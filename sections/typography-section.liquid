@@ -1,0 +1,270 @@
+
+
+<style>
+  *:not(i) {
+  	font-family: {{ section.settings['font-family'] }} !important;
+    font-weight: {{ section.settings['font-weight'] }} !important;
+    font-style: {{ section.settings['font-style'] }} !important;
+    letter-spacing: {{ section.settings['font-space'] }}pt !important;
+  }
+  .headline2,
+  #reviews-container .review-section-text,
+  #overall-fit-bodyName .review-section-text,
+  .reviews-rating .review-section-text,
+  #rw-modal-container .rw-modal-head h3
+   {
+  	font-family: {{ section.settings['font-family-headlines'] }} !important;
+    font-weight: {{ section.settings['font-weight-headlines'] }} !important;
+    font-style: {{ section.settings['font-style-headlines'] }} !important;
+    color: {{ section.settings['font-color-headlines'] }} !important;
+    letter-spacing: {{ section.settings['font-space-headlines'] }}pt !important;
+    font-size: {{ section.settings['font-size-headlines'] }}px !important;
+  }
+  
+  body .nav-bar .wrapper .site-nav, 
+  body .nav-bar .wrapper .site-nav__link, 
+  body .nav-bar .wrapper .site-nav__link a,
+  body .nav-bar .wrapper .medium-down--hide,
+  .cart-title-mobile{
+	color: {{ section.settings['font-color-header'] }} !important;
+	font-size: {{ section.settings['font-size-header'] }}px !important;
+	font-weight: {{ section.settings['font-weight-header'] }} !important;
+    letter-spacing: {{ section.settings['font-space-header'] }}pt !important;
+    
+  }
+  body .nav-bar .wrapper .site-nav__link a:hover {
+	color: {{ section.settings['font-color-hover-header'] }} !important;
+    
+  }
+  footer.site-footer * {
+	color: {{ section.settings['font-color-footer'] }} !important;
+	font-size: {{ section.settings['font-size-footer'] }}px !important;
+  }
+  footer.site-footer a:hover {
+	color: {{ section.settings['font-color-hover-footer'] }} !important;
+  }
+  footer .footer-newsletter__text {
+  	font-size: {{ section.settings['font-size-footer-paragraph'] }}px !important;
+  }
+  footer .btn.footer-newsletter__btn.footer-btn {
+  	color: white !important;
+    background: black;
+    padding: 10px 20px;
+  }
+  
+  @media screen and (min-width: 768px) {
+    .homepage-inst-headline2 {
+      font-family: {{ section.settings['font-family-headlines'] }} !important;
+    font-weight: {{ section.settings['font-weight-headlines'] }} !important;
+    font-style: {{ section.settings['font-style-headlines'] }} !important;
+    color: {{ section.settings['font-color-headlines'] }} !important;
+    letter-spacing: {{ section.settings['font-space-headlines'] }}pt !important;
+    font-size: {{ section.settings['font-size-headlines'] }}px !important;
+    }
+  }
+  
+</style>
+
+
+{% schema %}
+  {
+    "name": "Typography",
+    "settings": [
+      {
+         "type": "header",
+         "content": "Sitewide"
+      },
+      {
+         "type":      "select",
+         "id":        "font-family",
+         "label":     "font family",
+         "options": [
+            { "value": "MaisonNeue", "label": "Maison Neue"},
+            { "value": "fontin_sans_rgregular", "label": "Fontin Sans Regular"},
+            { "value": "'Helvetica', serif", "label": "Helvetica"},
+            { "value": "Gill Sans", "label": "Gill Sans"}
+         ]
+      },
+      {
+         "type":      "select",
+         "id":        "font-weight",
+         "label":     "font Weight",
+         "options": [
+            { "value": "lighter", "label": "lighter"},
+            { "value": "normal", "label": "normal"},
+            { "value": "bold", "label": "bold"},
+            { "value": "bolder", "label": "bolder"}
+         ]
+      },
+	{
+         "type":      "select",
+         "id":        "font-style",
+         "label":     "font Style",
+         "options": [
+            { "value": "normal", "label": "Normal"},
+            { "value": "italic", "label": "Italic"}
+         ]
+      },
+	  {
+		"type":      "range",
+		"id":        "font-space",
+		"min":       0,
+		"max":        40,
+		"step":       0.5,
+		"unit":       "pt",
+		"label":     "Letter Space",
+    	"default":   1
+	  },
+      {
+         "type": "header",
+         "content": "Headlines"
+      },
+      {
+           "type":      "select",
+           "id":        "font-family-headlines",
+           "label":     "Headlines font family",
+           "options": [
+              { "value": "MaisonNeue", "label": "Maison Neue"},
+              { "value": "fontin_sans_rgregular", "label": "Fontin Sans Regular"},
+              { "value": "'Helvetica', serif", "label": "Helvetica"},
+              { "value": "Gill Sans", "label": "Gill Sans"}
+           ]
+        },
+		{
+         "type":      "select",
+         "id":        "font-weight-headlines",
+         "label":     "font Weight",
+         "options": [
+            { "value": "lighter", "label": "lighter"},
+            { "value": "normal", "label": "normal"},
+            { "value": "bold", "label": "bold"},
+            { "value": "bolder", "label": "bolder"}
+         ]
+      },
+	  {
+		"type":      "range",
+		"id":        "font-space-headlines",
+		"min":       0,
+		"max":        40,
+		"step":       0.5,
+		"unit":       "pt",
+		"label":     "Letter Space",
+    	"default":   1
+	  },
+	  {
+		"type":      "range",
+		"id":        "font-size-headlines",
+		"min":       12,
+		"max":        80,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Font Size",
+    	"default":   15
+	  },
+	{
+         "type":      "select",
+         "id":        "font-style-headlines",
+         "label":     "font Style",
+         "options": [
+            { "value": "normal", "label": "Normal"},
+            { "value": "italic", "label": "Italic"}
+         ]
+      },
+      {
+         "type": "color",
+         "id": "font-color-headlines",
+         "label": "Color",
+         "default": "#000000"
+      },
+      {
+         "type": "header",
+         "content": "Header"
+      },
+      {
+         "type": "color",
+         "id": "font-color-header",
+         "label": "Text Color",
+         "default": "#000000"
+      },
+      {
+         "type": "color",
+         "id": "font-color-hover-header",
+         "label": "Hover state color",
+         "default": "#000000"
+      },
+	  {
+		"type":      "range",
+		"id":        "font-size-header",
+		"min":       12,
+		"max":        40,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Font Size",
+    	"default":   15
+	  },
+	  {
+		"type":      "range",
+		"id":        "font-space-header",
+		"min":       0,
+		"max":        40,
+		"step":       0.5,
+		"unit":       "pt",
+		"label":     "Letter Space",
+    	"default":   1
+	  },
+		{
+         "type":      "select",
+         "id":        "font-weight-header",
+         "label":     "font Weight",
+         "options": [
+            { "value": "lighter", "label": "lighter"},
+            { "value": "normal", "label": "normal"},
+            { "value": "bold", "label": "bold"},
+            { "value": "bolder", "label": "bolder"}
+         ]
+      },
+      {
+         "type": "header",
+         "content": "Footer"
+      },
+      {
+         "type": "color",
+         "id": "font-color-footer",
+         "label": "Text color",
+         "default": "#000000"
+      },
+      {
+         "type": "color",
+         "id": "font-color-hover-footer",
+         "label": "Hover state color",
+         "default": "#000000"
+      },
+	  {
+		"type":      "range",
+		"id":        "font-size-footer",
+		"min":       12,
+		"max":        40,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Font Size",
+    	"default":   15
+	  },
+	  {
+		"type":      "range",
+		"id":        "font-size-footer-paragraph",
+		"min":       12,
+		"max":        40,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Text Font Size",
+    	"default":   15
+	  }
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

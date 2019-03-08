@@ -1,0 +1,43 @@
+{% include 'landing-page-section-5' %}
+{% schema %}
+  {
+	"name": "Section 5: Fabric",
+  	"settings": [
+    {
+      "type": "text",
+      "id": "section_5_title",
+      "label": "Section title"
+    },
+    {
+      "type": "textarea",
+      "id": "section_5_paragraph",
+      "label": "Paragraph"
+    }
+	],
+    "blocks":[
+		{
+			"type": "text",
+			"name": "Reviews",
+			"limit": 10,
+			"settings": [
+                {
+                  "type": "text",
+                  "id": "section_5_title",
+                  "label": "Fabric Name"
+                },
+                {
+                  "type": "textarea",
+                  "id": "section_5_paragraph",
+                  "label": "Fabric Description"
+                }
+			]
+		}
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

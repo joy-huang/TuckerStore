@@ -1,0 +1,58 @@
+{% include 'landing-page-section-3' %}
+{% schema %}
+  {
+	"name": "Section 3: Reviews",
+  	"settings": [
+    {
+    "type": "text",
+    "id": "section_3_title",
+    "label": "Section title"
+    }
+	],
+    "blocks":[
+		{
+			"type": "text",
+			"name": "Reviews",
+			"limit": 4,
+			"settings": [
+                {
+                  "type": "textarea",
+                  "id": "section_3_pg_1",
+                  "label": "Paragraph 1"
+                },
+                {
+                  "type": "textarea",
+                  "id": "section_3_customer_1",
+                  "label": "Customer 1"
+                },
+                {
+                  "type": "textarea",
+                  "id": "section_3_stars_1",
+                  "label": "Stars 1"
+                },
+                {
+                  "type": "textarea",
+                  "id": "section_3_pg_2",
+                  "label": "Paragraph 2"
+                },
+                {
+                  "type": "textarea",
+                  "id": "section_3_customer_2",
+                  "label": "Customer 2"
+                },
+                {
+                  "type": "textarea",
+                  "id": "section_3_stars_2",
+                  "label": "Stars 2"
+                }
+			]
+		}
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

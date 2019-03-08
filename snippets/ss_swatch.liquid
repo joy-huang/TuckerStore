@@ -1,0 +1,14 @@
+{% assign swatch_layout = shop.metafields.switchtoswatchlayout.themestyle %}
+<script type="text/javascript">
+//document.write(unescape("%3Cscript src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+{% assign swatch_layout2 = 'layout9' %}
+<!-- Dynamic Layout CSS is included here -->
+{{ 'swatch-'| append: swatch_layout | append: '.css' | asset_url | stylesheet_tag }}
+
+{% assign gen_sett = shop.metafields.color-swatch-setting.general_sett %}
+{% if swatch_layout == "layout9" %}
+	{% include 'ss_varaint_images' %}
+{% else %}
+	{% include 'ss_color_swatches' %}
+{% endif %}

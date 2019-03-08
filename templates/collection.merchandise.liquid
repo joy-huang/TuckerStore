@@ -1,0 +1,614 @@
+{% include 'shogun-products', content: collection %}
+{{collection.metafields.shogun.above}}
+<!-- /templates/collection.liquid -->
+{% comment %}
+
+  For more information on collection tags:
+    - http://docs.shopify.com/themes/liquid-variables/collection
+
+{% endcomment %}
+
+
+<!-- set # of products per page -->
+{% paginate collection.products by 34 %}
+
+{% comment %}
+  Use .grid--rev so that the collection tags appear below the products on mobile
+{% endcomment %}
+
+<link rel="stylesheet" href="{{ 'ccf-dropdown.min.css' | asset_url }}">
+<style>
+  .star-0 {
+    display: none;
+  }
+  .star-rating {
+    font-size: 15px;
+    text-align: center;
+  }
+
+  .halfStyle {
+    position: relative;
+    display: inline-block;
+    width: 15px;
+    overflow: hidden;
+    white-space: pre;
+    color: #ddc;
+    text-align: center;
+  }
+
+  .halfStyle:before {
+    display: none;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    width: 50%;
+    content: "★";
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .star-rating.star-4.half span:nth-child(5).halfStyle:before, .star-rating.star-3.half span:nth-child(4).halfStyle:before, .star-rating.star-2.half span:nth-child(3).halfStyle:before, .star-rating.star-1.half span:nth-child(2).halfStyle:before {
+    display: block;
+  }
+
+  .image-merchandise .featured-image[er]:after {
+    display: block;
+    width: 100%;
+    height: 150px;
+    padding-top: 30px;
+    margin-top: 60px;
+    background-color: #fff;
+    text-align: center;
+    content: attr(er);
+  }
+  .mer-button-hidden {
+    display: none;
+  }
+  .dropdown-filter select {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+  #sort-by {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0px;
+  }
+  select#sort-by:focus {
+    outline: none;
+  }
+  #size-filter {
+    padding-bottom: 5px;
+    display: inline-block;
+  }
+  div.dropdown.dropdown-filter {
+    display: inline-block;
+    min-width: inherit;
+    transform: none;
+  }
+  @media (max-width: 470px){
+    div.dropdown.dropdown-filter {
+      width: 49%;
+    }
+    div.dropdown.dropdown-filter select {
+      display: block;
+      margin: auto;
+    }
+
+  }
+  #page-filters{
+    padding : 10px 35px;
+    text-align: left;
+  }
+  .product-sorter {
+    float: right;
+  }
+  @media (max-width: 768px){
+    .product-sorter {
+      display: none;
+    }
+    #page-filters {
+      text-align:center;
+      padding : 10px 0px;
+    }
+    #size-filter {
+      display: block;
+    }
+  }
+
+  .size-selector-desktop {
+    display:inline-flex;
+    width:auto;
+  }
+
+
+  #filter-by-size {
+    margin: 0 0 0px 0px;
+  }
+
+  .product-size-values {
+    @extend .paragraph3;
+    font-size: 9px;
+    color: black;
+  }
+
+
+  .size-options.size-options-label.size-selected .display-on-selection {
+    display: block;
+  }
+
+
+
+  .size-options {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 3px 3px 0;
+    width: 16px;
+    height: 20px;
+    text-align: center;
+    padding-top: 20px;
+    cursor: pointer;
+  }
+
+  .size-options-label {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 5px 5px 0;
+    width: 25px;
+    height: 20px;
+    text-align: center;
+    padding-top: 20px;
+    cursor: pointer;
+    color: #969595;
+  }
+
+  .size-options-out-stock {
+    text-decoration: line-through;
+  }
+</style>
+
+{% comment %}
+<div class="grid__item large--one-whole" style="text-align: center;padding-bottom:30px;">
+  <div style="font-family: 'fontin_sans_rgregular',serif; padding: 1% 10%;background-color:#f6e7dc;border:0px solid #b57f30;">
+  ENDS TODAY - Save an extra 25% Off Sale Styles with code EXTRA25 <a href="https://www.tuckernyc.com/collections/markdowns" style=“color:#4a4a4a;text-decoration:underline;”>Shop The Sale ></a>
+  </div>
+</div>
+{% endcomment %}
+
+<h1 class="headline2">{{collection.title}}</h2>
+<div id="page-filters">
+
+  {% assign namespace = 'F-'| append:{{collection.id}} %}
+  <div style="display:none">{{namespace}}</div>
+  {% assign filter = collection.metafields[namespace] %}
+
+  <div id="filter-options" style="display:none" data-options="{{ filter.fits | append: "," | append: filter.colors | append: filter.fabrics }}"></div>
+  <div class="filter-and-tabs-header" style="position: relative;" id="collection-page-filtering">
+
+  {% if collection.handle != 'markdowns' %}
+      {% include "ccf-head-filter-1"%}
+      {% include "ccf-head-filter-2"%}
+  {% endif %}
+
+    <div class="ccf-filters header header-list size-by">
+      <div class="list-title">
+        <span class="dd-title" id="optimize-decorate">Shop by Size</span>
+        <div class="selected-type">
+          <span class="diselect">×</span>
+          <span class="selected"></span>
+        </div>
+      </div>
+
+      <ul class="dd dd-size">
+        <li value="ccf-size-xs">XS</li>
+        <li value="ccf-size-s">S</li>
+        <li value="ccf-size-m">M</li>
+        <li value="ccf-size-l">L</li>
+        <li value="ccf-size-xl">XL</li>
+      </ul>
+    </div>
+
+  <div class="ccf-filters header header-list fabric-by" style="display: none;">
+      <div class="list-title">
+        <span class="dd-title">Shop by Fabric</span>
+        <div class="selected-type">
+          <span class="diselect">×</span>
+          <span class="selected"></span>
+        </div>
+      </div>
+
+      <ul class="dd dd-fabric">
+        {% include "ccf-content-filter-4"%}
+      </ul>
+    </div>
+
+    <div class="ccf-filters header header-list sort-by">
+      <div class="list-title">
+        <span class="dd-title" id="optimize-decorate">Sort By</span>
+        <div class="selected-type">
+          <span class="diselect">×</span>
+          <span class="selected"></span>
+        </div>
+      </div>
+
+      <ul class="dd dd-sort">
+        <li value="manual" id="sort-order-featured">Featured</li>
+        <li value="created-ascending" id="sort-order-oldest">Oldest to Newest</li>
+        <li value="created-descending" id="sort-order-newest">Newest to Oldest</li>
+        <li value="price-ascending" id="sort-order-price-low">Price: Low to High</li>
+        <li value="price-descending" id="sort-order-price-high">Price: High to Low</li>
+        <li value="best-selling" id="sort-order-best-selling">Best Selling</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="filter-and-tabs-container" >
+    {% include "ccf-content-filter-1"%}
+    {% include "ccf-content-filter-2"%}
+    {{ 'hide-filters.js' | asset_url | script_tag }}
+  </div>
+
+<script src="https://shopify-ccf.herokuapp.com/public/size-handler.js" type="text/javascript"></script>
+<script src="{{ 'ccf-dropdown.js' | asset_url }}" async></script> <!-- Watch async -->
+
+</div>
+
+<script>
+  Shopify.queryParams = {};
+  if (location.search.length) {
+    for (var aKeyValue, i = 0, aCouples = location.search.substr(1).split('&'), tagValue = location.search.substr(0).split('&'); i < aCouples.length; i++) {
+      aKeyValue = aCouples[i].split('=');
+      if (aKeyValue.length > 1) {
+        Shopify.queryParams[decodeURIComponent(aKeyValue[0])] = decodeURIComponent(aKeyValue[1]);
+      }
+    }
+  }
+
+  // Set up dropdown listeners.
+  $(function() {
+    $('#sort-by')
+      .val('{{ collection.sort_by | default: collection.default_sort_by | escape }}')
+      .bind('change', function() {
+        Shopify.queryParams.sort_by = jQuery(this).val();
+        Shopify.queryParams.page = 1;
+
+        var pathComponents = location.pathname.split('/').filter(function(component) {
+          return component != '';
+        });
+        getCollectionFromMerch(pathComponents);
+
+        var url = location.origin + '/' + pathComponents.join('/') + '?' + jQuery.param(Shopify.queryParams).replace(/\+/g, '%20');
+
+        location.href = url;
+    });
+  });
+</script>
+
+{% include 'product-advertizing' %}
+
+<div class="grid-uniform collection-products">
+
+  <!--   Resonance Merchandise App -->
+  {% assign namespace = 'mk-'| append:{{collection.id}} | downcase %}
+  <!--   Resonance Merchandise App -->
+
+  {% for product in collection.products %}
+
+    <!--   Resonance Merchandise App -->
+     {% assign layout = product.metafields[namespace] %}
+    {% assign size = layout.size | plus: 0%}
+
+    {% if shop.metafields.merchandise.default_row %}
+      {% assign default = shop.metafields.merchandise.default_row %}
+    {% else %}
+      {% assign default = 25 %}
+  {% endif %}
+
+      {% case default %}
+      {% when 50 %}
+        {% assign default_grid_item_width = 'large--two-quarters medium--one-whole small--one-whole' %}
+      {% when 33 %}
+        {% assign default_grid_item_width = 'large--one-third medium--one-half small--one-half' %}
+      {% else %}
+       {% assign default_grid_item_width = 'large--one-quarter medium--one-half small--one-half' %}
+      {% endcase %}
+
+    {% if size > 75 %}
+        {% assign grid_item_width = 'large--one-whole medium--one-whole small--one-whole' %}
+    {% elsif size > 50 %}
+        {% assign grid_item_width = 'large--three-quarters medium--one-whole small--one-whole' %}
+    {% elsif size > 33 %}
+        {% assign grid_item_width = 'large--two-quarters medium--one-whole small--one-whole' %}
+    {% elsif size > 25 %}
+        {% assign grid_item_width = 'large--one-third medium--one-half small--one-half' %}
+    {% else %}
+        {% assign size = default %}
+        {% assign grid_item_width = default_grid_item_width %}
+    {% endif %}
+
+    {% assign resizeWidth = size | times: 21.6 | round | downcase %}
+
+    {% if layout.imgUrl == "" or layout.imgUrl == nil %}
+    {% assign image_size = resizeWidth | append: 'x' %}
+        {% assign feature_image = product.featured_image.src | img_url: image_size %}
+    {% else %}
+
+      {%if layout.imgUrl contains '.jpg?' %}
+        {%assign imgFormat = '.jpg?' %}
+      {%elsif layout.imgUrl contains '.png?' %}
+    {%assign imgFormat = '.png?' %}
+      {%endif%}
+
+      {% assign joinParam = '_' | append: resizeWidth | append: 'x' | append: imgFormat %}
+      {% assign feature_image = layout.imgUrl | split: '.jpg?' | join: joinParam %}
+    {% endif %}
+    <!--   Resonance Merchandise App -->
+
+    <div class="grid__item grid_collection_item {{grid_item_width}} product-grid-item-container product-merchandise"
+         id = {{ product.id }}
+         data-xs="{{ product.variants[0].inventory_quantity }}"
+         data-s="{{ product.variants[1].inventory_quantity }}"
+         data-m="{{ product.variants[2].inventory_quantity }}"
+         data-l="{{ product.variants[3].inventory_quantity }}"
+         style={{tam}}
+         data-key="sameHeights"
+         >
+      {% include 'product-grid-item-merchandise' %}
+    </div>
+    <!--   Resonance Merchandise App -->
+
+  {% else %}
+    {% if collection.handle == 'all' and current_tags == '' %}
+    {% else %}
+      {% comment %}
+        If collection exists but is empty, display message
+      {% endcomment %}
+      <div class="grid__item">
+        <p style="font-size: 20px;text-align: center">{{ 'collections.general.no_matches' | t }}</p>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  <div id="product-list-foot"></div>
+  {% if paginate.next %}
+    <div id="more"><p><a href="{{ paginate.next.url }}"></a></p></div>
+    <div id="loading-img" style="text-align:center;display:none;"><img src="{{ "loading.svg" | asset_url }}" style="width:90px;"/></div>
+  {% endif %}
+
+</div>
+{% endpaginate %}
+
+<script>
+  // Restore last place on page
+  $(function() {
+    $('.grid__image').click(function() {
+      Cookies.set('scrollTop', $(window).scrollTop(), {
+        expires: 1,
+        path: '',
+      });
+    });
+
+    var scrollTop = +Cookies.get('scrollTop');
+    if (!scrollTop) return;
+    setScrollTop(scrollTop);
+
+    function setScrollTop(scrollTop) {
+      var $body = $(document.body);
+      if ($body.height() < scrollTop) {
+        // Body isn't tall enought yet. Try again in 100ms.
+        setTimeout(function() {
+          setScrollTop(scrollTop);
+        }, 100);
+        return;
+      }
+      $(window).scrollTop(scrollTop);
+      Cookies.remove('scrollTop', { path: '' });
+    }
+  });
+</script>
+
+<script type="text/javascript">
+  function sameHeights(selector) {
+      var selector = selector || '[data-key="sameHeights"]',
+          query = document.querySelectorAll(selector),
+          elements = query.length,
+          max = 0;
+      if (elements) {
+          while (elements--) {
+              var element = query[elements];
+              if (element.clientHeight > max) {
+                  max = element.clientHeight;
+              }
+          }
+          elements = query.length;
+          while (elements--) {
+              var element = query[elements];
+              element.style.height = max + 'px';
+          }
+      }
+  }
+</script>
+<script type="text/javascript">
+  if ('addEventListener' in window) {
+      window.addEventListener('resize', function(){
+          sameHeights();
+      });
+      window.addEventListener('load', function(){
+          sameHeights();
+      });
+  }
+</script>
+<script>
+   function insertParam(key, value) {
+   key = encodeURI(key); value = encodeURI(value);
+
+   var kvp = document.location.search.substr(1).split('&');
+   var found = false;
+
+   var i=kvp.length; var x; while(i--)
+   {
+       x = kvp[i].split('=');
+
+         if (x[0]=="page")
+       {
+           x[1] = 1;
+           kvp[i] = x.join('=');
+       }
+       else if (x[0]==key)
+       {
+           x[1] = value;
+           kvp[i] = x.join('=');
+           found = true;
+       }
+   }
+
+   if(!found) {kvp[kvp.length] = [key,value].join('=');}
+
+   //this will reload the page, it's likely better to store this until finished
+   return kvp.join('&');
+ }
+  /* Product Tag Filters - Good for any number of filters on any type of collection pages */
+  var collFilters = jQuery('.coll-filter');
+  collFilters.change(function() {
+    var newTags = [];
+    collFilters.each(function() {
+      if (jQuery(this).val()) {
+        newTags.push(jQuery(this).val());
+      }
+    });
+    if (newTags.length) {
+      var query = newTags.join('+');
+      var url = jQuery('{{ 'tag' | link_to_tag: 'tag' }}').attr('href').replace('tag', query);
+      url = url.split('?')[0] + '?' + insertParam("filter-by-size", jQuery(this).val());
+      window.location.href = url;
+    }
+    else {
+      {% if collection.handle %}
+      window.location.href = '/collections/{{ collection.handle }}';
+      {% elsif collection.products.first.type == collection.title %}
+      window.location.href = '{{ collection.title | url_for_type }}';
+      {% elsif collection.products.first.vendor == collection.title %}
+      window.location.href = '{{ collection.title | url_for_vendor }}';
+      {% endif %}
+    }
+  });
+
+var getFilterSize = function() {
+    var found = "";
+    window.location.pathname.split("/").forEach(function(item) {
+        if (item.indexOf("ccf-size") >=  0) {
+            found = item;
+        }
+    });
+    return found;
+};
+
+ $(function() {
+  var tagValue = getFilterSize();
+  $('#filter-by-size').val(tagValue);
+})
+
+</script>
+
+{% if template contains 'collection' %}
+  <script>
+    function ScrollExecute() {
+      if($(document).height() - 800 < ($(document).scrollTop() + $(window).height())) {
+        scrollNode = $('#more').last();
+        scrollURL = $('#more p a').last().attr("href");
+        if(scrollNode.length > 0 && scrollNode.html().length> 0) {
+          $.ajax({
+            type: 'GET',
+            url: scrollURL,
+            beforeSend: function() {
+              scrollNode.empty();
+              $('#loading-img').show();
+            },
+            success: function(data) {
+              var newLink = $(data).find("#more").html() || "";
+              $('#more').html( newLink );
+              var filteredData = $(data).find(".product-grid-item-container");
+              $(filteredData).find(".featured-image").each(function(idx,img){
+                $(img).attr("src",$(img).data('original'));
+              });
+
+              filteredData.insertBefore( $("#product-list-foot") );
+              $('#loading-img').hide();
+            },
+            complete: function() {
+            addStartRating();
+            },
+            dataType: "html"
+          });
+        }
+      }
+    }
+
+    $(document).ready(function () {
+      $(window).scroll(function(){
+        $.doTimeout( 'scroll', 200, ScrollExecute);
+        addStartRating();
+      });
+    });
+
+    function addStartRating(){
+      var bodynamesRatings = localStorageHandler.get('bodynames-ratings');
+             	console.log(bodynamesRatings);
+
+      if (!bodynamesRatings || !bodynamesRatings.length) {
+          var shop = 'tuckernyc'
+          var url = 'https://resonance-pr.herokuapp.com/';
+          url += 'get-bodynames-rating?shop=' + shop;
+
+          $.ajax({
+            url: url,
+            async: true,
+            success: function(data) {
+              bodynamesRatings = localStorageHandler.save('bodynames-ratings', data, 120) || JSON.parse(data);
+              loadRatingViews(bodynamesRatings);
+            }
+          });
+      } else {
+        loadRatingViews(bodynamesRatings);
+      }
+    }
+
+    function loadRatingViews(bodynamesRatings){
+      bodynamesRatings = JSON.parse(bodynamesRatings);
+      bodynamesRatings.forEach(function(obj){
+        var bodyName = obj.bodyName;
+        var rating = obj.rating % parseInt(obj.rating) > 0 ? (parseInt(obj.rating) + " half") : obj.rating;
+
+          $('.rating-content[data-bodyname="' + bodyName.trim().replace(/\'/g,"") + '"]').each(function(){
+              $(this).find('.star-rating').removeClass('star-0').addClass('star-'+rating);
+          });
+      });
+    }
+
+    var localStorageHandler = {
+      save : function(key, jsonData, expirationMin){
+          if (typeof (Storage) == "undefined") { return false; }
+          var expirationMS = expirationMin * 60 * 1000;
+          var record = {value: jsonData, timestamp: new Date().getTime() + expirationMS}
+          localStorage.setItem(key, JSON.stringify(record));
+          return jsonData;
+      },
+      get : function(key) {
+        if (typeof (Storage) == "undefined") { return false; }
+        var record = JSON.parse(localStorage.getItem(key));
+        if (!record) {return false;}
+        if (new Date().getTime() > record.timestamp) {
+          //Delete on expire
+            localStorage.removeItem(key);
+            return false;
+        } else {
+          return record.value;
+        }
+      }
+    }
+  </script>
+
+{% endif %}
+
+
+{{collection.metafields.shogun.below}}
+

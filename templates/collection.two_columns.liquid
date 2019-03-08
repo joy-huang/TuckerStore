@@ -1,0 +1,197 @@
+<!-- /templates/collection.liquid -->
+{% comment %}
+
+  For more information on collection tags:
+    - http://docs.shopify.com/themes/liquid-variables/collection
+
+{% endcomment %}
+
+{% if collection.handle == "40-off-markdowns" %}
+  <!-- close wrapper for full width -->
+  </div>
+
+  <img width="100%" src="{{ 'sale-banner-12-15-2015.jpg' | asset_url }}" />
+
+  <div class="wrapper">
+{% endif %}
+
+<!-- set # of products per page -->
+{% paginate collection.products by 32 %}
+
+{% comment %}
+  Use .grid--rev so that the collection tags appear below the products on mobile
+{% endcomment %}
+
+
+
+<div style="text-align:right">
+  <div class="clearfix filter" style="display:inline-block">
+  <label for="filter-by-size">Filter by size:</label>
+  <select id="filter-by-size" class="coll-filter" style="padding:2px 24px 2px 8px">
+    <option value="">All</option>
+    <option value="ccf-size-extra-extra-small">XXS</option>
+	<option value="ccf-size-extra-small">XS</option>
+    <option value="ccf-size-small">S</option>
+    <option value="ccf-size-medium">M</option>
+    <option value="ccf-size-large">L</option>
+  </select>
+</div>
+  <div class="product-sorter" style="float:none">
+    <label for="sort-by">Sort by</label>
+    <select id="sort-by" class="narrow-dropdown">
+      <option value="manual">Featured</option>
+      <option value="created-ascending">Oldest to Newest</option>
+      <option value="created-descending">Newest to Oldest</option>
+      <option value="price-ascending">Price: Low to High</option>
+      <option value="price-descending">Price: High to Low</option>
+      <option value="best-selling">Best Selling</option>
+    </select>
+  </div>
+</div>
+    
+{% include 'product-advertizing' %}
+    
+<div class="grid-uniform">
+  {% for product in collection.products %}
+    <div class="grid__item one-half product-grid-item-container"
+         style="margin-top:30px;margin-bottom:30px;"
+         data-xs={{ product.variants[0].inventory_quantity }}
+         data-s={{ product.variants[1].inventory_quantity }}
+         data-m={{ product.variants[2].inventory_quantity }}
+         data-l={{ product.variants[3].inventory_quantity }}
+         data-size={{product.variants[0].option1}}
+         >
+      {% include 'product-grid-item' %}
+    </div>
+  {% endfor %}
+
+  {% if paginate.pages > 1 %}
+    <div class="grid__item one-whole">
+      <div class="pagination">
+        {% if paginate.previous.is_link %}<span class="page"><a href="{{ paginate.previous.url }}">Previous</a></span><span class="page">|</span>{% endif %}
+        <span class="page" style="padding-left:6px;padding-right:6px;">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+        {% if paginate.next.is_link %}<span class="page">|</span><span class="page"><a href="{{ paginate.next.url }}">Next</a></span>{% endif %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endpaginate %}
+    
+<script>
+Shopify.queryParams = {};
+if (location.search.length) {
+  for (var aKeyValue, i = 0, aCouples = location.search.substr(1).split('&'), tagValue = location.search.substr(0).split('&'); i < aCouples.length; i++) {
+    aKeyValue = aCouples[i].split('=');
+    if (aKeyValue.length > 1) {
+      Shopify.queryParams[decodeURIComponent(aKeyValue[0])] = decodeURIComponent(aKeyValue[1]);
+    }
+  }
+}
+
+// Set up dropdown listeners.
+$(function() {
+  $('#sort-by')
+    .val('{{ collection.sort_by | default: collection.default_sort_by | escape }}')
+    .bind('change', function() {
+      Shopify.queryParams.sort_by = jQuery(this).val();
+      Shopify.queryParams.page = 1;
+
+      location.search = jQuery.param(Shopify.queryParams).replace(/\+/g, '%20');
+    });
+})
+
+</script>
+
+<script>
+  // Restore last place on page
+  $(function() {
+    $('.grid__image').click(function() {
+      Cookies.set('scrollTop', $(window).scrollTop(), {
+        expires: 1,
+        path: '',
+      });
+    });
+
+    var scrollTop = +Cookies.get('scrollTop');
+    if (!scrollTop) return;
+    setScrollTop(scrollTop);
+
+    function setScrollTop(scrollTop) {
+      var $body = $(document.body);
+      if ($body.height() < scrollTop) {
+        // Body isn't tall enought yet. Try again in 100ms.
+        setTimeout(function() {
+          setScrollTop(scrollTop);
+        }, 100);
+        return;
+      }
+      $(window).scrollTop(scrollTop);
+      Cookies.remove('scrollTop', { path: '' });
+    }
+  });
+</script>
+
+<script>
+  function insertParam(key, value) {
+    key = encodeURI(key); value = encodeURI(value);
+
+    var kvp = document.location.search.substr(1).split('&');
+
+    var i=kvp.length; var x; while(i--) 
+    {
+        x = kvp[i].split('=');
+
+        if (x[0]==key)
+        {
+            x[1] = value;
+            kvp[i] = x.join('=');
+            break;
+        }
+    }
+
+    if(i<0) {kvp[kvp.length] = [key,value].join('=');}
+
+    //this will reload the page, it's likely better to store this until finished
+    return kvp.join('&'); 
+  }
+  /* Product Tag Filters - Good for any number of filters on any type of collection pages */
+  var collFilters = jQuery('.coll-filter');
+  collFilters.change(function() {
+    var newTags = [];
+    collFilters.each(function() {
+      if (jQuery(this).val()) {
+        newTags.push(jQuery(this).val());
+      }
+    });
+    if (newTags.length) {
+      var query = newTags.join('+');
+      var url = jQuery('{{ 'tag' | link_to_tag: 'tag' }}').attr('href').replace('tag', query);
+      window.location.href = url;                             
+    }
+    else {
+      {% if collection.handle %}
+      window.location.href = '/collections/{{ collection.handle }}';
+      {% elsif collection.products.first.type == collection.title %}
+      window.location.href = '{{ collection.title | url_for_type }}';
+      {% elsif collection.products.first.vendor == collection.title %}
+      window.location.href = '{{ collection.title | url_for_vendor }}';
+      {% endif %}
+    }
+  });
+  
+ var getQueryParam = function(param) {
+    var found;
+    window.location.search.substr(1).split("&").forEach(function(item) {
+        if (param ==  item.split("=")[0]) {
+            found = item.split("=")[1];
+        }
+    });
+    return found;
+};
+  
+ $(function() {
+  var tagValue = getQueryParam("filter-by-size"); 
+  $('#filter-by-size').val(tagValue);
+})
+ 
+</script>

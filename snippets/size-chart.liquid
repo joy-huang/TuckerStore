@@ -1,0 +1,31 @@
+<script src="{{ 'size-chart.js' | asset_url }}" async></script> <!-- Watch async -->
+
+<div class="size-chart" style="position:relative; padding-bottom: 10px;">
+  <button type="button" class="icon-fallback-text size-chart-close-overlay size-chart-close-overlay-mobile">
+    <span class="icon icon-x" aria-hidden="true"></span>
+    <span class="fallback-text">x</span>
+  </button>
+
+  <div class="headline4 size-chart-headline4-mobile">Size Chart</div>
+  {% assign size_chart = product.metafields.info.size_chart %}
+
+  {% if size_chart %}
+    {% if pages[small_size_chart] %}
+      {{ pages[small_size_chart].content }}
+    {% else %}
+      {{ pages.default-size-chart.content }}
+    {% endif %}
+  {% else %}
+    {{ pages.default-size-chart.content }}
+  {% endif %}
+  <div style="padding: 10px;">
+    <div class="size-chart-paragraph3 size-chart-paragraph3-mobile" style="font-weight:bold;margin-top:30px;margin-bottom:20px;">Measuring Tips:</div>
+    <div class="size-chart-paragraph3 size-chart-paragraph3-mobile" style="margin-bottom:30px;">
+      If you are between sizes we recommend sizing down. <br />
+      BUST: Fullest part of bust/chest <br />
+      WAIST: Natural waist, which is the smallest part of your waist <br />
+      HIPS: Fullest part of hips/butt when feet are together on the floor
+      If you have further questions, please email us at <a href="mailto:hello@tuckernyc.com">hello@tuckernyc.com</a>
+    </div>
+    </div>
+  </div>

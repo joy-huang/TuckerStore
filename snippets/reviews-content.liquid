@@ -1,0 +1,370 @@
+<style>
+{% capture content %}
+  .halfStyle {
+  	width: auto;
+    font-size: 18px;
+  }
+@media only screen and (min-width: 768px) {
+    .review-header-wrapper {
+        display: box;
+        display: flex;
+    }
+}
+
+.review-header-text,
+.review-header-button {
+  padding: 10px;
+}
+
+.load-more-container {
+	text-align: center;
+  margin: 30px auto;
+}
+
+.rw-row,
+.review-content {
+	display: flex;
+}
+
+@media only screen and (min-width: 768px) {
+  .review-header-text,
+  .review-header-button  {
+      padding: 10px
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .review-header-text {
+      width: 50%
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .review-header-button {
+      border-top: none;
+      font-size: 14px;
+      text-align: center;
+    }
+
+}
+
+@media only screen and (min-width: 768px) {
+    .review-header-button {
+        -webkit-box-flex: 1;
+        -moz-box-flex: 1;
+        box-flex: 1;
+        -webkit-flex: 1;
+        -moz-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        border-left: none;
+        text-align: right;
+    }
+}
+
+
+
+.review-section-text {
+    font-family: "garamond-premier-pro-display";
+    font-style: italic;
+    font-size: 32px;
+    line-height: 2.0;
+    text-decoration: none;
+}
+
+.rw-statitics,
+#overall-rating,
+.rw-container {
+	display: none;
+}
+
+
+.has-reviews .rw-statitics,
+.has-backfills .rw-statitics,
+.has-star-rating #overall-rating,
+.has-reviews #productReviews,
+.has-backfills #backfillReviews {
+	display: block;
+  margin-top: 30px;
+}
+
+@media only screen and (max-width: 1200px) {
+
+  #reviews-container .review-content {
+  	display: block;
+  }
+  #reviews-container .review-image {
+  	text-align: center;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+    .review-wrapper {
+        display: box;
+        display: flex;
+        margin: 3rem 0
+    }
+}
+
+.review-user,
+.review-content {
+    padding: 32px;
+    border: 1px solid #f5f5f5
+}
+
+@media only screen and (min-width: 768px) {
+    .review-user,
+    .review-content {
+        padding: 48px
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .review-user {
+        width: 30%;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .review-user {
+        border-bottom: none;
+    }
+
+    .review-container.rw-row {
+    	display: block;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .review-content .general{
+        border-top: none;
+        font-size: 14px
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .review-content .general{
+        -webkit-box-flex: 2;
+        -moz-box-flex: 2;
+        box-flex: 2;
+        -webkit-flex: 2;
+        -moz-flex: 2;
+        -ms-flex: 2;
+        flex: 2;
+        border-left: none;
+    }
+  .review-content.no-review-img .general{
+        -webkit-box-flex: 1;
+        -moz-box-flex: 1;
+        box-flex: 1;
+        -webkit-flex: 1;
+        -moz-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        border-left: none;
+    }
+  .review-content.no-review-img {
+    width: 100%;
+  }
+}
+
+  #overall-fit-body-rating {
+    margin-button: 30px;
+  }
+
+
+ .review-image {
+  flex: 1;
+  text-align: center;
+  padding: 15px;
+ }
+
+.review-image img{
+  max-width: 100%;
+  height: auto;
+}
+
+.no-review-img .review-image {
+  display: none;
+}
+
+.review-date, .star-rating {
+  display: inline-block;
+}
+
+.star-rating:not(.general) {
+  display: none;
+}
+  .reviews-rating .star-rating.general,{
+  display: none;
+}
+  .reviews-rating .star-rating:last-child {
+  display: inline-block;
+}
+  .general .star-rating {
+  	display: inline-block;
+  }
+.review-information {
+  background-color: #f8f8f7;
+  flex-shrink: 0;
+  min-width: 290px;
+}
+.review-information .overal-fit p {
+  display: block;
+}
+
+.review-content .general .review-date {
+  margin-left: 25px;
+}
+
+.review-content .general .review-headline {
+  margin-top: 30px;
+}
+
+.general-info p {
+  display: inline-block;
+  margin-right: 20px;
+  width: 105px;
+  color: #333;
+}
+
+#productReviews .review-container.rw-row{
+	font-family: "fontin_sans_rgregular",serif;
+}
+
+#reviews-container .slider-tick-label {
+  font-size: 13px;
+}
+#reviews-container .slider-tick-label-container {
+    margin-left: -19px !important;
+}
+
+#reviews-container .slider-tick-label-container .slider-tick-label {
+  width: 45px !important;
+}
+
+
+#reviews-container .slider-horizontal {
+    width: 200px;
+  margin: 0px;
+}
+
+#reviews-container .review-content .star-rating {
+  font-size: 25px;
+}
+
+#reviews-container .customer-name,
+#reviews-container .certified-customer {
+  margin-bottom: 5px;
+  text-transform: capitalize;
+}
+
+#reviews-container .separator {
+  border-bottom: 1px solid;
+  margin: 15px auto;
+}
+
+#reviews-container .certified-customer {
+  font-size: 15px;
+  display: none;
+}
+
+#reviews-container .certified-customer.certified {
+  display: block;
+}
+
+#productReviews *,
+#backfillReviews * {
+  font-family: "fontin_sans_rgregular", serif;
+}
+
+{% endcapture %}
+{% assign content =  content | strip_newlines | split: " " | join: " " | split: "*/" %}
+{% assign new_content = "" %}
+{% for word in content %}
+	{% assign new_word = word | split: "/*" | first | strip %}
+  	{% assign new_content = new_content | append: new_word %}
+{% endfor %}
+{{ new_content }}
+</style>
+
+{% assign review-server = "https://resonance-pr.herokuapp.com/" %}
+
+{% assign bodyname = product.title | split: ' | ' %}
+<div id="reviews-container" data-app="{{review-server}}" data-shop="tuckernyc" data-bodyname="{{bodyname.first}}" data-pid="{{product.id}}" data-limit="5"  data-facebook-app-id="404741389976058">
+  <div class="review-header-wrapper">
+    <div class="review-header-text rw-statitics">
+      <span class="review-section-text">Customer Reviews</span>
+    </div>
+    <div class="review-header-button">
+      <button onClick="showReviewModal(true);" class="btn btn-review">
+        <span>WRITE A REVIEW</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="rw-statitics">
+    <div id="overall-rating" style="display: flex;padding-top:25px;">
+      <span>Overall Rating:</span>
+      <div class="reviews-rating reviews-rating-{{product.id}}" style="padding:0px 0px 25px 15px;"></div>
+    </div>
+    <div id="overall-fit-body-rating" data-bodyname="{{bodyname.first}}" style="padding-bottom:25px;"></div>
+    {% assign review-title = product.title | split: '|' %}
+    <div id="productReviews" class="rw-container">
+      <h4>Reviews for {{review-title[0]}} in  {{review-title[1]}}</h4>
+    </div>
+    <div id="backfillReviews" class="rw-container">
+      <h4>All Reviews for the {{review-title[0]}}</h4>
+    </div>
+    <div class="load-more-container">
+      <button id="loadMoreReviews" class="btn btn-review">
+        <span>LOAD MORE</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script type="text/template" id="rw-single-template">
+<div class="review-container rw-row">
+  <div class="review-information review-user">
+    <h3 class="customer-name">${name}</h3>
+    <p class="certified-customer ${isCertified}">Certified Customer</p>
+    <div class="separator"></div>
+    <div class="general-info">
+      <div class="wears-size"><p>Wears size:</p>${sizeOrdered}</div>
+      <div class="height"><p>Height:</p>${height}</div>
+      <div class="overal-fit"><p>Overal fit:</p>
+      <input
+         type="text"
+         name="overallFit"
+         data-provide="slider"
+         data-slider-ticks="[1, 2, 3, 4, 5]"
+         data-slider-ticks-labels='["Runs Small", "", "", "", "Runs Large"]'
+         data-slider-min="1"
+         data-slider-max="5"
+         data-slider-step="1"
+         data-slider-value=${overallFit}
+         data-slider-selection="none"
+         data-slider-handle="square"
+         data-slider-tooltip="hide">
+      </div>
+    </div>
+  </div>
+  <div class="review-content  ${noReviewImage}">
+  	<div class="general">
+        <div class="star-rating star-${starRating}">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+        <div class="review-date">${formatedDate}</div>
+        <h3 class="review-headline">${title}</h3>
+        <p class="review-text">
+          ${fit}. ${design}
+        </p>
+    </div>
+  <div class="review-image">
+    <img data-src="${rwImgUrl}" class="lazyload" alt="Review">
+  </div>
+  </div>
+</div>
+</script>

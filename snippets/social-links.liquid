@@ -1,0 +1,15 @@
+{% if settings.facebook_url != "" %}
+  <li class="social--margin{% if social-links == 'header' %} palm--hide lap--hide{% endif %}"><a href="{{ settings.facebook_url }}" class="facebook"><span class="icon__facebook"></span></a></li>
+{% endif %}
+{% if settings.twitter_url != "" %}
+  <li class="social--margin{% if social-links == 'header' %} palm--hide lap--hide{% endif %}"><a href="{{ settings.twitter_url }}" class="twitter"><span class="icon__twitter"></span></a></li>
+{% endif %}
+{% if settings.instagram_url != "" %}
+  <li class="social--margin{% if social-links == 'header' %} palm--hide lap--hide{% endif %}"><a href="{{ settings.instagram_url }}" class="instagram"><span class="icon__instagram"></span></a></li>
+{% endif %}
+{% if settings.pinterest_url != "" %}
+  <li class="social--margin{% if social-links == 'header' %} palm--hide lap--hide{% endif %}"><a href="{{ settings.pinterest_url }}" class="pinterest"><span class="icon__pinterest"></span></a></li>
+{% endif %}
+{% if settings.google_url != "" %}
+  <li class="social--margin{% if social-links == 'header' %} palm--hide lap--hide{% endif %}"><a href="{{ settings.google_url }}" rel="publisher" class="googleplus"><span class="icon__googleplus"></span></a></li>
+{% endif %}

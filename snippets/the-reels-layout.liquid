@@ -1,0 +1,98 @@
+{% for block in section.blocks %}
+
+  {% assign compact_class = ""  %}
+  {% if block.settings.content_column == "one-whole" and block.settings.content_compact == true %}
+  	{% assign compact_class = "compact"  %}
+  {% endif %}
+
+  {% assign border_top_class = ""  %}
+  {% if block.settings.content_border_top == true %}
+  	{% assign border_top_class = "border-top"  %}
+  {% endif %}
+
+  {% assign border_bottom_class = ""  %}
+  {% if block.settings.content_border_bottom == true %}
+  	{% assign border_bottom_class = "border-bottom"  %}
+  {% endif %}
+
+  {% assign flex = ""  %}
+  {% if block.settings.heading_location == "top" %}
+  	{% assign flex = "flex-content"  %}
+  {% endif %}
+
+  {% assign content_padding_top = ""  %}
+  {% if block.settings.content_type == "paragraph" and block.settings.content_column == "one-whole" %}
+  	{% assign content_padding_top = "padding-top: 0px"  %}
+  {% endif %}
+
+  {% assign content_clean_line = ""  %}
+  {% if block.settings.content_clean_line == true %}
+  	{% assign content_clean_line = "clear: both;"  %}
+  {% endif %}
+
+  {% assign paragraph_separator = ""  %}
+  {% if block.settings.paragraph_Separator == true %}
+  	{% assign paragraph_separator = "border"  %}
+  {% endif %}
+
+  <div class="grid__item small--one-whole {{block.settings.content_column}}" style="{{content_clean_line}}">
+    <div class="column-content {{block.settings.content_type}} {{flex}} {{border_top_class}} {{border_bottom_class}}" style="{{content_padding_top}}">
+
+      {% if block.settings.heading_location == "top" and block.settings.title != "" or block.settings.sub_title != "" %}
+        <div class="page-title top {{block.settings.title_alignment}}">
+          {% if block.settings.title != "" %}
+              <p class="headline3"> {{ block.settings.title }} </p>
+          {% endif %}
+
+          {% if block.settings.sub_title != "" %}
+              <p class="paragraph2"> {{ block.settings.sub_title }} </p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if block.settings.content_type == "video" and block.settings.video_url != ""%}
+        <div class="video-container">
+          <video loop preload="metadata">
+            <source src="{{ block.settings.video_url }}#t=0.5" type="video/mp4">
+            Not supported
+          </video>
+          <div class="control {{block.settings.video_control_position}} {{block.settings.video_mobile_control_position}}"><i class="fa fa-play"></i><i class="fa fa-pause"></i></div>
+        </div>
+      {% endif %}
+
+      {% if block.settings.content_type == "image" %}
+
+        {% if block.settings.img_1 %}
+          <div class="image-holder {{compact_class}}">
+            <img src="{{ block.settings.img_1 | img_url: "original"  }}" style="{{ block.settings.width_images }} vertical-align: middle;">
+          </div>
+        {% endif %}
+
+      {% endif %}
+
+      {% if block.settings.content_type == "paragraph" %}
+        <div class="mobile-padding-top-none" style="padding-top: {{block.settings.paragraph_vertical_align}}vw;">
+          <div class="page-paragraph {{paragraph_separator}} {{compact_class}} {{block.settings.paragraph_alignment}}">
+            <p class="headline3">{{block.settings.paragraph}}</p>
+            <p class="desc-paragraph headline4">{{block.settings.paragraph_desc}}</p>
+          </div>
+        </div>
+
+      {% endif %}
+
+
+      {% if block.settings.heading_location == "bottom" and block.settings.title != "" or block.settings.sub_title != "" %}
+        <div class="page-title bottom {{block.settings.title_alignment}}">
+          {% if block.settings.title != "" %}
+              <p class="headline3"> {{ block.settings.title }} </p>
+          {% endif %}
+
+          {% if block.settings.sub_title != "" %}
+              <p class="paragraph2"> {{ block.settings.sub_title }} </p>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+{% endfor %}

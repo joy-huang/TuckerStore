@@ -1,0 +1,82 @@
+<div>
+
+  <h1>{{section.settings.title}}</h1>
+  <a href="{{section.settings.col_url}}">
+    <div class="product-grid">
+	  {% for item in section.blocks %}
+      	{% assign product = all_products[item.settings.featured_product] %}
+        <div class="grid-item">
+      		<img alt="{{product.title}}" src="{{product.featured_image | img_url }}">
+      	</div>
+      {% endfor %}
+    </div>
+    <div class="btn-container">
+      <button class="hero-section-button btn">
+         {{ section.settings.button_text }}
+      </button>
+    </div>
+  </a>
+
+
+</div>
+{% schema %}
+{
+  "name": "Featured Collection 2",
+  "settings": [
+	{
+		"type": "text",
+		"id": "title",
+		"label": "title"
+	},
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text"	
+    },
+	  {
+        "type": "color",
+        "id": "color_button_text",
+        "label": "Button text Color",
+        "default": "#ffffff"
+      },
+	  {
+        "type": "color",
+        "id": "color_button_bg",
+        "label": "Button background Color",
+        "default": "#000000"
+      },
+    {
+      "type": "url",
+      "id": "col_url",
+      "label": "Collection URL"
+    }
+	
+  ],
+  "blocks": [
+    {
+    "name": "products",
+    "type": "product",
+    "limit": 4,
+    "settings": [
+      {
+        "type": "product",
+        "id": "featured_product",
+        "label": "Product"        
+      }
+    ]
+    }
+  ],
+    "presets": [
+      {
+        "category": "Collections",
+        "name": "Featured Collection"
+      }
+    ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

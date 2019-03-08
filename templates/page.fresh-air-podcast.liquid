@@ -1,0 +1,130 @@
+
+</div>
+
+<style>
+
+
+@media only screen and (min-width: 768px) {
+
+    .homepage-container-mobile {
+  		display: none;
+  	}
+
+    
+}
+
+@media only screen and (max-width: 767px) {
+  
+    .homepage-container-desktop {
+		display: none;
+  	}
+
+  
+}
+
+  
+</style>
+
+
+<div class="wrapper">
+  <div class="grid" style="text-align:center;"> 
+    
+      <div class="row">
+        <div class="grid__item one-whole">
+          	
+          <div class="homepage-container-desktop" style="margin-bottom:15px;display:block;text-align:center;background-color:#E6C0BE;padding:15px 0px 15px 0px;">
+            <span style="font-size:20px;">Thanks for visiting us from NPR! Your 20% off discount will be automatically applied at checkout.</span> <img style="vertical-align:middle;margin-left:25px;"  src="{{ 'NPR-Logo.png' | asset_url }}" alt="" />
+          </div>
+
+        </div>
+      </div>
+    
+      <div class="row">
+        <div class="grid__item one-whole">
+          	
+	          <a href="{{settings.homepage_hero_item_url}}">
+    	        <img style="margin-bottom:0px;display:block;position:relative;" src="{{ 'homepage_hero_item_image.jpg' | asset_url }}" alt="" />
+        	  </a>
+                 
+
+        </div>
+      </div>
+    
+	{% include 'hp-grid' %}
+    
+  </div>
+</div>
+
+
+
+<img style="width:100%;display:block;" src="{{ 'quote-homepage-10-21-2016.jpg' | asset_url }}" alt="" />
+
+<div style="line-height:0;">
+  <div style="width:20%;display:inline-block;">
+    <img style="width:100%;" src="{{ 'homepage-social-image-1.jpg' | asset_url }}" alt="">
+  </div><div style="width:20%;display:inline-block;">
+    <img style="width:100%;" src="{{ 'homepage-social-image-2.jpg' | asset_url }}" alt="">
+  </div><div style="width:20%;display:inline-block;">
+    <img style="width:100%;" src="{{ 'homepage-social-image-3.jpg' | asset_url }}" alt="">
+  </div><div style="width:20%;display:inline-block;">
+    <img style="width:100%;" src="{{ 'homepage-social-image-4.jpg' | asset_url }}" alt="">
+  </div><div style="width:20%;display:inline-block;">
+    <img style="width:100%;" src="{{ 'homepage-social-image-5.jpg' | asset_url }}" alt="">
+  </div>
+</div>
+
+
+<script>
+  $(function() {
+    setupAllMovieControls();
+  });
+
+  function setupAllMovieControls() {
+    var movies = $('.movie').toArray();
+    movies.forEach(function(movie) {
+      setupMovieControls(movie);
+    });
+  }
+
+  function setupMovieControls(movie) {
+    var $movie = $(movie);
+    var $video = $movie.find('video');
+    var videoElement = $video.get(0);
+    var videoFile = $video.find('source').prop('src').split('/').slice(-1).pop();
+    
+    videoElement.load();
+    //videoElement.play();
+    
+    $movie.click(function(e) {
+      var $this = $(this);
+      if ($this.hasClass('movie-paused') || $this.hasClass('movie-poster')) {
+        pauseAllVideos();
+        videoElement.play();
+        return;
+      }
+
+      if ($this.hasClass('movie-playing')) {
+        videoElement.pause();
+      }
+    });
+
+    $video.on('play', function() {
+      $movie.removeClass('movie-paused')
+            .removeClass('movie-poster')
+            .addClass('movie-playing');
+      ga('send', 'event', 'Engagement', 'Video Play', videoFile);
+    }).on('pause', function() {
+      $movie.removeClass('movie-playing').addClass('movie-paused');
+    }).on('ended', function() {
+      videoElement.load();
+      $movie.removeClass('movie-playing').addClass('movie-poster');
+    });
+  }
+
+  function pauseAllVideos() {
+    var videoElements = $('video').toArray();
+    videoElements.forEach(function(videoElement) {
+      videoElement.pause();
+    });
+  }
+</script>

@@ -1,0 +1,23 @@
+<div class="utility-buttons-mobile">
+<a href="/cart" class="site-header__cart-toggle js-drawer-open-right site-nav__link" aria-controls="CartDrawer" aria-expanded="false">
+  <div class="cart-items-mobile">
+    <span class="cart-title-mobile">CART</span>
+
+      {% if cart.total_price > 0 %}
+
+      <span>(</span><span id="CartCount">{{ cart.item_count }}</span><span>)</span>
+
+
+      {% else %}
+
+      <span>(</span><span id="CartCount">0</span><span>)</span>
+
+
+      {% endif %}
+  </div>
+</a>
+<button type="button" class="icon-fallback-text search-overlay-show search-overlay-show-header-button">
+  <span class="icon icon-search icon-search-mobile icon-search-desktop" aria-hidden="true"></span>
+  <span class="fallback-text">Search</span>
+</button>
+</div>

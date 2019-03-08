@@ -1,0 +1,29 @@
+<!-- <h1>{{ 'general.404.title' | t }}</h1> -->
+<!-- <span style=""></span><h1>{{ 'general.404.subtext_html' | t }}</h1> -->
+<br />
+<h3>This item is no longer available.</h3>
+<p style="font-size:18px;">Check out other amazing Tucker pieces below.</h5>
+
+<div class="grid-uniform">
+
+  {% assign collection = collections.new %}
+  {% paginate collection.products by 12 %}
+  {% for product in collection.products %}
+    <div class="grid__item one-half large--one-third medium--one-half product-grid-item-container"
+         style="margin-top:30px;margin-bottom:30px;"
+         data-xs={{ product.variants[0].inventory_quantity }}
+         data-s={{ product.variants[1].inventory_quantity }}
+         data-m={{ product.variants[2].inventory_quantity }}
+         data-l={{ product.variants[3].inventory_quantity }}
+         >
+      {% include 'product-grid-item' %}
+    </div>
+  {% endfor %}
+  {% endpaginate %}
+</div>
+
+{% include 'nosto-element' with 'notfound-nosto-1' %}
+
+{% include 'nosto-element' with 'notfound-nosto-2' %}
+
+{% include 'nosto-element' with 'notfound-nosto-3' %}

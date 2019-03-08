@@ -1,0 +1,26 @@
+
+<link rel="stylesheet" href="{{ 'ccf-dropdown.min.css' | asset_url }}">
+<div class="homepage-filter-container">
+ <div class="filter-and-tabs-header" style="position: relative;">
+  {% include "ccf-head-filter-1"%}
+    {% include "ccf-head-filter-2"%}
+  </div>
+
+  <div class="filter-and-tabs-container" id="homepage-filters">
+    {% include "ccf-content-filter-1"%}
+    {% include "ccf-content-filter-2"%}
+  </div>
+
+  <script src="{{ 'ccf-dropdown.js' | asset_url }}"></script> <!-- Watch async -->
+  <script type="text/javascript" src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js"></script>
+
+
+  <script type="text/javascript">
+
+    $(function(){
+      $(".filter-and-tabs-header .ccf-filters.header:first-child .filter-title").click();
+    });
+
+  </script>
+
+</div>

@@ -1,0 +1,105 @@
+{% comment %}
+  Set the extension of your color files below. Use 'png', 'jpeg', 'jpg' or 'gif'.
+{% endcomment %}
+{% assign file_extension = 'png' %}
+{% if ss_swatch == blank %}
+
+{% else %}
+{% assign found_option = false %}
+{% assign is_color = false %}
+{% assign option_index = 0 %}
+{% for option in product.options %}
+  {% if option == ss_swatch %}
+    {% assign found_option = true %}
+    {% assign option_index = forloop.index0 %}
+    <style>
+      label[for="product-select-option-{{ option_index }}"] { display: none; }
+      #product-select-option-{{ option_index }} { display: none; }
+      #product-select-option-{{ option_index }} + .custom-style-select-box { display: none !important; }
+    </style>
+    <script>jQuery(window).load(function() { jQuery('.selector-wrapper:eq({{ option_index }})').hide(); });</script>
+    {% assign downcased_option = ss_swatch | downcase %}
+    {% if downcased_option contains 'color' or downcased_option contains 'colour' %}
+      {% assign is_color = true %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+{% unless found_option %}
+
+{% else %}
+
+<div class="swatch clearfix" data-option-index="{{ option_index }}">
+  <div class="header">{{ ss_swatch }}</div>
+  {% assign values = '' %}
+  {% for variant in product.variants %}
+    {% assign value = variant.options[option_index] %}
+    {% unless values contains value %}
+      {% assign values = values | join: ',' %}
+      {% assign values = values | append: ',' | append: value %} 
+      {% assign values = values | split: ',' %}
+      <div data-value="{{ value | escape }}" class="swatch-element {% if is_color %}color {% endif %}{{ value | handle }} {% if variant.available %}available{% else %}soldout{% endif %}" style="{% if is_color %}background-color: #fff;{% else %}background-color: #ddd;{% endif %}">
+        {% if is_color %}
+        {% endif %} 
+        <input class="swatch-{{ variant.id }}" id="swatch-{{ option_index }}-{{ value | handle }}" type="radio" name="option-{{ option_index }}" value="{{ value | escape }}"{% if forloop.first %} checked{% endif %} {% unless variant.available %}disabled{% endunless %} />
+        {% if is_color %}
+        <label for="swatch-{{ option_index }}-{{ value | handle }}" id="color_swatch-{{option_index }}-{{ value | handle }}">
+          <img src='{{ variant.image.src | product_img_url: "small" }}' height="40px" width="40px" align="middle">
+          <span class="variant_name">{{ value }}</span>
+        </label>        
+<script type="text/javascript">
+//document.write(unescape("%3Cscript src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script>
+ 
+if(typeof jQuery=='undefined') { 
+    var headTag = document.getElementsByTagName("head")[0];
+    var jqTag = document.createElement('script');
+    jqTag.type = 'text/javascript';
+    jqTag.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js';
+    headTag.appendChild(jqTag);
+}
+</script>
+<script type="text/javascript">
+//var $ = jQuery.noConflict(true);
+</script>         
+<script type="text/javascript">
+(function(jQuery){  
+    var color_div_id = "#color_swatch-{{ option_index }}-{{ value | handle }}";
+  	var sett_obj = "";
+    var layout_val = '{{ swatch_layout }}';
+    var general_sett = '{{ gen_sett }}';
+    sett_obj = jQuery.parseJSON(general_sett);
+    var curr_variantid = jQuery("select[name='id'] option:selected").val();
+   
+    jQuery(color_div_id).addClass(layout_val); 
+    
+    jQuery(".swatch input").click(function() {
+   		var div_id = jQuery(this).attr("id");
+   		if(jQuery('#'+div_id).is(':checked')) {
+     	  jQuery('.swatch input').next().css("border-color",sett_obj.swatch_border_color);
+       	  jQuery('#'+div_id).next().css("border-color",sett_obj.swatch_active_border_color);
+    	} 
+   });
+    
+  jQuery(color_div_id+":not('.swatch-"+curr_variantid+"')").css("border-color",sett_obj.swatch_border_color);
+  jQuery(".swatch input.swatch-"+curr_variantid).next().css("border-color",sett_obj.swatch_active_border_color);
+})(jQuery);   
+</script>
+<!-- ends here -->  
+      {% else %}
+        <label for="swatch-{{ option_index }}-{{ value | handle }}">
+          {{ value }}
+          <img class="crossed-out" src="{{ 'soldout.png' | asset_url }}" />
+        </label>  
+        {% endif %}
+      </div>
+    {% endunless %}
+    {% if variant.available %}
+    <script>
+      jQuery('.swatch[data-option-index="{{ option_index }}"] .{{ value | handle }}').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
+    </script>
+    {% endif %}
+  {% endfor %}
+</div>
+{% endunless %}
+{% endif %}

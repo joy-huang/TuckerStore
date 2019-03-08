@@ -1,0 +1,331 @@
+{% include 'shogun-products', content: product %}
+{{product.metafields.shogun.above}}
+<style>
+  .pin-button {
+    position: absolute;
+    z-index: 5;
+    padding: 10px;
+    display: none;
+  }
+  .pin-button.hover {
+    display: block;
+  }
+  .close-zoom-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 45%;
+    background-color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px #eed solid;
+  }
+  #myCanvas {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #F0F0F0;
+  }
+  .stock-notification {
+    font-size:16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: inline;
+  }
+  .product-image-box .zoom_01 {
+  	margin: 0 auto;
+  }
+  @media (max-width: 480px) {
+    .product-single button:before {
+      display: none;
+    }
+  }
+  
+  @media only screen and (min-width: 768px) {
+
+  	.ugc-section-text {
+    	color: #b57f30;
+    	font-size: 54px;
+    	letter-spacing: 0px;
+    	font-style: italic;
+    	line-height: 71px;
+    	font-family: "adobe-caslon-pro",serif;
+    	font-weight: normal;
+	}
+
+  }
+
+  @media only screen and (max-width: 767px) {
+
+  	.ugc-section-text {
+    	color: #b57f30;
+    	font-size: 54px;
+    	letter-spacing: 0px;
+    	font-style: italic;
+    	line-height: 71px;
+    	font-family: "adobe-caslon-pro",serif;
+    	font-weight: normal;
+	}
+
+  }   
+  
+</style>
+
+<!-- /templates/product.liquid -->
+{% comment %}
+
+  Rich snippets (itemscope, itemtype, etc.) for products are a theme requirement,
+  and allow search engines to easily understand what the content is.
+
+  For more information on these Scheme.org tags, visit:
+    - http://schema.org/docs/gs.html
+
+{% endcomment %}
+<div style="margin-bottom:50px;">
+
+  
+  {% comment %}
+  Get first variant, or deep linked one
+  {% endcomment %}
+  {% assign current_variant = product.selected_or_first_available_variant %}
+
+  <div class="grid grid--table product-single flex-content">
+    <div class="grid__item large--one-half medium--one-whole small--one-whole mobile-no-padding" style="padding-right: 10%;">
+      {% include 'product-info' %}
+    </div>
+    <div class="grid__item large--one-half medium--one-whole small--one-whole mobile-no-padding">
+      {% include 'product-image' %}
+    </div>
+  </div>
+   
+
+      
+  
+  {% comment %}
+  <div class="grid grid--table product-single flex-content" style="padding:100px 0px 25px 0px;">
+     <span class="ugc-section-text">Tucker Styled On Instagram</span>
+  </div>
+  <div class="grid grid--table product-single flex-content" style="padding:0px 0px 25px 0px;">
+    <div>{% include 'product-ugc' %}</div>
+  </div> 
+  {% endcomment %}
+  
+  {% include 'nosto-element' with 'productpage-nosto-1' %}
+  
+  
+  
+{% comment %}
+	{% include 'nosto-element' with 'productpage-nosto-2' %}
+{% endcomment %}
+
+{% comment %}
+  	{% include 'related-product' %}
+{% endcomment %}
+
+</div>
+
+{% include 'reviews-content' %}
+
+{% if product.metafields.reviews.count %}
+<div style="display:none;" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+  <span itemprop="itemReviewed">{{product.title}}</span>
+  has a rating of <span itemprop="ratingValue">{{product.metafields.reviews.rating}}</span> stars
+  based on <span itemprop="ratingCount">{{product.metafields.reviews.count}}</span> reviews.
+</div>
+{% endif %}
+<script>
+  $(function() {
+    function adjustRelatedContent() {
+      var screenWidth = $(window).width()
+      var minGridHeight = 0;
+      if (screenWidth <= 768) {
+        minGridHeight = screenWidth * 0.593;
+      } else {
+        minGridHeight = screenWidth * 0.2982;
+      }
+      $(".related-container .grid__image").css('min-height', minGridHeight);
+    }
+
+    adjustRelatedContent();
+
+    $( window ).resize(function() {
+      adjustRelatedContent();
+    });
+
+    var reviewID = window.getParameterByName('reviewId');
+    if (reviewID && typeof ga === 'function') ga('send', 'event', 'fb_referal', 'visit', reviewID);
+  })
+</script>
+
+
+{{ 'jquery.zoom.js' | asset_url | script_tag }}
+{{ 'konva.min.js' | asset_url | script_tag }}
+
+<script>
+  var selectedSize = '';
+  var selectedSku = '';
+  // Modify continue shopping link if it should go to a specific category
+ $(document).ready(function() {
+    if (document.referrer.match(/tuckernyc\.com\/collections/)) {
+      $('.continue-shopping a').prop('href', document.referrer);
+    }
+
+    var slickConfig = {
+      speed: 300,
+      arrows: true,
+      swipe: false,
+      lazyLoad: 'ondemand',
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      prevArrow: '<i class="slick-prev fa fa-chevron-left"></i>',
+      nextArrow: '<i class="slick-next fa fa-chevron-right"></i>',
+      responsive: [
+        {
+          breakpoint: 768,
+          settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          lazyLoad: 'ondemand',
+            arrows: false,
+            dots: true,
+            swipe: true,
+          }
+        }
+      ]
+    };
+	
+   
+    var carouselImgs = $('.zoom_01');
+   	$(carouselImgs).each(function(index){
+      var dataLazy = '';
+      if ( $(window).width() > 767) {
+	      dataLazy = $(this).data('desktop');
+      } else {
+	      dataLazy = $(this).data('small');
+      }
+      $(this).attr( "data-lazy", dataLazy );
+
+    });
+   
+    $('.swiper-container').slick(slickConfig);
+
+    if ( $(window).width() > 767) {
+
+      $(carouselImgs).each(function(){
+        var u = $(this).data('zoom-image');
+        $(this)
+        .wrap('<span style="display:block"></span>')
+        .css('display', 'block')
+        .parent()
+        .zoom({url: u});
+      });
+    }
+    else {
+      //Add your javascript for small screens here
+      $(".swiper-container .slick-slide img").on('click', function(e) {
+        $("#zoom-container").show();
+        $(".fixed-add-to-bag-mobile").addClass("hide");
+        var width =window.innerWidth; //document.width is obsolete
+        var height = window.innerHeight; //document.height is obsolete
+
+        function drawImage(imageObj) {
+          var positionSet  = - ((imageObj.width/2) - width) /2;
+          var stage = new Konva.Stage({
+            container: 'myCanvas',
+            width: width,
+            height: height
+          });
+
+          var layer = new Konva.Layer();
+          var productImage = new Konva.Image({
+            image: imageObj,
+            x: positionSet,
+            y: 0,
+            width: imageObj.width/2,
+            height: imageObj.height/2,
+            draggable: true,
+            dragBoundFunc: function(pos) {
+              var w = Math.max(pos.x,-imageObj.width/2 + width);
+              var h = Math.max(pos.y,-imageObj.height/2 + height);
+              w = Math.min(w,0);
+              h = Math.min(h,0);
+              return {
+                x: w,
+                y: h
+              }
+            }
+          });
+
+          layer.add(productImage);
+          stage.add(layer);
+
+          $("button.close-zoom-btn").on("click", function() {
+            var c = $(".konvajs-content canvas").get(0).getContext("2d");
+            c.clearRect(0, 0, width, height);
+          });
+        }
+
+        var imageObj = new Image();
+        imageObj.onload = function() {
+          drawImage(this);
+          $("body").css("overflow", "hidden"); //     disactive scroll
+        };
+        imageObj.src = $(this).data('zoom-image');
+      });
+
+    }
+
+    $('#filter-by-size').change(function(){
+      var size = $("#filter-by-size option:selected").data("size");
+      var inStock = $("#filter-by-size option:selected").data("instock");
+      var variantId = $(this).val();
+      inStock ? inStockSelect(variantId) : outOfStockSelect(variantId);
+
+      $(".units-left").hide();
+      $((".units-left-"+ size )).show();
+
+    });
+
+    $("#share").jsSocials({
+      showLabel: false,
+      showCount: false,
+      shares: ["facebook",  "pinterest"]
+    });
+
+    $('body').on("ReviewsLoaded", function() {
+      $('#reviews-container-link').css("display","block");
+    });
+
+   //slick slide fix
+    $('.product-image-box').on('beforeChange', function(event, slick, currentSlide, nextSlide){
+      $('.slick-slide:not(.slick-current)').css('opacity', '1');
+    });
+    $('.product-image-box').on('afterChange', function(event, slick, currentSlide, nextSlide){
+      $('.slick-slide:not(.slick-current)').css('opacity', '0');
+      $('.slick-current').css('opacity', '1');
+    });
+
+   // Show sold out if appropriate
+  $(function() {
+    {% unless product.available || product.metafields.info.waitlist == "yes" %}
+      $('.btn-product').hide();
+      $('#SoldOutButton').show();
+    {% endunless %}
+
+     window.FBProductType='{{ product.type }}';
+     window.fbVariantId = {{ product.variants[0].id }};
+  });
+
+  
+ });
+  function closeZoomContainer() {
+    $("body").css("overflow", "auto"); //     active scroll
+    $("#zoom-container").hide();
+    $(".fixed-add-to-bag-mobile").removeClass("hide");
+  }
+</script>
+
+
+
+{{product.metafields.shogun.below}}
+

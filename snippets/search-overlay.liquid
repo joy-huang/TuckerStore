@@ -1,0 +1,27 @@
+<div id="SearchOverlay" style="position: fixed;z-index:51;">
+  <button class="icon-fallback-text search-overlay-close search-overlay-close-x">
+    <span class="icon icon-x"></span>
+    <span class="fallback-text">x</span>
+  </button>
+
+  <form action="/search"
+        method="get"
+        class="search-bar"
+        role="search"
+        style="text-align:center;">
+    <input type="hidden" name="type" value="product">
+
+    <input type="search"
+           name="q"
+           value="{{ search.terms | escape }}"
+           class="search-input "
+           placeholder="Search..."
+           aria-label="{{ 'general.search.placeholder' | t }}"
+           />
+
+    <button class="search-btn" type="submit">
+     <span class="icon icon-search icon-search-mobile icon-search-desktop" aria-hidden="true"></span>
+    </button>
+
+  </form>
+</div>

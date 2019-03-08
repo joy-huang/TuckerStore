@@ -1,0 +1,11 @@
+<div class="grid-uniform">
+  {% for collection in collections %}
+    {% if collection.handle == "cheese" %}
+      <h1>YIPPEE</h1>
+      {% for product in collection.products %}
+        <p>{{ product.title }}</p>
+        {% include 'product-grid-item' %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+</div>

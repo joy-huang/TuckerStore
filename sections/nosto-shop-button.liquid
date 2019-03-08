@@ -1,0 +1,53 @@
+<style>
+  .btn.nosto-shop-now-btn{
+    border-radius: 0;
+    padding: 12px 32px;
+    background-color: {{ section.settings['color_button_bg'] }};
+    color: {{ section.settings['color_button_text'] }};
+    display: block;
+    margin: -5em auto 5em;
+    width: fit-content;
+  }
+  
+  .btn.nosto-shop-now-btn:hover {
+    color: {% if data.settings.color_button_bg == 'rgba(0,0,0,0)' %} white {% else %} {{ data.settings.color_button_bg }} {% endif %};
+    background-color: {{ data.settings.color_button_text }};
+  }
+
+</style>
+<a href=" {{ section.settings['url'] }}" class="btn nosto-shop-now-btn">{{ section.settings['url_label'] }}</a>
+{% schema %}
+  {
+    "name": "Recommended sec. button",
+    "settings": [
+ {
+        "type": "color",
+        "id": "color_button_text",
+        "label": "Button text Color",
+        "default": "#ffffff"
+      },
+	  {
+        "type": "color",
+        "id": "color_button_bg",
+        "label": "Button background Color",
+        "default": "#000000"
+      },
+      {
+        "type": "url",
+        "id": "url",
+        "label": "Link"
+      },
+      {
+        "type": "text",
+        "id": "url_label",
+        "label": "Link label"
+      }
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

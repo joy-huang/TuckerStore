@@ -1,0 +1,156 @@
+<!--  HERO SECTION	 -->
+{% include  "hero-with-content" data: section %}
+{% schema %}
+  {
+    "name": "Hero",
+    "class": "hero-with-content home-hero content-wrapper",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "hero_image",
+        "label": "Hero Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "hero_image_mobile",
+        "label": "Hero Image for mobile"
+      },
+
+      {
+        "type": "text",
+        "id": "hero_title",
+        "label": "Title"
+      },
+      {
+        "type": "text",
+        "id": "hero_description",
+        "label": "Description"
+      },
+	  {
+        "type": "color",
+        "id": "color_hero_title",
+        "label": "Hero Title Color",
+        "default": "#000000"
+	  },
+	  {
+        "type": "color",
+        "id": "color_hero_description",
+        "label": "Hero Description Color",
+        "default": "#000000"
+      },
+	  {
+        "type": "color",
+        "id": "color_button_text",
+        "label": "Button text Color",
+        "default": "#ffffff"
+      },
+	  {
+        "type": "color",
+        "id": "color_button_bg",
+        "label": "Button background Color",
+        "default": "#000000"
+      },
+	  {
+		"type":      "range",
+		"id":        "description_font_size_desktop",
+		"min":       12,
+		"max":        40,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Description font size for desktop",
+    	"default":   15
+	  },
+	  {
+		"type":      "range",
+		"id":        "description_font_size_mobile",
+		"min":       8,
+		"max":        40,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Description font size for mobile",
+    	"default":   15
+	  },
+	  {
+		"type":      "range",
+		"id":        "font-size-title-desktop",
+		"min":       8,
+		"max":        80,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Title font size",
+    	"default":   15
+	  },
+	  {
+		"type":      "range",
+		"id":        "font-size-title-mobile",
+		"min":       8,
+		"max":        80,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Title font size for mobile",
+    	"default":   15
+	  },
+      {
+        "type": "url",
+        "id": "hero_url",
+        "label": "Link"
+      },
+      {
+        "type": "text",
+        "id": "hero_url_label",
+        "label": "Link label"
+      },
+      {
+        "type": "checkbox",
+        "id": "is_link_a_btn",
+        "default": false,
+        "label": "Display Link as a Button"
+      },
+      {
+         "type": "radio",
+         "id": "caption_position",
+         "label": "Hero text position",
+         "options": [
+           { "value": "left", "label": "Left" },
+           { "value": "left-center", "label": "Left Center" },
+           { "value": "top-center", "label": "Top Center" },
+           { "value": "center", "label": "Center" },
+           { "value": "right", "label": "Right" },
+           { "value": "right-center", "label": "Right Center" }
+         ]
+      },
+	  {
+		"type":      "range",
+		"id":        "hero-space-desktop",
+		"min":       0,
+		"max":        100,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Space between the next element for desktop",
+    	"default":   15
+	  },
+	  {
+		"type":      "range",
+		"id":        "hero-space-mobile",
+		"min":       0,
+		"max":        100,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Space between the next element for mobile",
+    	"default":   15
+	 }
+    ],
+    "presets": [
+      {
+        "category": "Images",
+        "name": "Hero"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

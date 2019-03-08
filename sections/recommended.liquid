@@ -1,0 +1,230 @@
+
+<!-- Include the nosto element for the homepage here -->
+
+{% include 'nosto-element' with {{section.settings['nosto_id']}} %}
+
+<style>
+   #{{section.settings['nosto_id']}} {
+
+    background-color: #f8f8f7;
+        margin-top: -10px;
+  }
+     #{{section.settings['nosto_id']}} .product-font {
+
+    line-height: 24px;
+    }
+    .related-products {
+    background-color: #f8f8f7;
+    margin-top: 100px;
+    padding-bottom: 170px;
+    }
+    .also-like {
+    margin-top: -25px;
+    margin-bottom: 35px;
+    }
+    .related-container {
+    max-width: 85%;
+    margin: auto;
+    }
+    .related-product-info {
+    text-align: left !important;
+    }
+    .product-header-color {
+    font-size: 13px;
+    color: #969595;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    font-family: "fontin_sans_rgregular",serif;
+    line-height: 17px;
+    }
+    .product-font, .template-search .product-font, .template-collection .product-font {
+    color: #4a4a4a;
+    font-size: 20px;
+    letter-spacing: 0.6px;
+    font-family: "adobe-caslon-pro",serif;
+    }
+    .price {
+    font-family: 'Times New Roman', serif;
+    }
+    .product__price--small {
+    font-size: 17px;
+    line-height: 17px;
+    }
+    .price-font {
+    color: #969595;
+    letter-spacing: 1px;
+    }
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 660px;
+    }
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover img {
+    max-height: 100% !important;
+    }
+    @media(max-width: 2000px) {
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 580px !important;
+    }
+    }
+    @media(max-width: 1780px) {
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 510px !important;
+    }
+    }
+    @media(max-width: 1560px) {
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 440px !important;
+    }
+    }
+    @media(max-width: 1350px) {
+     {{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 380px !important;
+    }
+    }
+    @media(max-width: 1200px) {
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 330px !important;
+    }
+    }
+    @media(max-width: 1175px) {
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 290px !important;
+    }
+    }
+    @media(max-width: 900px) {
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 250px !important;
+    }
+    }
+    @media(max-width: 835px) {
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 200px !important;
+    }
+    }
+    @media(max-width: 768px) {
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 400px !important;
+    }
+    }
+    @media(max-width: 620px) {
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 350px !important;
+    }
+    }
+    @media(max-width: 550px) {
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 300px !important;
+    }
+    }
+    @media(max-width: 470px) {
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 250px !important;
+    }
+    }
+    @media(max-width: 430px) {
+     #{{section.settings['nosto_id']}} .rotate-image-on-hover {
+    height: 220px !important;
+    }
+    }
+
+    @media(max-width: 1100px) {
+     #{{section.settings['nosto_id']}} .grid__item.large--one-fifth.medium--one-sixth.small--one-half.related-product-grid.product__you-might-also-like:last-of-type {
+    display: none;
+    }
+     #{{section.settings['nosto_id']}} .grid__item.large--one-fifth.medium--one-sixth.small--one-half.related-product-grid.product__you-might-also-like {
+    width: 25% !important;
+    }
+    }
+    @media(max-width: 750px) {
+     #{{section.settings['nosto_id']}} .grid__item.large--one-fifth.medium--one-sixth.small--one-half.related-product-grid.product__you-might-also-like:nth-of-type(4) {
+    display: none;
+    }
+     #{{section.settings['nosto_id']}} .grid__item.large--one-fifth.medium--one-sixth.small--one-half.related-product-grid.product__you-might-also-like {
+    width: 33.33% !important;
+    }
+    }
+    @media(max-width: 550px) {
+     #{{section.settings['nosto_id']}} .grid__item.large--one-fifth.medium--one-sixth.small--one-half.related-product-grid.product__you-might-also-like:nth-of-type(3) {
+    display: none;
+    }
+     #{{section.settings['nosto_id']}} .grid__item.large--one-fifth.medium--one-sixth.small--one-half.related-product-grid.product__you-might-also-like:nth-of-type(2) {
+    display: none;
+    }
+    #{{section.settings['nosto_id']}} .grid__item.large--one-fifth.medium--one-sixth.small--one-half.related-product-grid.product__you-might-also-like {
+    width: 100% !important;
+    }
+    }
+
+    .star-rating {
+        color: #ddc;
+        font-size: 18px;
+    }
+</style>
+
+{% if template == 'index' and section.settings['url_label'] != '' %}
+
+<style>
+  .btn.nosto-shop-now-btn{
+    border-radius: 0;
+    padding: 12px 60px;
+    background-color: {{ section.settings['color_button_bg'] }};
+    color: {{ section.settings['color_button_text'] }};
+    display: block;
+    margin: -8em auto 5em;
+    width: fit-content;
+  }
+
+  .btn.nosto-shop-now-btn:hover {
+    color: {% if data.settings.color_button_bg == 'rgba(0,0,0,0)' %} white {% else %} {{ data.settings.color_button_bg }} {% endif %};
+    background-color: {{ data.settings.color_button_text }};
+  }
+
+</style>
+<a href=" {{ section.settings['url'] }}" class="btn nosto-shop-now-btn ">{{ section.settings['url_label'] }}</a>
+{% endif %}
+{% schema %}
+  {
+    "name": "Recommended Products",
+    "settings": [
+{
+        "type": "color",
+        "id": "color_button_text",
+        "label": "Button text Color",
+        "default": "#ffffff"
+      },
+	  {
+        "type": "color",
+        "id": "color_button_bg",
+        "label": "Button background Color",
+        "default": "#000000"
+      },
+      {
+        "type": "url",
+        "id": "url",
+        "label": "Link"
+      },
+      {
+        "type": "text",
+        "id": "url_label",
+        "label": "Link label"
+      },
+      {
+        "type": "text",
+        "id": "nosto_id",
+        "label": "NOSTO ID"
+      }
+],
+
+    "presets": [
+      {
+        "category": "Products",
+        "name": "Recommended"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,208 @@
+<div class="two-images-container">
+  <div class="image-container">
+    <div>
+    <a href="{{section.settings.first_image_url}}" style="padding: {{section.settings.first-image-padding}}px">
+	  	<img src="{{section.settings.first_image | img_url: 'master'}}" alt="{{first_image_label}}"  style="margin-top: {{section.settings.first-image-position}}px">
+        <p class="image-title">
+      		{{section.settings.first_image_label}}
+      	</p>
+    </a>
+    </div>
+  </div>
+  <div class="image-container">
+    <div>
+    <a href="{{section.settings.second_image_url}}" style="padding: {{section.settings.second-image-padding}}px">
+		<img src="{{section.settings.second_image | img_url: 'master'}}" alt="{{section.settings.second_image_label}}" style="margin-top: {{section.settings.second-image-position}}px">
+      <p class="image-title">
+      	{{section.settings.second_image_label}}
+      </p>
+    </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .two-images-container {
+  	display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    margin-top: {{section.settings.top-space}}px;
+    margin-bottom: {{section.settings.bottom-space}}px;
+  }
+  
+  .two-images-container .image-container {
+  	max-width: 50%;
+    
+  }
+  
+  .two-images-container a {
+      display: flex;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    position: relative;
+  }
+  
+  .two-images-container img,
+  .two-images-container p {
+  	max-width: calc(100% - 20px);
+    margin: 0 10px;
+  }
+  
+  .two-images-container .image-title {
+    font-size: {{section.settings.font-size}}px;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+    font-weight: {{section.settings.font-weight}} !important;
+  }
+  
+  @media screen and (max-width: 980px) {
+  	  .two-images-container .image-container {
+  		max-width: 100%;
+    }
+    
+    .two-images-container {
+    	display: block;
+    }
+    .two-images-container .image-title  {
+    	font-size: 7vw;
+    }
+    .two-images-container a {
+    	padding: 10px !important;
+        margin: 0 10px;
+    }
+    .two-images-container img {
+    	margin: 20px auto;
+    }
+  }
+  
+</style>
+
+{% schema %}
+  {
+    "name": "Two images",
+    "class": "two-images-container",
+    "settings": [
+	  {
+        "type": "image_picker",
+        "id": "first_image",
+        "label": "First image"
+      },
+	  {
+		"type":      "range",
+		"id":        "first-image-padding",
+		"min":       0,
+		"max":        70,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Padding",
+    	"default":   0
+	  },
+	  {
+		"type":      "range",
+		"id":        "first-image-position",
+		"min":       -20,
+		"max":        20,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Position",
+    	"default":   0
+	  },
+	  {
+        "type": "text",
+        "id": "first_image_label",
+        "label": "Label"
+      },
+	  {
+        "type": "url",
+        "id": "first_image_url",
+        "label": "Url"
+      },
+	  {
+        "type": "image_picker",
+        "id": "second_image",
+        "label": "Second image"
+      },
+	  {
+		"type":      "range",
+		"id":        "second-image-padding",
+		"min":       0,
+		"max":        70,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Padding",
+    	"default":   0
+	  },
+	  {
+		"type":      "range",
+		"id":        "second-image-position",
+		"min":       -20,
+		"max":        20,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Position",
+    	"default":   0
+	  },
+	  {
+        "type": "text",
+        "id": "second_image_label",
+        "label": "Label"
+      },
+	  {
+        "type": "url",
+        "id": "second_image_url",
+        "label": "URL"
+      },
+	  {
+		"type":      "range",
+		"id":        "font-size",
+		"min":       12,
+		"max":        72,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Font size",
+    	"default":   15
+	  },
+      {
+         "type":      "select",
+         "id":        "font-weight",
+         "label":     "font Weight",
+         "options": [
+            { "value": "lighter", "label": "lighter"},
+            { "value": "normal", "label": "normal"},
+            { "value": "bold", "label": "bold"},
+            { "value": "bolder", "label": "bolder"}
+         ]
+      },
+	  {
+		"type":      "range",
+		"id":        "top-space",
+		"min":       0,
+		"max":        70,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Top Space",
+    	"default":   0
+	  },
+	  {
+		"type":      "range",
+		"id":        "bottom-space",
+		"min":       0,
+		"max":        72,
+		"step":       1,
+		"unit":       "px",
+		"label":     "Bottom Space",
+    	"default":   0
+	  }
+	],
+	"presets": [
+		{
+      		"name": "Two images",
+      		"category": "Image"
+    	}
+	]
+  }
+{% endschema %}

@@ -1,0 +1,216 @@
+{% include 'the-reels-layout' %}
+
+{% schema %}
+  {
+    "blocks": [
+      {
+      "type": "content",
+      "name": "content",
+      "settings": [
+        {
+          "id": "title",
+          "type": "text",
+          "label": "Heading"
+        },
+        {
+          "id": "sub_title",
+          "type": "textarea",
+          "label": "Sub Heading"
+        },
+		{
+          "type": "radio",
+          "id": "heading_location",
+          "options": [
+            { "value": "top", "label": "Top"},
+            { "value": "bottom", "label": "Bottom"}
+          ],
+          "label": "Insert At"
+        },
+		{
+          "type": "radio",
+          "id": "title_alignment",
+          "options": [
+			{ "value": "text-left", "label": "Left"},
+			{ "value": "text-center", "label": "Center"},
+            { "value": "text-right", "label": "Right"}
+          ],
+          "label": "Title Alignment"
+        },
+		{
+          "type": "header",
+          "content": "Content Type"
+        },
+		{
+          "type": "radio",
+          "id": "content_type",
+          "options": [
+            { "value": "image", "label": "image"},
+            { "value": "video", "label": "video"},
+            { "value": "paragraph", "label": "paragraph"}
+          ],
+          "label": "Type"
+        },
+		{
+          "type": "checkbox",
+          "id": "content_clean_line",
+		  "default": false,
+          "label": "Break Line",
+		  "info": "Force Column to align to the start of  the row"
+        },
+		{
+          "type": "header",
+          "content": "Content Size"
+        },
+		{
+          "type": "radio",
+          "id": "content_column",
+          "options": [
+			{ "value": "one-whole", "label": "100%"},
+            { "value": "six-tenths", "label": "60%"},
+            { "value": "one-half", "label": "50%"},
+            { "value": "four-tenths", "label": "40%"}
+          ],
+          "label": "Column"
+        },
+		{
+          "type": "checkbox",
+          "id": "content_compact",
+		  "default": false,
+          "label": "compact",
+		  "info": "Only avaible for paragraph with a 100% size column"
+        },
+		{
+          "type": "checkbox",
+          "id": "content_border_top",
+		  "default": false,
+          "label": "Top Separator"
+        },
+		{
+          "type": "checkbox",
+          "id": "content_border_bottom",
+		  "default": false,
+          "label": "Bottom Separator"
+        },
+		{
+          "type": "header",
+          "content": "Paragraph"
+        },
+		{
+          "id": "paragraph",
+          "type": "textarea",
+          "label": "Paragraph",
+		  "default": "Sample Text"
+        },
+		{
+          "id": "paragraph_desc",
+          "type": "text",
+          "label": "Description",
+		  "default": "- by Lorem Ipsum"
+        },
+		{
+          "type": "radio",
+          "id": "paragraph_alignment",
+          "options": [
+			{ "value": "text-center", "label": "Center"},
+            { "value": "text-left", "label": "Left"},
+            { "value": "text-right", "label": "Right"}
+          ],
+          "label": "Text Alignment"
+        },
+		{
+          "type": "range",
+          "id": "paragraph_vertical_align",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Vertical Position",
+          "default": 0
+      	},
+		{
+          "type": "checkbox",
+          "id": "paragraph_Separator",
+		  "default": true,
+          "label": "Separator Border"		  
+        },
+		{
+          "type": "header",
+          "content": "video"
+        },
+        {
+          "id": "video_url",
+          "type": "text",
+          "label": "Video URL",
+          "info": "must be a mp4 format",
+		  "default": "https://s3-us-west-2.amazonaws.com/tuckernyc/Tucker_FallPreview_Video.mp4"
+        },
+		{
+         "type":      "select",
+         "id":        "video_control_position",
+         "label":     "Video Control",
+         "options": [
+           {
+             "value": "center",
+             "label": "Center"
+           },
+           {
+             "value": "bottom-right",
+             "label": "Bottom Right"
+           },
+		   {
+             "value": "bottom-left",
+             "label": "Bottom Left"
+           }
+         ],
+         "default":   "center"
+      	},
+		{
+         "type":      "select",
+         "id":        "video_mobile_control_position",
+         "label":     "Video Control (Mobile)",
+         "options": [
+           {
+             "value": "small--center",
+             "label": "Center"
+           },
+           {
+             "value": "small--bottom-right",
+             "label": "Bottom Right"
+           },
+		   {
+             "value": "small--bottom-left",
+             "label": "Bottom Left"
+           }
+         ],
+         "default":   "small--center"
+      	},
+		{
+          "type": "header",
+          "content": "image"
+        },
+        {
+          "type": "image_picker",
+          "id": "img_1",
+          "label": "Image"
+        },
+		{
+          "id": "imgage_title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "id": "image_description",
+          "type": "textarea",
+          "label": "Description"
+        }
+      ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

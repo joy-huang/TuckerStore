@@ -1,0 +1,452 @@
+
+
+
+// Email Capture Popup
+$(function() {
+  // Reference to Nov 2015 email capture popup.
+  var $emailCapture = $('#EmailCapturePopup');
+
+
+  // Collect URL to check for Friendbuy referral visit
+  var url = window.location.href;
+
+
+  $('#modalpop').click(function(){
+
+    if (Cookies.get(NEVER_SHOW_NOV_2015_EMAIL_POPUP)) {
+      Cookies.remove(NEVER_SHOW_NOV_2015_EMAIL_POPUP);
+    }
+
+    if (Cookies.get(CLOSED_NOV_2015_EMAIL_POPUP)) {
+      Cookies.remove(CLOSED_NOV_2015_EMAIL_POPUP);
+    }
+
+    if (Cookies.get(SIGNED_UP_NOV_2015_EMAIL_POPUP)) {
+      Cookies.remove(SIGNED_UP_NOV_2015_EMAIL_POPUP);
+    }
+
+    Cookies.set(USER_TRIGGER_POPUP, Date.now());
+
+    location.reload();
+
+
+  });
+  
+
+  //
+  // Show popup if we should.
+  //
+
+  window.CLOSED_NOV_2015_EMAIL_POPUP = 'CLOSED_NOV_2015_EMAIL_POPUP';
+  window.NEVER_SHOW_NOV_2015_EMAIL_POPUP = 'NEVER_SHOW_NOV_2015_EMAIL_POPUP';
+  window.SIGNED_UP_NOV_2015_EMAIL_POPUP = 'SIGNED_UP_NOV_2015_EMAIL_POPUP';
+
+  window.USER_TRIGGER_POPUP = 'USER_TRIGGER_POPUP';
+  
+  // If previously signed up, leave popup hidden.
+  if (hasSignedUp()) return;
+
+  // If never show again, leave popup hidden.
+  if (clickedNeverShowAgain()) return;
+
+  // If closed popup in last 12 hours, leave popup hidden.
+  if (hasClosedWithinHours(72)) return;
+
+  // If the user is coming from a newsletter, leave popup hidden.
+  if (window.getParameterByName('utm_source') == "Tucker Newsletter") return;
+
+
+  // If visitor is a referral, exit
+  if(url.indexOf('Friendbuy') != -1) return
+
+
+  
+  function UserTriggerPopup() {
+    if (Cookies.get(USER_TRIGGER_POPUP)) return true;
+    return false;
+  }
+  
+  
+  if(UserTriggerPopup()) {
+      
+    $emailCapture.show();
+        
+  } else {
+        
+    setTimeout(function() {$emailCapture.show();}, 5000);
+  }
+   
+  
+  
+
+  // Temporary close (background or x click)
+  $emailCapture.click(function(e) {
+    temporalilyClose();
+  });
+  $emailCapture.find('.email-capture-close').click(function(e) {
+    temporalilyClose();
+  });
+
+  // Forever close
+  $emailCapture.find('.email-popup-never-again').click(function(e) {
+    foreverClose();
+  })
+
+  // Prevent click events from bubbling up
+  // and closing whole email capture popup.
+  $emailCapture.find('.email-popup-content').click(function(e) {
+    e.stopPropagation();
+  });
+
+  // Submit
+  $emailCapture.find('form').submit(function(e) {
+    e.preventDefault();
+
+    var $emailPopupError = $emailCapture.find('.email-popup-error');
+
+    var email = $(this).find('[name="email"]').val();
+
+    if (!validateEmail(email)) {
+      $emailPopupError.text('Oops! You entered an invalid email address.');
+      return
+    }
+
+    // Prevent multiple submits.
+    var $subscribeButton = $emailCapture.find('#homepage-email-popup-subscribe');
+    $subscribeButton.attr('disabled', true);
+
+    sendEmailSignup('', email, function(errMessage) {
+      $emailPopupError.text('');
+
+      // Allow submissions now that the request has gone through.
+      $subscribeButton.attr('disabled', false);
+
+      if (errMessage) {
+        // Email already exists.
+        // TODO: one day actually have proper error checking.
+        $emailPopupError.text('Someone with this email has already signed up.');
+        return;
+      }
+
+      Cookies.set(SIGNED_UP_NOV_2015_EMAIL_POPUP, Date.now());
+      $emailCapture
+        .removeClass('show-signup-form')
+        .addClass('show-thank-you');
+    });
+  });
+
+  // Thank you close button.
+  $emailCapture.find('.email-popup-thank-you button').click(function(e) {
+    $emailCapture.hide();
+  });
+
+  function temporalilyClose() {
+    $emailCapture.hide();
+    Cookies.set(CLOSED_NOV_2015_EMAIL_POPUP, Date.now());
+  }
+
+  function foreverClose() {
+    $emailCapture.hide();
+    Cookies.set(NEVER_SHOW_NOV_2015_EMAIL_POPUP, Date.now());
+  }
+
+  function clickedNeverShowAgain() {
+    if (localStorage[NEVER_SHOW_NOV_2015_EMAIL_POPUP]) return true;
+    if (Cookies.get(NEVER_SHOW_NOV_2015_EMAIL_POPUP)) return true;
+    return false;
+  }
+
+  function hasSignedUp() {
+    if (localStorage[SIGNED_UP_NOV_2015_EMAIL_POPUP]) return true;
+    if (Cookies.get(SIGNED_UP_NOV_2015_EMAIL_POPUP)) return true;
+    return false;
+  }
+
+  function hasClosedWithinHours(hours) {
+    // Ignoring localStorage here.
+    var closedAt = Cookies.get(CLOSED_NOV_2015_EMAIL_POPUP);
+    var closePeriod = hours*60*60*1000;
+    if (closedAt && (+closedAt)+closePeriod > Date.now()) return true;
+    return false;
+  }
+});
+
+
+
+
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
+
+// Show search overlay on click.
+$(function() {
+  $('.search-overlay-show').click(function(e) {
+    if ($(document.body).hasClass('show-search')) {
+      // Return so the event bubbles up and closes search overlay.
+      return;
+    }
+
+    // If we are on a naked search page, just focus the input.
+    if (window.location.pathname === '/search' && window.location.search === '') {
+      $('input.search-input').focus();
+      return;
+    }
+
+    $(document.body).addClass('show-search');
+    e.stopPropagation(); // prevent from reaching body and immediately closing overlay.
+  });
+
+  $('.search-overlay-close').click(function(e) {
+    $(document.body).removeClass('show-search');
+  });
+
+  $('#SearchOverlay').click(function(e) {
+    e.stopPropagation(); // Stop event from propagating all the way, because that closes the overlay.
+  });
+
+  $(document.body).click(function(e) {
+    $(document.body).removeClass('show-search');
+  });
+})
+
+// Rotate image on hover.
+$(function() {
+  var rotateInterval;
+
+  $(document).on('mouseover', '.rotate-image-on-hover', function(e) {
+    var parent = $(e.target).parents('.rotate-image-on-hover');
+    var secundaryImg = $(parent).find('.secundary-img');
+    if (!$(secundaryImg).hasClass('lazyloaded')) {
+      $(secundaryImg).addClass('lazypreload');
+    }
+        rotateImage(parent)(); // Immediately rotate.
+
+
+    // Start rotating.
+    rotateInterval = setInterval(rotateImage(parent), 1500);
+    return;
+  });
+
+  $(document).on('mouseout', '.rotate-image-on-hover', function(e) {
+    // Stop rotating.
+    clearInterval(rotateInterval);
+
+    // Return to featured image.
+    var parent = $(e.target).parents('.rotate-image-on-hover');
+    $(parent).find('img').hide();
+    $(parent).find('img.featured-image').show()
+  });
+  function rotateImage(parent) {
+    return function() {
+      var images = $(parent).find('img');
+
+      // find which one is displayed
+      var displayedIndex;
+      for (var i = 0; i < images.length; i++) {
+        if (!$(images[i]).is(':visible')) continue;
+        displayedIndex = i;
+        break;
+      }
+
+      // Hide all.
+      images.hide();
+
+      // Display the next one.
+      var nextIndex = (displayedIndex + 1) % images.length;
+      $(images[nextIndex]).show();
+    }
+  }
+});
+
+
+
+
+// Email signups.
+$(function() {
+
+  /**
+   * Determine wheter Tucker should subscribe email address,
+   * then send ajax request.
+   *
+   * @param {String} name
+   * @param {String} email
+   * @param {Function(String)} cb is with an error message, if present.
+   */
+
+  window.sendEmailSignup = function sendEmailSignup(name, email, cb) {
+
+    cb = cb || function() {}
+
+    var utmSource = Cookies.get(UTM_SOURCE);
+    var utmMedium = Cookies.get(UTM_MEDIUM);
+    var utmCampaign = Cookies.get(UTM_CAMPAIGN);
+    var utmContent = Cookies.get(UTM_CONTENT);
+    var utmTerm = Cookies.get(UTM_TERM);
+    var sessionReferringUrl = Cookies.get(REFERRING_URL);
+    var sessionLandingUrl = Cookies.get(LANDING_PAGE_URL);
+
+    var subscriber = {
+      shopName: 'tucker',
+      subscriberName: name,
+      subscriberEmail: email,
+      utmSource: utmSource,
+      utmMedium: utmMedium,
+      utmCampaign: utmCampaign,
+      utmContent: utmContent,
+      utmTerm: utmTerm,
+      sessionReferringUrl: sessionReferringUrl,
+      sessionLandingUrl: sessionLandingUrl,
+      shouldSendCoupon: true,
+    };
+    
+    var cosmoUrl = 'https://cosmo.herokuapp.com/coupons/api/subscribe';
+
+    $.ajax({
+      type: "POST",
+      url: cosmoUrl,
+      data: JSON.stringify(subscriber),
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+      error: function(err) {
+
+        if (err.responseText == "Member Exists") {
+          cb("Member exists");
+        } else {
+          // Handle mailchimp signup error.
+          console.log('newsletter signup error', err);
+          cb("what?")
+        }
+      },
+      success: function(data) {
+        console.log("this is data:", data);
+        if (data.result == 'error') {
+          cb("I don't even know");
+          console.log(data.msg);
+        }
+        cb();
+        
+      zaius.event("email", 
+    		{
+      			action: "subscribe",
+      			email: email
+    		}
+  		);
+        
+      }
+    });
+  }
+});
+
+
+
+
+window.getParameterByName = function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+// Scroll to Top Button
+$(function () {
+  var footerAndWindowHeight = ($("footer.site-footer .grid__item").height() * 1.5 ) +  $(window).height();
+  $(window).scroll(function(){
+    if($(document).height()  <= $(document).scrollTop() + footerAndWindowHeight ) {
+      $("#scrollTop").removeClass('fixed');
+    } else if ($(document).scrollTop() > $(window).height()){
+      $("#scrollTop").addClass('fixed');
+    } else {
+      $("#scrollTop").removeClass('fixed');
+    }
+    if ($(document).scrollTop() < $(window).height()){
+      $("#scrollTop").hide();
+    } else {
+      $("#scrollTop").show();
+    }
+  });
+
+  $("#scrollTop").on('click', function() {
+    $("html, body").animate({ scrollTop: 0 }, "slow");
+  });
+});
+
+// Sections redesign
+$(function () {
+
+  //video functions
+  $(".video-container").on("click", function(){
+      var player = $(this).find("video").get(0);
+      var $control = $(this).find(".control");
+      if (!player) return;
+
+      if (player.paused) {
+          player.play();
+          $control.addClass("playing");
+      } else {
+          player.pause();
+          $control.removeClass("playing");
+      }
+  });
+
+  //on load promo text position
+  function fixPromoPosition() {
+    var h = $("#promo-text").outerHeight();
+    if (h && h>0) {
+      $(".site-header").css("margin-top", h);
+    }
+  }
+  
+  function fixExpPromoPosition() {
+    var hh = $("#exp-promo-text").outerHeight();
+    if (hh && hh>0) {
+      $(".site-header").css("margin-top", hh);
+    }
+  }  
+
+  fixPromoPosition();
+  fixExpPromoPosition();
+});
+
+// index carousel
+
+$(function(){
+  
+//   $('.carousel-container').on('init', function(event, slick){
+//     console.log($('.slick-cloned').each(){
+//             console.log($(this).css('background-image'));
+//             });
+//   });
+
+  $('.carousel-container').slick({
+    speed: 300,
+    arrows: true,
+    swipe: false,
+    infinite: true,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          arrows: false,
+          dots: true,
+          swipe: true,
+        }
+      }
+    ]
+  }).on('beforeChange', function(event, slick, currentSlide, nextSlide){
+    var $slide = $(slick.$slides).each(function(i, obj) {
+    	$(obj).find('.carousel-img-container').addClass('lazyload');
+    });
+  })
+  
+  $('.carousel-container').find('.carousel-img-container').each(function(e, obj) {
+    if (window.innerWidth <= 720) {
+      $(obj).css('background-image', 'url(' + $(obj).data('mobile') + ')');
+    } else {
+      $(obj).css('background-image', 'url(' + $(obj).data('desktop') + ')');
+    }
+  });
+
+});

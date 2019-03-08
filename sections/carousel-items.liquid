@@ -1,0 +1,51 @@
+<div>
+	{% include 'homepage-carousel' %}
+</div>
+{% schema %}
+  {
+    "blocks":[
+		{
+			"type": "carousel-item",
+			"name": "Carousel Item",
+			"limit": 5,
+			"settings": [
+				{
+  				  "type": "text",
+				  "id": "title",
+				  "label": "Image Title"
+				},
+                {
+                   "type": "color",
+                   "id": "headline_color",
+                   "label": "Headline Color",
+                   "info": "Text"
+                },
+				{
+				  "type": "image_picker",
+				  "id": "item_img",
+ 				  "label": "Carousel Image"
+				},
+				{
+				  "type": "image_picker",
+				  "id": "item_img_mobile",
+          "label": "Carousel Image for mobile"
+				},
+				{
+				  "type": "url",
+				  "id": "shop_col",
+				  "label": "Shop Collection URL"
+				},
+                {
+                  "id": "text_link",
+                  "type": "textarea",
+                  "label": "Text Link"
+                }
+			]
+		}
+	],
+	"presets": [{
+      "name": "Carousel",
+      "category": "Image"
+    }]
+  }
+{% endschema %}

@@ -1,0 +1,218 @@
+<style>
+  .section-content.contact-us {
+    margin-bottom: 80px;
+    margin-top: 80px;
+  }
+  .container{
+    background-image: url(//cdn.shopify.com/s/files/1/0962/9270/t/3/assets/tucker_flowerbground.png?1480420…);
+    background-repeat: repeat;
+  }
+  .columns{
+    display: inline-block; 
+    padding: 10px;
+    text-align:left;
+    padding-left: 0px;
+  }
+  .information{
+    background-color: #F8F8F7; 
+    margin: 0px;
+    text-align: center;
+    padding-left: 0px;
+    margin-bottom: 3vw;
+  }
+  .first{
+    font-weight: bold;
+    font-size: 13px;
+    font-family: "fontin_sans_rgregular","Georgia", serif;
+    background: transparent;
+  }
+  .second{
+    font-family: "fontin_sans_rgregular","Georgia", serif;
+    font-size: 18px;
+  }
+  .form-contact-mobile{
+    width: 80%;
+    margin: auto;
+  }
+  input{
+    width: 100%;
+    display: block;
+    padding: 12px 20px;
+    margin: 8px 0;
+    font-size: 18px;
+    font-family: "fontin_sans_rgregular","Georgia", serif;
+    /* float: left; */
+    background: none;
+    border: none;
+    border-bottom: 1px solid grey;
+  }
+  label{
+    font-size: 16px;
+    font-family: "fontin_sans_rgregular", "Georgia", serif;
+    background: none;
+    margin-right: 56em;
+  }
+  .inputs-block{
+    display: inline-block;
+  }
+/*   .inputs-block > input{
+                width: 26.5em;
+  } */
+  .textarea-input{
+    text-align: -webkit-left;
+  }
+  .textarea-input > textarea{
+    background: none;
+    border: 1px solid grey;
+  } 
+  #SendContact{
+    border-color: #364076;
+    min-width: 200px;
+    font-weight: bold;
+    background-color: transparent;
+    border: 1px solid;
+    padding: 8px 20px;
+    color: #364076;
+    background: none;
+    overflow: visible;
+    font-size: 13px;
+    letter-spacing: 1.8px;
+    font-family: "fontin_sans_rgregular","Georgia", serif;
+    line-height: 17px;
+  }
+  
+  #SendContact:hover{
+    background-color: transparent;
+    border: 1px solid #969595;
+    color: #969595;
+  }
+ 
+  @media only screen and (max-width: 768px) {
+    .form-contact-mobile {
+      width: 80%;
+      margin: 0;
+    }
+  }
+
+  @media (min-width: 769px){
+    .one-half-reduce {
+      width: 49%;
+    }
+    .title-spaces-desktop {
+      margin-bottom:3vw;
+    }
+
+  }
+  
+  body#contact-us .wrapper.wrapper-container.wrapper-content {
+    min-height: 600px;
+  }
+  
+</style>
+
+<div class="section-content contact-us">
+  <div class="grid">
+
+    <div class="grid__item large--one-whole title-spaces-desktop">
+      <h2 class="headline2 border-bottom" style="margin:0px;">We'd love to hear from you</h2>
+    </div>
+
+    <div class="grid__item large--one-whole">
+      <div class="information grid__item large--one-whole">
+        <div class="columns grid__item large--one-half">
+          <h2 class="first">E-MAIL US ANYTIME</h2>
+          <p class="second">hello@tuckernyc.com</p>
+        </div>
+
+        <div class="columns grid__item large--one-half">
+          <h2 class="first">WHOSALE INQUIRES</h2>
+          <p class="second">sales@tuckernyc.com</p>
+        </div>
+
+        <div class="columns grid__item large--one-half">
+          <h2 class="first">PRESS INQUIRES</h2>
+          <p class="second">tucker@autumncommunications.com</p>
+        </div>
+
+        <div class="columns grid__item large--one-half">
+          <h2 class="first">MON-FRI 9AM-5PM (ET)</h2>
+          <p class="second">1.800.201.9510</p>
+        </div>
+      </div>
+      <div class="container grid__item large--one-whole">
+        <div class="form-contact form-contact-mobile">
+          <form action="" class="form-contacts " style="display:none;">
+            <div class="inputs-block large--one-half small--one-whole medium--one-whole">
+              <input type="text" name="name"  placeholder="Name" class="inputs">
+              <input type="text" name="email" placeholder="Email" class="inputs">
+            </div>
+            <div class="inputs-block large--one-half small--one-whole medium--one-whole one-half-reduce">
+              <input type="text" name="phone" placeholder="Phone Number" class="inp">
+              <input type="text" name="subject" placeholder="Subject">
+            </div><br>
+            <div class="textarea-input">
+              <label>Message</label><br>
+
+              <textarea name="" id=""  rows="5" style="width:100%"></textarea>
+            </div>
+            <button type="submit" id="SendContact">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+    
+
+
+{% comment %}
+<div class="grid--full info">
+
+  <div class="grid__item large--one-whole">
+    <div class="info__header">
+      Contact Us
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <div class="info-box grid__item large--eight-twelfths push--large--two-twelfths">
+
+    Please contact us by email and we'll get back to you as soon as we can.
+    
+<!-- Start of tucker Zendesk Widget script -->
+<script>/*<![CDATA[*/window.zEmbed||function(e,t){var n,o,d,i,s,a=[],r=document.createElement("iframe");window.zEmbed=function(){a.push(arguments)},window.zE=window.zE||window.zEmbed,r.src="javascript:false",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="display: none",d=document.getElementsByTagName("script"),d=d[d.length-1],d.parentNode.insertBefore(r,d),i=r.contentWindow,s=i.document;try{o=s}catch(e){n=document.domain,r.src='javascript:var d=document.open();d.domain="'+n+'";void(0);',o=s}o.open()._l=function(){var e=this.createElement("script");n&&(this.domain=n),e.id="js-iframe-async",e.src="https://assets.zendesk.com/embeddable_framework/main.js",this.t=+new Date,this.zendeskHost="tucker.zendesk.com",this.zEQueue=a,this.body.appendChild(e)},o.write('<body onload="document._l();">'),o.close()}();
+/*]]>*/</script>
+<!-- End of tucker Zendesk Widget script -->
+
+    <hr />
+
+    <a href="mailto:hello@tuckernyc.com" target="_top">hello@tuckernyc.com</a>
+    <br />
+    <br />
+    1.800.201.9510
+    <br />
+    Monday - Friday 9am-5pm (ET)
+    <br />
+    <br />
+
+    For wholesale inquiries, email us at
+    <br/>
+    <a href="mailto:sales@tuckernyc.com" target="_top">sales@tuckernyc.com</a>
+
+    <br />
+    <br />
+    For press inquiries, email us at
+    <br/>
+    <a href="mailto:jessica@allenmc.com" target="_top">jessica@allenmc.com</a>
+
+  </div>
+
+</div>
+{% endcomment %}
+
+  <script>/*<![CDATA[*/window.zEmbed||function(e,t){var n,o,d,i,s,a=[],r=document.createElement("iframe");window.zEmbed=function(){a.push(arguments)},window.zE=window.zE||window.zEmbed,r.src="javascript:false",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="display: none",d=document.getElementsByTagName("script"),d=d[d.length-1],d.parentNode.insertBefore(r,d),i=r.contentWindow,s=i.document;try{o=s}catch(e){n=document.domain,r.src='javascript:var d=document.open();d.domain="'+n+'";void(0);',o=s}o.open()._l=function(){var e=this.createElement("script");n&&(this.domain=n),e.id="js-iframe-async",e.src="https://assets.zendesk.com/embeddable_framework/main.js",this.t=+new Date,this.zendeskHost="tucker.zendesk.com",this.zEQueue=a,this.body.appendChild(e)},o.write('<body onload="document._l();">'),o.close()}();
+/*]]>*/</script>
+  

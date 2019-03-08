@@ -1,0 +1,23 @@
+<div class="product-image-box grid__item text-center">
+	<div class="swiper-container">  
+		{% for image in product.images %}
+			<div class="swiper-slide">
+				      <img
+       class="lazyload zoom_01 blur-up"
+         data-zoom-image="{{ image | img_url: 'master' }}"
+         data-srcset="
+                      {{ image | img_url: '400x' }} 480w,
+                      {{ image | img_url: '700x' }} 780w,
+                      "
+         alt=""
+                          >
+			</div>
+
+		{% endfor %}
+	</div>
+</div>
+
+<div id="zoom-container" style='background:white;position:fixed;top:0;bottom:0;left:0;right:0;z-index:1000;display:none'>
+  <div id="myCanvas"></div>
+  <button class="close-zoom-btn" onclick="closeZoomContainer();">X</button>
+</div>

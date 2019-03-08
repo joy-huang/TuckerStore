@@ -1,0 +1,171 @@
+<!-- /snippets/ajax-cart-template.liquid -->
+{% comment %}
+
+  This snippet provides the default handlebars.js templates for
+  the ajax cart plugin. Use the raw liquid tags to keep the
+  handlebar.js template tags as available hooks.
+
+{% endcomment %}
+  <script id="CartTemplate" type="text/template">
+
+  {% raw %}
+  <form action="{{{action}}}" method="post" novalidate class="cart" id="cartform">
+    <div class="ajaxcart__inner">
+        <div style="text-align:right;">
+      		<button type="submit" class="cart__checkout ajaxcart-checkout-btn-top" name="checkout">
+        		GO TO CHECKOUT
+      		</button>
+            &nbsp;&nbsp;{% endraw %}<img src="{{ 'left-arrow-chevron.svg' | asset_url }}" style="width:10px; transform: rotate(180deg);">{% raw %}
+        </div>
+      {{#items}}
+      <div class="ajaxcart__product">
+        <div class="ajaxcart__row" data-line="{{line}}">
+          <div class="grid">
+            <div class="grid__item ajaxcart__grid--move-right">
+              <div class="ajaxcart__qty-remove icon-fallback-text" data-line="{{line}}">
+                <span class="icon icon-x ajaxcart__qty-remove__icon"></span>
+                <span class="fallback-text">x</span>
+              </div>
+            </div>
+            <div class="grid__item one-quarter">
+              <a href="{{url}}" class="ajaxcart__product-image"><img src="{{img}}" alt=""></a>
+            </div>
+            <div class="grid__item three-quarters">
+              <div class="grid--full">
+                <div class="grid__item">
+                  {{#if variation}}
+                  <span class="ajaxcart__product-meta  ajaxcart-color-paragraph3">{{{getColor variation}}}</span>
+                  {{/if}}
+
+                  <div class="ajaxcart__product-name ajaxcart-product-name-paragraph2">
+                    <a href="{{url}}">{{{name}}}</a>
+                  </div>
+                  {{#if variation}}
+                  <span class="ajaxcart__product-meta ajaxcart-size-paragraph3">Size: {{{getSize variation}}}</span>
+                  {{/if}}
+                </div>
+                <div class="grid__item ajaxcart__grid--move-right">
+
+                  <div id="regItemPrice" class="grid__item four-tenths ajaxcart_price">
+                    <div class="ajaxcart__product-price price ajaxcart-price-paragraph2" data-line="{{line}}">
+                      {{{price}}}
+                    </div>
+                  </div>
+
+                  <div class="grid__item six-tenths">
+                    <div class="grid--full display-table">
+                      <div class="grid__item display-table-cell one-half">
+                        <div class="ajaxcart__qty">
+                          <button type="button" class="qty-adjust ajaxcart__qty-adjust ajaxcart__qty--minus icon-fallback-text" data-id="{{id}}" data-qty="{{itemMinus}}" data-line="{{line}}">
+                            <span class="icon icon-minus" aria-hidden="true"></span>
+                            <span class="fallback-text">&minus;</span>
+                          </button>
+                          <input type="text" name="updates[]" class="ajaxcart__qty-num ajaxcart-price-paragraph2" value="{{itemQty}}" min="0" data-id="{{id}}" data-line="{{line}}" aria-label="quantity" pattern="[0-9]*">
+                          <button type="button" class="qty-adjust ajaxcart__qty-adjust ajaxcart__qty--plus icon-fallback-text" data-id="{{id}}" data-line="{{line}}" data-qty="{{itemAdd}}">
+                            <span class="icon icon-plus" aria-hidden="true"></span>
+                            <span class="fallback-text">+</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/items}}
+
+      <label for="CartGift" class="ajaxcart-product-name-paragraph2" style="display:none;color:#4a4a4a;">
+        <input id="CartGift" type="checkbox" name="gift-box-checked" value={{giftEnable}}></input>Add Gift Boxing To Your Order.
+      </label>
+
+      <div id="gift-note-contaner" style="display:none;">
+        <label class="ajaxcart-color-paragraph3" for="CartSpecialInstructions" style="display:block;">Write a note</label>
+        <textarea name="note" data-note="{{giftNote}}" class="input-full ajaxcart-product-name-paragraph2 disabled" id="CartSpecialInstructions">{{ giftNote }}</textarea>
+        <div style="text-align: right;">
+          <button id="save-note" style="margin-top:4px;" class="ajaxcart-checkout-btn btn--secondary" disabled>SAVE</button>
+        </div>
+      </div>
+
+      {% endraw %}{% if settings.cart_notes_enable %}{% raw %}
+      <div>
+        <label for="CartSpecialInstructions">{% endraw %}{{ 'cart.general.note' | t }}{% raw %}</label>
+        <textarea name="note" class="input-full" id="CartSpecialInstructions">{{ note }}</textarea>
+      </div>
+      {% endraw %}{% endif %}{% raw %}
+    </div>
+    <div class="ajaxcart__footer">
+      <div class="grid--full">
+	  
+        <div id="regTotalPrice" class="ajaxcart__subtotal ajaxcart-subtotal-paragraph2">
+          <span class="ajaxcart__subtotal-text">{% endraw %}{{ 'cart.general.subtotal' | t }}{% raw %}: </span>
+          <span class="ajaxcart__subtotal-price price">{{{totalPrice}}}</span>
+        </div>
+		
+      </div>
+      
+    {{#if totalPriceRaw}}
+    
+      <div class="grid--full" style="padding-top:10px;">
+        <div class="ajaxcart__subtotal ajaxcart-subtotal-paragraph2">
+          <span class="ajaxcart__subtotal-text">Shipping: </span>
+          <span class="ajaxcart__subtotal-price price">Free</span>
+        </div>
+      </div>
+        
+	{{/if}}      
+      
+      <button type="submit" class="btn btn--full cart__checkout ajaxcart-checkout-btn" name="checkout">
+        {% endraw %}{{ 'cart.general.checkout' | t }}{% raw %}
+      </button>
+      {% endraw %}{% if additional_checkout_buttons %}
+      <div class="additional_checkout_buttons">{{ content_for_additional_checkout_buttons }}</div>
+      {% endif %}
+      {% raw %}
+    </div>
+
+  </form>
+  {% endraw %}
+  </script>
+  <script id="AjaxQty" type="text/template">
+  {% raw %}
+    <div class="ajaxcart__qty">
+      <button type="button" class="qty-adjust ajaxcart__qty-adjust ajaxcart__qty--minus icon-fallback-text" data-id="{{id}}" data-qty="{{itemMinus}}">
+        <span class="icon icon-minus" aria-hidden="true"></span>
+        <span class="fallback-text">&minus;</span>
+      </button>
+      <input type="text" class="ajaxcart__qty-num" value="{{itemQty}}" min="0" data-id="{{id}}" aria-label="quantity" pattern="[0-9]*">
+      <button type="button" class="qty-adjust ajaxcart__qty-adjust ajaxcart__qty--plus icon-fallback-text" data-id="{{id}}" data-qty="{{itemAdd}}">
+        <span class="icon icon-plus" aria-hidden="true"></span>
+        <span class="fallback-text">+</span>
+      </button>
+    </div>
+  {% endraw %}
+  </script>
+  <script id="JsQty" type="text/template">
+  {% raw %}
+    <div class="js-qty">
+      <button type="button" class="qty-adjust js-qty__adjust js-qty__adjust--minus icon-fallback-text" data-id="{{id}}" data-qty="{{itemMinus}}">
+        <span class="icon icon-minus" aria-hidden="true"></span>
+        <span class="fallback-text">&minus;</span>
+      </button>
+      <input type="text" class="js-qty__num" value="{{itemQty}}" min="1" data-id="{{id}}" aria-label="quantity" pattern="[0-9]*" name="{{inputName}}" id="{{inputId}}">
+      <button type="button" class="qty-adjust js-qty__adjust js-qty__adjust--plus icon-fallback-text" data-id="{{id}}" data-qty="{{itemAdd}}">
+        <span class="icon icon-plus" aria-hidden="true"></span>
+        <span class="fallback-text">+</span>
+      </button>
+    </div>
+  {% endraw %}
+  </script>
+<script>
+  Handlebars.registerHelper('getColor', function(string) {
+    var variantsArray = string.split("/");
+    return variantsArray[1];
+  });
+  Handlebars.registerHelper('getSize', function(string) {
+    var variantsArray = string.split("/");
+    return variantsArray[0];
+  });
+</script>

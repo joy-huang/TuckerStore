@@ -1,0 +1,42 @@
+<div class="grid--full info">
+  <div class="grid__item large--one-whole">
+    <div class="info__header">
+      Linesheets
+    </div>
+  </div>
+  <div class="info-box grid__item large--eight-twelfths push--large--two-twelfths">
+    <p><a href="{{ 'linesheet-spring-2016-1.pdf' | asset_url }}" target="_blank">Spring 2016 Collection - First Delivery</a></p>
+    <p><a href="{{ 'linesheet-spring-2016-2.pdf' | asset_url }}" target="_blank">Spring 2016 Collection - Second Delivery</a></p>
+    <p><a href="{{ 'tucker-linesheet-summer-prefall-2016.pdf' | asset_url }}" target="_blank">Summer & Pre-Fall 2016 Collection</a></p>
+  </div>
+</div>
+
+<div class="password" style="position:fixed;z-index:100;background-color:white;top:0;right:0;bottom:0;left:0;text-align:center;">
+  <div style="margin-top:70px;">
+    <img width="170px" src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" />
+  </div>
+  <div style="margin-top:40px;">
+    <form action="#">
+      <input style="height:47px;" type="password" placeholder="Password" />
+      <button style="height:47px;padding-left:20px;padding-right:20px;" type="submit" class="btn">ENTER</button>
+    </form>
+  </div>
+  <div class="invalid-password" style="display:none;margin-top:10px;">
+    Invalid password
+  </div>
+</div>
+
+<script>
+  $(function() {
+    var $form = $('.password form');
+    $form.submit(function(e) {
+      e.preventDefault();
+      var val = $form.find('input').val();
+      if (val !== 'tuckernyc') {
+        $('.invalid-password').show();
+        return;
+      }
+      $('.password').hide();
+    });
+  });
+</script>

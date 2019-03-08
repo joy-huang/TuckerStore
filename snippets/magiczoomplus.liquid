@@ -1,0 +1,32 @@
+{% assign MagicToolboxSirvID = '' %}
+{% assign MagicToolboxSirvSpinsPath = 'products/{product-id}/{product-id}.spin' %}
+{% assign MagicToolboxShowMessage = 'Yes' %}
+{% assign MagicToolboxMessage = 'Move your mouse over image or click to enlarge' %}
+{% assign MagicToolboxBigImageSize = 'master' %}
+{% assign MagicToolboxThumbnailImageSize = 'large' %}
+{% assign MagicToolboxSelectorImageSize = 'small' %}
+{% assign MagicToolboxUseCustomWidth = 'No' %}
+{% assign MagicToolboxThumbnailImageWidth = '480' %}
+{% if MagicToolboxUseCustomWidth == 'Yes' %}
+<style type="text/css">.MagicZoomPlus > img { max-width: {{ MagicToolboxThumbnailImageWidth }}px !important; }</style>
+{% endif %}
+<div class="MagicToolboxContainer">
+    <a href="{{ product.images[0] | product_img_url: MagicToolboxBigImageSize }}" class="MagicZoomPlus" id="zoom{{ product.id }}" title="{{ product.images[0].alt | escape }}"><img itemprop="image" src="{{ product.images[0] | product_img_url: MagicToolboxThumbnailImageSize }}" alt="{{ product.images[0].alt | escape }}" /></a>
+    {% if MagicToolboxShowMessage == 'Yes' %}
+    <div class="MagicToolboxMessage">{{ MagicToolboxMessage }}</div>
+    {% endif %}
+    {% if product.images.size > 1 %}
+    <div class="MagicToolboxSelectorsContainer">
+        {% for image in product.images %}
+        <a href="{{ image | product_img_url: MagicToolboxBigImageSize }}" rel="zoom-id:zoom{{ product.id }}" rev="{{ image | product_img_url: MagicToolboxThumbnailImageSize }}" title="{{ image.alt | escape }}"><img src="{{ image | product_img_url: MagicToolboxSelectorImageSize }}" alt="{{ image.alt | escape }}" /></a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<script>
+var SirvID = '{{ MagicToolboxSirvID }}';
+var SirvSpinsPath = '{{ MagicToolboxSirvSpinsPath }}';
+var SirvProductID = {{ product.id }};
+var SirvIconURL = '{{ 'SirvIcon.png' | asset_url }}';
+</script>

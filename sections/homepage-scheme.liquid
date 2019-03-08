@@ -1,0 +1,396 @@
+{% include 'homepage-layout' %}
+{% schema %}
+{
+  "blocks": [
+    {
+      "type": "content",
+      "name": "content",
+      "settings": [
+       {
+          "id": "title",
+          "type": "text",
+          "label": "Heading"
+        },
+        {
+          "id": "sub_title",
+          "type": "textarea",
+          "label": "Sub Heading"
+        },
+		{
+          "type": "radio",
+          "id": "heading_location",
+          "options": [
+            { "value": "top", "label": "Top"},
+            { "value": "bottom", "label": "Bottom"}
+          ],
+          "label": "Insert At"
+        },
+		{
+          "type": "radio",
+          "id": "heading_style",
+          "options": [
+            { "value": "headline", "label": "Headline"},
+            { "value": "headline2", "label": "Headline2"},
+            { "value": "headline3", "label": "Headline3"},
+            { "value": "headline4", "label": "Headline4"},
+			{ "value": "headline5", "label": "Headline5"}
+          ],
+		  "default": "headline2",
+          "label": "Heading Style"
+        },
+		{
+          "type": "checkbox",
+          "id": "headline_font_style",
+		  "default": false,
+          "label": "Italy"
+        },
+		{
+          "type": "radio",
+          "id": "title_alignment",
+          "options": [
+			{ "value": "text-left", "label": "Left"},
+			{ "value": "text-center", "label": "Center"},
+            { "value": "text-right", "label": "Right"}
+          ],
+          "label": "Title Alignment"
+        },
+        {
+          "type": "radio",
+          "id": "content_type",
+          "options": [
+            { "value": "snippet", "label": "snippet"},
+            { "value": "video", "label": "video"},
+            { "value": "image", "label": "image"},
+            { "value": "paragraph", "label": "paragraph"},
+            { "value": "video-image", "label": "video - image"},
+            { "value": "image-video", "label": "image - video"},
+            { "value": "image-image", "label": "image - image"},
+            { "value": "text-img", "label": "paragraph - image"},
+            { "value": "img-text", "label": "image - paragraph"}
+          ],
+          "label": "Type"
+        },
+		{
+          "type": "radio",
+          "id": "content_column",
+          "options": [
+			{ "value": "seven-tenths", "label": "70%"},
+            { "value": "six-tenths", "label": "60%"},
+            { "value": "one-half", "label": "50%"},
+            { "value": "four-tenths", "label": "40%"},
+			{ "value": "three-tenths", "label": "30%"}
+          ],
+		  "default": "one-half",
+          "label": "Column"
+        },
+		{
+          "type": "radio",
+          "id": "content_column2",
+          "options": [
+			{ "value": "seven-tenths", "label": "70%"},
+            { "value": "six-tenths", "label": "60%"},
+            { "value": "one-half", "label": "50%"},
+            { "value": "four-tenths", "label": "40%"},
+			{ "value": "three-tenths", "label": "30%"}
+          ],
+		  "default": "one-half",
+          "label": "Column"
+        },
+		{
+          "type": "checkbox",
+          "id": "content_compact",
+		  "default": false,
+          "label": "compact",
+		  "info": "Only avaible for paragraph with a 100% size column"
+        },
+		{
+          "type": "checkbox",
+          "id": "content_separation",
+		  "default": false,
+          "label": "Without Separation"
+        },
+		{
+          "type": "radio",
+          "id": "background_color",
+          "options": [
+			{ "value": "", "label": "None"},
+ 			{ "value": "background-section-white", "label": "White"},
+            { "value": "background-section-aqua", "label": "Aqua"},
+            { "value": "background-section-light-pink ", "label": "Light Pink"},
+			{ "value": "background-section-light-gray", "label": "Light Gray"}
+          ],
+          "label": "Background_Color"
+        },
+		{
+          "type": "range",
+          "id": "row_height",
+          "min": 0,
+          "max": 800,
+          "step": 10,
+          "unit": "px",
+          "label": "Section Height",
+          "default": 400
+        },
+ 		{
+          "type": "range",
+          "id": "section_horizontal_padding",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Section Horizontal Padding",
+          "default": 0
+        },
+		{
+          "type": "range",
+          "id": "section_vertical_padding",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Section Vertical Padding",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Paragraph"
+        },
+        {
+          "id": "paragraph",
+          "type": "textarea",
+          "label": "Paragraph",
+          "default": "Sample Text"
+        },
+        {
+          "id": "link_into_paragraph",
+          "type": "url",
+          "label": "Link"
+        },
+		{
+          "id": "text_link_into_paragraph",
+          "type": "textarea",
+          "label": "Text Link"
+        },
+        {
+          "type": "radio",
+          "id": "paragraph_alignment",
+          "options": [
+            { "value": "text-center", "label": "Center"},
+            { "value": "text-left", "label": "Left"},
+            { "value": "text-right", "label": "Right"}
+          ],
+          "label": "Text Alignment"
+        },
+        {
+          "type": "range",
+          "id": "paragraph_horizontal_padding",
+          "min": 0,
+          "max": 500,
+          "step": 10,
+          "unit": "px",
+          "label": "Horizontal Padding",
+          "default": 100
+        },
+		{
+          "type": "range",
+          "id": "paragraph_vertical_padding",
+          "min": 0,
+          "max": 500,
+          "step": 10,
+          "unit": "px",
+          "label": "Vertical Padding",
+          "default": 10
+        },
+		{
+          "type": "checkbox",
+          "id": "decoration_paragraph",
+		  "default": false,
+          "label": "None Decoration"
+        },
+{
+          "type": "radio",
+          "id": "paragraph_style",
+          "options": [
+            { "value": "headline", "label": "Headline"},
+            { "value": "headline2", "label": "Headline2"},
+            { "value": "headline3", "label": "Headline3"},
+            { "value": "headline4", "label": "Headline4"},
+			{ "value": "headline5", "label": "Headline5"}
+          ],
+		  "default": "headline3",
+          "label": "Heading Style"
+        },
+		{
+          "type": "checkbox",
+          "id": "font_style_paragraph",
+		  "default": false,
+          "label": "Italy"
+        },
+        {
+          "type": "header",
+          "content": "video"
+        },
+        {
+          "id": "video_url",
+          "type": "text",
+          "label": "Video URL"
+        },
+        {
+          "id": "video_title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "id": "video_description",
+          "type": "textarea",
+          "label": "Description"
+        },
+        {
+          "id": "link_into_video_description",
+          "type": "url",
+          "label": "Link"
+        },
+		{
+          "id": "text_link_into_video_description",
+          "type": "textarea",
+          "label": "Text Link"
+        },
+        {
+          "type": "header",
+          "content": "Image"
+        },
+  		{
+          "type": "image_picker",
+          "id": "img_1",
+          "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "img_1_mobile",
+          "label": "Image for mobile"
+        },
+        {
+          "id": "image1_title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "id": "image1_description",
+          "type": "textarea",
+          "label": "Description"
+        },
+        {
+          "id": "link_into_image1_description",
+          "type": "url",
+          "label": "Link"
+        },
+		{
+          "id": "text_link_into_image1_description",
+          "type": "textarea",
+          "label": "Text Link"
+        },
+        {
+          "type": "radio",
+          "id": "image1_width",
+          "options": [
+            { "value": "width: 50%;", "label": "50%"},
+            { "value": "width: 100%;", "label": "100%"}
+          ],
+          "label": "Width Image"
+        },
+		{
+          "type": "range",
+          "id": "image_horizontal_padding",
+          "min": 0,
+          "max": 200,
+          "step": 10,
+          "unit": "px",
+          "label": "Horizontal Padding",
+          "default": 10
+        },
+		{
+          "type": "range",
+          "id": "image_vertical_padding",
+          "min": 0,
+          "max": 200,
+          "step": 10,
+          "unit": "px",
+          "label": "Vertical Padding",
+          "default": 10
+        },
+		{
+          "type": "checkbox",
+          "id": "image1_small",
+		  "default": false,
+          "label": "Smaller"
+        },
+        {
+          "type": "header",
+          "content": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "img_2",
+          "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "img_2_mobile",
+          "label": "Image for mobile"
+        },
+        {
+          "id": "image2_title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "id": "image2_description",
+          "type": "textarea",
+          "label": "Description"
+        },
+        {
+          "id": "link_into_image2_description",
+          "type": "url",
+          "label": "Link"
+        },
+		{
+          "id": "text_link_into_image2_description",
+          "type": "textarea",
+          "label": "Text Link"
+        },
+        {
+          "type": "radio",
+          "id": "width_image2",
+          "options": [
+            { "value": "width: 50%;", "label": "50%"},
+            { "value": "width: 100%;", "label": "100%"}
+          ],
+          "label": "Width Image"
+        },
+		{
+          "type": "checkbox",
+          "id": "image2_small",
+		  "default": false,
+          "label": "Smaller"
+        },
+        {
+          "type": "radio",
+          "id": "snippets",
+          "options": [
+          { "value": "home-filters", "label": "Filter"},
+		  { "value": "homepage-instagram-media", "label": "Instagram Media"},
+      { "value": "homepage-reviews", "label": "Latest Five Star Reviews"}
+          ],
+          "label": "Include Snippet"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

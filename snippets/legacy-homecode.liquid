@@ -1,0 +1,139 @@
+<div class="grid__item large--one-third push--large--one-third large--text-right medium-down--hide">
+
+  {% comment %}
+  Show number of items in the cart and total cost in the /cart link
+
+  Ajax Cart Notes:
+  - #cartCount updates the total number of items in the cart
+  - #cartCost updates the total cost of the cart
+  - Documentation:  http://shopify.com/timber#ajax-cart
+  {% endcomment %}
+  <div style="display:inline-block;">
+
+  </div>
+
+  {% comment %}
+  If customer accounts are enabled, provide login and create account links
+  {% endcomment %}
+  {% if shop.customer_accounts_enabled %}
+  <div>
+    {% if customer %}
+    {% if customer.first_name != blank %}
+    {% capture first_name %}<a href="/account">{{ customer.first_name }}</a>{% endcapture %}
+    {{ 'layout.customer.logged_in_as_html' | t: first_name: first_name }}
+    {% else %}
+    <a href="/account">{{ 'layout.customer.account' | t }}</a>
+    {% endif %}
+    | {{ 'layout.customer.log_out' | t | customer_logout_link }}
+    {% else %}
+    {{ 'layout.customer.log_in' | t | customer_login_link }}
+    {% if shop.customer_accounts_optional %}
+    | {{ 'layout.customer.create_account' | t | customer_register_link }}
+    {% endif %}
+    {% endif %}
+  </div>
+  {% endif %}
+
+</div>
+
+<div class="follow-form" id="FollowForm">
+  <div class="follow-form__caret"></div>
+  <div class="follow-form__content">
+    <div class="grid">
+      <div class="grid__item large--one-quarter">
+        <div class="text-right" style="margin-top:5px;margin-right:6px;">
+          <div style="margin-right:20px;display:inline-block;">
+            <a href="https://instagram.com/tucker_nyc" target="_blank">
+              <img width="25px" src="{{ 'instagram.svg' | asset_url }}" alt="Instagram">
+            </a>
+          </div>
+          <div style="margin-right:20px;display:inline-block;">
+            <a href="https://www.facebook.com/tuckernyc" target="_blank">
+              <img width="25px" src="{{ 'facebook.svg' | asset_url }}" alt="Facebook">
+            </a>
+          </div>
+          <div style="margin-right:20px;display:inline-block;">
+            <a href="https://twitter.com/tucker_nyc" target="_blank">
+              <img width="25px" src="{{ 'twitter.svg' | asset_url }}" alt="Twitter">
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="grid__item large--one-quarter" style="border:solid #D9D7D7;border-width:0 0 0 2px;min-height:50px;position:relative;">
+        <div class="follow-form__content__message">
+          {{ 'general.newsletter_form.newsletter_enticement' | t }}
+        </div>
+      </div>
+      <div class="follow-form__inputs">
+        <div class="grid__item large--two-sixths">
+          <input class="full-width follow-form__content__input follow-form__inputs__email" type="email" placeholder="Email">
+          <div class="follow-form__inputs__error" style="margin-top:5px;text-align:left;font-style:italic;color:red;"></div>
+        </div>
+        <div class="grid__item large--one-sixth text-left">
+          <button class="btn">SIGN UP</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="logo-container">
+  <a href="/" itemprop="url" class="site-header__logo-link">
+    <img src="{{ 'tuckerlogo.png' | asset_url }}" alt="{{ shop.name }}" itemprop="logo" style="vertical-align:middle;">
+  </a>
+</div>
+<ul class="site-nav text-center medium-down--hide" id="AccessibleNav">
+  {% for link in linklists.main-menu.links %}
+  {% assign child_list_handle = link.title | handleize %}
+  {% if linklists[child_list_handle].links != blank %}
+  <li class="site-nav__list" >
+    <div class="site-nav__link  site-nav--has-dropdown" style="position:relative;">
+      <a {% if link.active %}style="font-weight:bold;"{% endif %} href="{{ link.url }}">{{ link.title | upcase }}</a>
+      <ul class="site-nav__dropdown" style="left:-25px">
+        {% for childlink in linklists[child_list_handle].links %}
+        <li {% if childlink.active %}class="site-nav--active"{% endif %}>
+          <a href="{{ childlink.url }}" class="site-nav__link">{{ childlink.title | escape }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </li>
+  {% else %}
+  <li class="site-nav__list {% if link.active %}site-nav--active{% endif %}">
+    {% capture title %}{{ link.title | upcase }}{% endcapture %}
+    <a href="{{ link.url }}" class="site-nav__link" {% if title == 'FOLLOW US' %}id="FollowUsLink"{% endif %}>
+      {{ title }}
+    </a>
+  </li>
+  {% endif %}
+  {% endfor %}
+</ul>
+<div class="right-btns">
+  <button type="button" class="icon-fallback-text search-overlay-show search-overlay-show-header-button">
+    <span style="font-size:17px;position:relative;top:-1px;" class="icon icon-search" aria-hidden="true"></span>
+    <span class="fallback-text">Search</span>
+  </button>
+
+  <div style="display:inline-block;">
+    <a href="/cart" class="site-header__cart-toggle js-drawer-open-right" aria-controls="CartDrawer" aria-expanded="false">
+      <div style="margin-top:-5px; display:inline-block; vertical-align:text-top;">
+
+        {% if cart.total_price > 0 %}
+
+        <span id="CartCount">{{ cart.item_count }}</span>
+        {{ 'layout.cart.items_count' | t: count: cart.item_count | capitalize }}
+
+        {% else %}
+
+        <span id="CartCount">0</span>
+        {{ 'layout.cart.items_count' | t: count: 0 | capitalize }}
+
+        {% endif %}
+
+      </div>
+      <img src="{{ 'bag-icon.png' | asset_url }}" alt="Shopping Cart">
+    </a>
+  </div>
+</div>

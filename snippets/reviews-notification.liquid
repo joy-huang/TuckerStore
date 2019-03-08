@@ -1,0 +1,473 @@
+<style>
+
+.notifyjs-reviews-base .star-rating {
+  max-height: 20px;
+  margin-bottom: 45%;
+}
+
+.star-rating i {
+  display: inline-block;
+  color: #95a5a6;
+  font-size: 20px;
+  font-style: normal;
+  cursor: pointer;
+}
+
+.star-rating:hover i,
+.star-rating i.active {
+  color: #b57f30;
+}
+
+.star-rating:hover i:hover ~ i {
+  color: #95a5a6;
+}
+
+.notifyjs-reviews-base {
+  background: white;
+  display: flex;
+  padding: 10px;
+  border-radius: 0px;
+  font-family: "fontin_sans_rgregular",serif;
+  margin-bottom: 0px;
+  border: 1px solid #364076;
+  color: #364076;
+}
+
+.notifyjs-reviews-base .close {
+  font-size: 15px;
+  font-family: Helvetica;
+  float: right;
+  position: absolute;
+  color: #333;
+  margin-left: 92%;
+  margin-top: -15px;
+  cursor: pointer;
+}
+.notifyjs-reviews-base .image-container{
+  flex-direction: row;
+  display: flex;
+}
+
+.notifyjs-reviews-base button{
+  flex: 0.2;
+  flex-direction: row-reverse;
+  background: #364076;
+  margin-top: 5px;
+  right: 0;
+  bottom: 0;
+  margin-left: 69%;
+  border-radius: 0px;
+  padding: 1px 8px;
+  width: 52px;
+  color: white;
+  line-height: 1;
+}
+
+.screen-1 {
+  width: 170px;
+}
+
+.screen-2 {
+  width: 159px;
+  text-align: left !important;
+  line-height: 1;
+}
+
+textarea.screen-2 {
+  margin-top: -17%;
+  border: 1px solid #b4b4b4;
+  text-align: left;
+  background: #ebebeb;
+  font-size: 12px;
+  font-family: "fontin_sans_rgregular",serif;
+  border-radius: 0px;
+  width: 175px;
+  line-height: 1.2;
+}
+
+.screen-1, .screen-2 {
+  flex: 1 1;
+  text-align: center;
+}
+
+.screen-3 {
+  padding: 35px;
+}
+
+.notifyjs-reviews-base .column {
+  flex-direction: column;
+  display: flex;
+}
+
+.screen-2, .screen-3 {
+  display: none;
+}
+
+.notifyjs-reviews-base img {
+  width: auto;
+  height: 170px;
+  margin-right: 10px;
+}
+
+</style>
+
+<script>
+
+if ( window.matchMedia('(max-width: 767px)').matches == false ) {
+  $(document).on('click', '.no-redirect a', function (e) {
+
+    e.preventDefault();
+
+  });
+  var mc_eid = window.getParameterByName('mc_eid');
+  var email = window.getParameterByName('email');
+  var $container = $('.homepage-review-container');
+  var shop = 'tuckernyc';
+  var app = 'https://resonance-pr.herokuapp.com/';
+  var rw_bl = localStorage.getItem('rw_bl') ? localStorage.getItem('rw_bl') : '';
+  var cid = '';
+  var productsInfo = {};
+  var queryParam = '';
+  var savedPID = '';
+
+  if (mc_eid && mc_eid != "") {
+    queryParam = '&mc_eid=' + mc_eid;
+  } else if (email && email != "") {
+    queryParam = '&email=' + email;
+  }
+
+  var userInformation = Cookies.get('RW_USER');
+  if (userInformation && userInformation != '' && queryParam == '') {
+    queryParam = '&email=' + userInformation.split(',')[1] // Customer email
+     Cookies.remove('RW_USER');
+  }
+
+  if (queryParam == '') {
+	  queryParam = Cookies.get('q_param');
+  }
+
+  Cookies.set('q_param', queryParam);
+
+
+  if (queryParam != '' && queryParam != 'undefined') {
+    //get CID from whale tracker
+    var url = 'https://resonance-whale-tracker.herokuapp.com/api/customer-info?shop=' + shop + queryParam;
+
+    $.ajax({
+      url: url,
+      async: false,
+      success: function (customer) {//change to success
+        if (customer && customer.cid) {
+          var shouldWait = (Cookies.get('NO_RW_' + customer.cid) == 1) ? true : false;
+          if (shouldWait == true) {
+            return;
+          }
+          cid = customer.cid;
+          checkOrRefreshProductData();
+          if (sessionExist(cid)) {
+            var sessionName = 'SESSION_' + cid;
+            var pid = Cookies.get(sessionName);
+            var product = getProductInfo(pid);
+            showReviewNotification(product);
+            return;
+          }
+
+          var pids = getPIDs(customer.cid);
+          if (pids) {
+            pidsArray = pids.split('|');
+
+            for (var i = 0; i < pidsArray.length; i++) {
+              var product = getProductInfo(pidsArray[i]);
+              if (product && productIsInPool(product.pid, cid)) {
+                createSession(cid, product.pid);
+                showReviewNotification(product);
+                var date = new Date();
+                var valueForTrack = product.pid + '|' + date.getTime();
+                localStorage.setItem("pid_shown", valueForTrack);
+                pids.replace(pidsArray[i] + '|', '');
+                break;
+              } else {
+                pids.replace(pidsArray[i] + '|', '');
+              }
+            }
+          }
+        }
+      },
+      error: function (error) {
+        console.log("error: ", error);
+      }
+    });
+
+    function sessionExist(cid) {
+      var sessionName = 'SESSION_' + cid;
+      return !!Cookies.get(sessionName);
+    }
+
+    function createSession(cid, pid) {
+      var sessionName = 'SESSION_' + cid;
+      var halfHour = new Date(new Date().getTime() + 30 * 60 * 1000);
+      Cookies.set(sessionName, pid, {
+        expires: halfHour
+      });
+    }
+
+    function checkOrRefreshProductData() {
+     	//if there is a product that has been shown in half an hour before or more, remove it from pool and disable
+      var previousProduct = localStorage.getItem('pid_shown');
+      if (previousProduct) {
+        var pid = previousProduct.split('|')[0];
+        var time = previousProduct.split('|')[1];
+        var diff = Math.abs(new Date(parseInt(time)) - new Date());
+        if (Math.floor((diff / 1000) / 60) > 30) {
+          removeProductFromPool(pid);
+        }
+
+      }
+    }
+
+    //Return true if the product can be shown
+    function productIsInPool(pid, cid) {
+      var rw_bl = localStorage.getItem('rw_bl' + cid) ? localStorage.getItem('rw_bl' + cid) : "";
+      if (rw_bl.indexOf(pid) == -1) {
+        return true;
+      }
+      return false;
+    }
+
+    function removeProductFromPool(pid, wait) {
+      var sessionName = 'SESSION_' + cid;
+      Cookies.remove(sessionName);
+      if (wait) {
+        var halfHour = new Date(new Date().getTime() + 30 * 60 * 1000);
+        Cookies.set('NO_RW_' + cid, 1, {
+          expires: halfHour
+        });
+      }
+      $.ajax({
+        url: app + 'disable-product',
+        type: 'PUT',
+        data: {
+          cid,
+          pid,
+          shop
+        },
+        async: false,
+        success: function (data) {
+          console.log(data);
+        },
+        error: function (error) {
+          console.log("error ", error);
+        }
+      });
+      rw_bl = rw_bl + '|' + pid;
+      localStorage.setItem('rw_bl' + cid, rw_bl);
+    }
+
+    function getPIDs(cid) {
+      if (!productsInfo.length) {
+        getProductsInfo()
+      }
+
+      return Object.keys(productsInfo).join('|') + '|';
+    }
+
+    function getCIDFromCookie() {
+      if (userInformation) {
+        return userInformation.split(',')[0];
+      }
+      return false;
+    }
+
+    function getProductsInfo() {
+      if (!productsInfo.length) {
+
+        var url = app + 'product-info?shop=' + shop + queryParam + '&cid=' + cid;
+        $.ajax({
+          url: url,
+          async: false,
+          success: function (data) {
+            data.map(function (product) {
+              productsInfo[product.pid] = product;
+            });
+            return;
+          },
+          error: function (error, blah) {
+            console.log("Error geting the product information: ", error);
+            return false;
+          }
+        });
+      }
+    }
+
+    function getProductInfo(pid) {
+      getProductsInfo();
+
+      if (productsInfo[pid]) {
+        return productsInfo[pid]
+      }
+      ;
+      return false;
+    }
+
+    function showReviewNotification(product) {
+      $.notify.addStyle('reviews', {
+        html:
+        '<div id="reviewNotification" class="review-notification" data-pid="' + product.pid + '"><span class="close">x</span>' +
+        '<div class="image-container small--hide"><img data-notify-html="image"></div>' +
+        '<div class="column">' +
+        '<div class="title-container screen-1" id="notification-stars">PLEASE RATE:<br/> <span data-notify-html="title"/></div>' +
+        '<div class="star-rating screen-1" id="notification-stars-click"><i data-rate="1">★</i><i data-rate="2">★</i><i data-rate="3">★</i><i data-rate="4">★</i><i data-rate="5">★</i> </div>' +
+        '<div class="title-container screen-2 small--hide" id="notification-comment">What are you thoughts on this product?</div>' +
+        '<textarea class="screen-2 small--hide" />' +
+        '<button class="screen-2 small--hide" id="notification-comment-click">SEND</button>' +
+        '</div>' +
+        '<div class="screen-3" id="notification-thankyou">Thanks for your feedback!</div>' +
+        '</div>',
+        showAnimation: 'slideDown',
+      });
+
+      $.notify({
+          title: product.title,
+          image: product.imgUrl
+        },
+        {
+          position: 'bottom left',
+          autoHide: false,
+          style: 'reviews',
+          className: 'info',
+          clickToHide: false,
+          gap: 20
+        }
+      );
+
+      return true;
+    }
+
+    //listen for click events from this style
+    $(document).on('click', '.notifyjs-reviews-base .star-rating i', function () {
+      $(".star-rating i.active").removeClass("active");
+      $(this).addClass('active');
+      $(this).prevAll().css("color", "#b57f30");
+      $('.screen-1').fadeOut(500, function () {
+        $('.screen-2').fadeIn(500)
+      });
+      $('#reviewNotification').addClass('with-stars');
+      $('body').addClass('no-redirect');
+
+
+      var $notificationForm = $('#reviewNotification');
+      var pid = $notificationForm.data('pid');
+
+      $.ajax({
+        url: app + 'insert-short-review?shop=' + shop,
+        type: 'post',
+        data: {
+          star_rating: $notificationForm.find('i.active').data('rate'),
+          pid: pid,
+          cid: cid,
+          shop: shop
+        },
+        success: function (data) {
+
+          removeProductFromPool(pid, true);
+		  $('#reviewNotification').data('review_id', data);
+          $(document).mouseup(function (e) {
+            var container = $("#reviewNotification.with-stars");
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+              container.find('img').fadeOut('500');
+              container.find('.screen-2').fadeOut('500', function () {
+                container.find('.screen-3').fadeIn('500');
+              });
+              $('#reviewNotification').removeClass('with-stars').addClass('thank-you');
+              sendReviewInfoToApp();
+              activateTimer();
+            }
+          });
+        },
+        error: function (error) {
+          console.log(error)
+        }
+
+      });
+
+    });
+
+
+    function activateTimer() {
+      $(document).mouseup(function (e) {
+        var container = $("#reviewNotification.thank-you");
+        var $notificationForm = $('#reviewNotification');
+        var pid = $notificationForm.data('pid');
+        if (!container.is(e.target) && container.has(e.target).length === 0) {
+          $("#reviewNotification").fadeOut(500);
+          $('body').removeClass('no-redirect');
+          sendReviewInfoToApp();
+        }
+      });
+    }
+
+    $('#reviewNotification .close').on('click', function () {
+      var $notificationForm = $('#reviewNotification');
+      var pid = $notificationForm.data('pid');
+      sendReviewInfoToApp();
+      removeProductFromPool(pid);
+
+      $(this).trigger('notify-hide');
+    });
+
+    $("#reviewNotification button").on("click", function () {
+      var container = $("#reviewNotification.with-stars");
+      container.find('img').fadeOut('500');
+      container.find('.screen-2').fadeOut('500', function () {
+        container.find('.screen-3').fadeIn('500');
+      });
+      $('#reviewNotification').removeClass('with-stars').addClass('thank-you');
+      sendReviewInfoToApp();
+      activateTimer();
+    });
+
+    function sendReviewInfoToApp() {
+      var $notificationForm = $('#reviewNotification');
+      var pid = $notificationForm.data('pid');
+      if (pid == savedPID) {
+        return;
+      } else {
+        savedPID = pid;
+      }
+      var star_rating = $notificationForm.find('i.active').data('rate');
+      var message = $notificationForm.find('textarea')[0].value;
+      var review_id = $notificationForm.data('review_id');
+
+      removeProductFromPool(pid);
+
+
+      if (star_rating && parseInt(star_rating) > 0) {
+        var review = {
+          shop,
+          cid,
+          pid,
+          review_id: $('#reviewNotification').data("review_id")
+        }
+
+        if (message && message.length && review_id && review_id.length) {
+          review.message = message;
+          $.ajax({
+            url: app + 'insert-short-review?shop=' + shop,
+            data: review,
+            type: 'PUT',
+            success: function (response) {
+              console.log("Review saved successful");
+            },
+            error: function (error) {
+              console.log("error saving the review", error);
+            }
+          });
+
+        } else {
+          removeProductFromPool(pid);
+        }
+      }
+    }
+  }
+}
+</script>

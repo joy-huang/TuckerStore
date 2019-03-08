@@ -1,0 +1,112 @@
+{% capture contentForQuerystring %}{{ content_for_header }}{% endcapture %}
+
+{% assign pageUrl = contentForQuerystring | split:'"pageurl":"' | last | split:'"' | first | split:'.com' | last | replace:'\/','/' |  replace:'%20',' ' | replace:'\u0026','&' %}
+{% assign debug = false %}
+
+{% for i in (1..1) %}
+
+  {% unless pageUrl contains "?" %}
+		{% break %}
+  {% endunless %}
+  {% assign pageQuerystring = pageUrl | split:'?' | last %}
+  {% assign parts = pageQuerystring | split:'&' %}
+  
+  {%- for part in parts -%}
+	{% assign keyAndValue = part | split:'=' %}
+  
+    {% if keyAndValue.size > 1 %}	
+	  {% if keyAndValue[0] == "handle" %}
+        {% assign advProductHandles = keyAndValue[1] | split: '%7C' %}
+		{% if advProductHandles.size > 1 %}
+          {% assign singleClass = '' %}
+		  {% assign productAdvertizedClass = 'advertized grid__item grid_collection_item large--one-half' %}
+		  {% assign heroAdvertizedClass = '' %}
+		{% else %}
+			{% assign singleClass = 'single' %}
+			{% assign productAdvertizedClass = 'advertized grid__item grid_collection_item large--one-quarter' %}
+		    {% assign heroAdvertizedClass = 'advertized grid__item grid_collection_item large--three-quarters' %}
+		{% endif %}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%} 
+{%- endfor -%}
+
+<style>
+  {% capture content %}
+  .advertized.product-grid-item-container,
+  .hero-advertized {
+  	display: inline-block;
+  }
+  
+  .advertizing-content .item-container * {
+  	max-height: 40vh;
+  }
+  
+  .advertizing-content {
+  	display: flex;
+    justify-content: space-between;
+  }
+
+  .advertizing-content .carousel-img-container {
+  	min-height: 32vw;
+  }
+  
+  @media (max-width: 768px) {
+    .advertizing-content .hero-advertized {
+      display: none;
+    }
+    
+    .advertizing-content .product__header,
+  	.advertizing-content .product__price--small {
+  		display: block;
+  	}
+  }
+{% endcapture %}
+{% assign content =  content | strip_newlines | split: " " | join: " " | split: "*/" %}
+{% assign new_content = "" %}
+{% for word in content %}
+	{% assign new_word = word | split: "/*" | first | strip %}
+  	{% assign new_content = new_content | append: new_word %}
+{% endfor %}
+{{ new_content }}
+
+</style>
+
+{% if advProductHandles.size >= 1 %}
+    <div class="advertizing-content {{ singleClass }}">
+		{% for handle in advProductHandles %}
+    		{% assign product = all_products[handle] %}
+            <div class="{{ productAdvertizedClass }} product-merchandise"
+             style="margin-top:30px;margin-bottom:30px;"
+             data-xs={{ product.variants[0].inventory_quantity }}
+             data-s={{ product.variants[1].inventory_quantity }}
+             data-m={{ product.variants[2].inventory_quantity }}
+             data-l={{ product.variants[3].inventory_quantity }}
+             data-size={{product.variants[0].option1}}
+             style={{tam}}
+             data-key="sameHeights"
+           >
+           	{% include 'product-grid-item' %}
+      	    </div>
+    	{% endfor %}
+      {% if advProductHandles.size == 1 %}
+        <div class="hero-advertized grid__item grid_collection_item {{heroAdvertizedClass}}  product-merchandise"
+          style="margin-top:30px;margin-bottom:30px;"
+           data-key="sameHeights">
+          {% section 'carousel-items' %}
+        </div>
+      {% endif %}
+	</div>
+
+<script>
+
+var screenSize = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+
+if (screenSize > 768) {
+  var carouselImage = document.querySelector('.carousel-img-container');
+  carouselImage.classList.add('lazyload');
+}
+
+</script>
+</script>
+{% endif %}

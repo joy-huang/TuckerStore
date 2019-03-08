@@ -1,0 +1,250 @@
+<style>
+    {% capture content %}
+
+  #instafeed{margin-top:50px;}
+
+.testimonials-wrapper {
+  display:table;
+  width: 100%;
+}
+
+.testimonial-column {
+  display: table-cell;
+  float: none;
+  vertical-align: middle !important;
+  text-align: center;
+}
+
+.animation {
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+}
+
+.instagram-photo {
+  padding-right: 5px;
+}
+
+.animation:hover .insta-comment {
+  opacity: 1 !important;
+}
+
+.insta-comment {
+  background: rgba($colorAccent, 0.95) none repeat scroll 0 0;
+  color: white;
+  font-family: $body_font;
+  opacity: 0;
+  text-align: center;
+  transition: all 0.2s ease;
+  top: 0;
+  padding: 20px;
+  width:200px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.insta-comment-table {
+  display:table;
+  height: 100%;
+  width:100%;
+}
+
+.instaimg {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+}
+
+
+.instaimg {
+  width: 235px;
+  height: 235px;
+}
+
+.testimonial-cell {padding:0px;}
+
+.insta-comment {
+  i {font-size:22px;}
+}
+
+.just-one-testimonial {
+  padding-top:0px;
+  @include at-query ($max, 991px) {
+    left:0;
+  }
+}
+
+.just-two-testimonials {
+  padding-top:0px;
+}
+
+.testimonial-image-wrapper img {
+  max-height: 500px;
+}
+
+.single-testimonial {padding-top:50px;}
+
+.testimonials-header {
+  margin-top: 12px;
+}
+
+.socialFeed {
+  display: none;
+}
+
+.insta-comment.secondary-comment {
+  background: rgba(241, 210, 200, 0.9) none repeat scroll 0 0;
+  i {
+    color: #b18080;
+  }
+}
+
+.insta-comment.facebook-comment {
+  background: rgba(0,0,0, 0.6) none repeat scroll 0 0;
+  /*i {
+    color: #b18080;
+  }*/
+}
+  
+  .featured-section.media-connect {
+    margin-bottom: 40px;
+  }
+  
+  .featured-section.media-connect,
+  .featured-section.media-connect .social-sharing-wrapper i {
+    color: Black;
+  }
+  
+  .featured-section.media-connect #instafeed {
+      margin: auto;
+    }
+  
+  .featured-section.media-connect .newsletter {
+    margin: auto;
+    max-width: 400px;
+    width: auto;
+  }
+  
+  .featured-section.media-connect .social-sharing-wrapper {
+  	display: inline-block;    
+  }
+  
+  .featured-section.media-connect #instafeed .instafeed-photo {
+    height: 25vw;
+    max-height: 300px;
+  }
+
+  @media screen and (min-width: 769px) {
+    
+    .featured-section.media-connect .social-media {
+      height: 600px;
+      position: relative;
+    }
+   
+    .featured-section.media-connect .social-links {
+      left: 25%;
+      top: 50%;
+      -ms-transform: translateY(-50%);
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
+      position: absolute;
+    }
+    
+    .featured-section.media-connect .social-media .separator {
+      display: none;
+    } 
+    
+    .insta-wrapper {
+      max-width: 78%;
+      width: 100%;
+      margin-left:auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    
+  }
+  
+  @media screen and (max-width: 768px) {
+    
+    .featured-section.media-connect .newsletter {
+      padding-bottom: 24px;
+    }
+
+    .featured-section.media-connect .social-media {
+      padding: 0 12px 12px;
+    }
+    
+    .featured-section.media-connect h2.section-heading {
+      margin-bottom: 0px;
+    }
+    
+    .featured-section.media-connect .social-media .separator {
+      margin: 0 auto;
+    } 
+    
+    .insta-wrapper {
+      max-width: 84%;
+      width: 100%;
+      margin-left:auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+ 
+  }
+    {% endcapture %}
+{% assign content =  content | strip_newlines | split: " " | join: " " | split: "*/" %}
+{% assign new_content = "" %}
+{% for word in content %}
+	{% assign new_word = word | split: "/*" | first | strip %}
+  	{% assign new_content = new_content | append: new_word %}
+{% endfor %}
+{{ new_content }}
+
+</style>
+<div class="featured-section media-connect">
+  <div class="grid--full">
+    <div class="grid__item large--one-whole">
+      <div class = "insta-wrapper">
+        <p class="homepage-inst-headline2 homepage-inst-headline3"><a href="https://www.instagram.com/tucker.nyc/" style="color:#b57f30;">#HOWTOTUCKER</a></p>
+        <div id="instafeed"></div>
+        <script>
+          window.access_token = "{{ settings.instagram_access_token }}";
+
+          $(window).scroll(function() {
+              var top = $("#instafeed").offset().top;
+              var bottom_el = $("#instafeed").offset().top + $("#instafeed").outerHeight();
+              var bottom_sc = $(window).scrollTop() + window.innerHeight;
+              var top_of_screen = $(window).scrollTop();
+
+              if((bottom_sc > top) && (top_of_screen < bottom_el)){
+                if (!window.instafeed_loaded) {
+                    $.getScript('{{ 'instafeed.min.js' | asset_url }}')
+                      .done(function( script, textStatus ) {
+                        $.getScript('{{ 'media-connect-insta-template.js' | asset_url }}');
+                      });
+
+                  window.instafeed_loaded = true;
+                }
+              }
+          });
+        </script>
+      </div>
+    </div> 
+  </div>
+</div>
+
+{% comment %}
+<div class="featured-section media-connect" style="padding-top:75px;">
+  <div class="grid--full">
+    <div class="grid__item large--one-whole">
+      <div class = "insta-wrapper">	      
+		<h1 class="homepage-inst-headline2 homepage-inst-headline3">Beautiful Silk Dresses and Blouses</h1>
+        <a class="homepage-paragraph3 homepage-link" href="/collections/shop-all">shop now</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endcomment %}

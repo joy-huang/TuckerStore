@@ -1,0 +1,22 @@
+{% assign counter = 0 %}
+
+
+{% for product in collection.products %}
+
+  {% assign discount_level = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price %}
+ 
+  {% if collection.handle != "markdowns" and discount_level < 45 %}
+
+		{% assign counter = counter | plus: 1 %}
+        <!-- Product is not in markdown collection -->
+		{% include 'product-grid-frame' %}
+
+  {% elsif  collection.handle == "markdowns" and discount_level > 0 %}  
+		
+		{% assign counter = counter | plus: 1 %}
+		<!-- Product is in markdown collection and is discounted -->
+		{% include 'product-grid-frame' %}
+
+  {% endif %}
+
+{% endfor %}

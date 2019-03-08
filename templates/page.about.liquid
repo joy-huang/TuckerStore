@@ -1,0 +1,30 @@
+{% include 'shogun-products', content: page %}
+<div class="gray-background">
+
+  <div class="page-container" style="width:100%;padding-top:120px;">
+    <h1 class="headline" style="padding-left:15px;">About</h2>
+  </div>
+
+  <div class="grid white-background">
+	<div class="image-holder">
+    	<img src="{{ 'about-us_image.jpg' | asset_url }}" width="100%">
+	</div>
+
+   	<div class="section-content">
+    	<div id="shopify-section-the-creator-scheme" class="shopify-section">
+			<div class="grid__item">
+    			<div class="column-content">    
+					<div class="bottom ">
+						<div class="headline3">Who we are... </div>
+<!-- 							<p class="paragraph2" style="padding-top:15px;">Tucker is a sustainable women’s lifestyle brand with a focus on easy, wearable silhouettes in beautifully printed silk - offered in ever changing colors and patterns. Tucker is driven and inspired by the ability to evoke emotion in the wearer; the brand strives to bring beauty and happiness to those who wear them.</p>
+	                        <p class="paragraph2" style="padding-top:15px;">Designed in New York and made in our own factories in the Dominican Republic, every piece is digitally printed and made to order - cutting out waste and over-production. Digital printing eliminates excess ink and uses a fraction of the water required by traditional fabric manufacturing processes.</p>
+                      <p class="paragraph2" style="padding-top:15px;">Tucker was founded in 2006 by <a href="/pages/gaby-basora">Gaby Basora</a>.</p> -->
+                      {{ page.content }}
+					</div>
+				</div>
+
+			</div>
+  		</div>
+	</div>
+  </div>
+</div>

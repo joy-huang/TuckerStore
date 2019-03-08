@@ -1,0 +1,446 @@
+{% assign productTags = product.tags | downcase %}
+{% assign newBadge = 0 %}
+
+
+
+
+{% if productTags contains 'new' %}
+
+	{% assign nowYearMonth = "now" | date: "%y%m" | plus:0 %}
+	{% assign pubYearMonth = product.created_at | date: "%y%m"  | plus:0 %}
+	{% assign yearMonthDiff = nowYearMonth | minus: pubYearMonth %}
+
+	{% assign nowDay = "now" | date: "%d" %}
+	{% assign pubDay = product.created_at | date: "%d" %}
+	{% assign dayCompare = nowDay | minus: pubDay %}
+
+
+	{% if yearMonthDiff == 0 %}
+
+		{% if dayCompare < 15 %}
+			{% assign newBadge = 1 %}
+		{% endif%}
+
+	{% elsif yearMonthDiff == 1 %}
+
+		{% if dayCompare < -15 %}
+			{% assign newBadge = 1 %}
+		{% endif%}
+
+	{% endif %}
+
+
+{% endif %}
+
+{% if productTags contains "published" %}
+
+	{% for tag in product.tags %}
+
+		{% assign ptag = tag | downcase %}
+
+		{% if ptag contains "published" %}
+
+			{% assign publishTag = ptag | split: '.' %}
+
+				{% assign pcount = 0 %}
+				{% assign monthYear = "" %}
+
+				{% for chunk in publishTag %}
+					{% assign pcount = pcount | plus: 1 %}
+					{% if pcount == 2 %}
+						{% if chunk contains "*" %}
+						{% else %}
+							{% if chunk.size < 2 %}
+								{% assign monthYear = "0" | append: chunk %}
+							{% else %}
+								{% assign monthYear = chunk %}
+							{% endif %}
+						{% endif %}
+					{% endif %}
+					{% if pcount == 4 %}
+						{% if chunk contains "*" %}
+						{% else %}
+							{% assign monthYear = monthYear | append: "-" %}
+							{% assign monthYear = monthYear | append: chunk %}
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+
+		{% endif %}
+
+	{% endfor %}
+
+{% endif %}
+
+{% if product.price < product.compare_at_price %}
+	{% assign markdown = "Markdown" %}
+  {% else %}
+	{% assign markdown = "Fullprice" %}
+{% endif %}
+
+
+
+
+<div style="padding-top: 6vw;">
+
+  <div class="grid--full grid--table text-left">
+    <div class="grid__item">
+      <div class="product__header product-info-header" style="margin-bottom:10px;">
+
+        {% assign newTitle = product.title | split:'|' %}
+
+        {% assign count = 0 %}
+        {% for part in newTitle %}
+        {% assign count = count | plus: 1 %}
+        {% if count == 2 %}
+
+		{% if newBadge == 1 %}
+			<p><span class="new-badge">New Arrival</span></p>
+		{% elsif productTags contains 'bestseller' %}
+			<p><span class="bestseller-badge">Best Seller</span></p>
+		{% endif %}
+
+
+        <p class="product-header-color" id="color-name">{{part}}</p>
+        {% endif %}
+        {% endfor %}
+
+        {% assign count = 0 %}
+        {% for part in newTitle %}
+        {% assign count = count | plus: 1 %}
+        {% if count == 1 %}
+        <p class="headline3" id="body-name">{{part}}</p>
+        {% endif %}
+        {% endfor %}
+
+        {% assign discount = 0 %}
+
+        <span class="visually-hidden price-font">{{ 'products.general.regular_price' | t }}</span>
+        <div class="product__price price price-font" style="margin-top: -20px;">
+          {% if product.price < product.compare_at_price %}
+          <span class="product__sale-price">
+            <del>{{ product.compare_at_price | money | remove: '.00' }}</del>
+          </span>
+
+          {% assign discount = product.compare_at_price_max | minus: product.price | times: 100.0 | divided_by: product.compare_at_price_max | money_without_currency | times: 100 %}
+
+          {% endif %}
+
+
+  		  <span id="ProductPrice">
+			{{ current_variant.price | money | remove: '.00' }}
+    	  </span>
+
+
+
+          {% if discount > 30 %}<span style="font-size:12px;color:red;font-weight:bold;padding-left:15px;">FINAL SALE</span>{% endif %}
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="grid__item large--one-whole size-select">
+      <div class="grid">
+        <div class=" grid__item eight-tenths size-selector-desktop">
+          <span class="product-headers" style="padding-right: 10px;padding-top: 10px;">SIZE:</span>
+          <ul id="filter-by-size" name="selectSize" class="coll-filter product-size-values">
+            {% for variant in product.variants %}
+              {% assign sizeOptions = variant.option1 | split: '-' %}
+
+              {% if variant.inventory_quantity > 0 or variant.inventory_policy != 'deny' %}
+                <li data-variantId="{{ variant.id }}" data-size="{{ variant.option1 }}" data-instock="true" class="size-options">
+                  {{ sizeOptions.first | strip }} <p class="display-on-selection">{{ sizeOptions[1] | strip }}</p>
+                </li>
+              {% else %}
+                <li data-variantId="{{ variant.id }}" data-size="{{ variant.option1 }}" data-instock="false" class="size-options size-options-out-stock">
+                  {{ variant.option1 }} <p class="display-on-selection">{{ sizeOptions[1] | strip }}</p>
+                </li>
+              {% endif %}
+
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="grid__item large--two-tenths medium--one-whole small--one-whole size-chart-show-overlay product-info-content" style="padding:0px;">
+          <p style="text-align:right;padding-left:20px;font-size:12px;"><img src="{{ 'measuring-tape-30px.png' | asset_url }}" style="float:right;padding-left:10px;vertical-align:middle;" alt="">Size Guide</p>
+        </div>
+
+        <div class="grid__item large--eight-tenths medium-down--one-whole medium-down--hide">
+          {% for variant in product.variants %}
+            {% if variant.inventory_quantity < 5 and variant.inventory_quantity > 1 %}
+              <div class="units-left units-left-{{variant.option1}}">
+                <p>{{variant.inventory_quantity}} units remaining</p>
+              </div>
+            {% elsif variant.inventory_quantity == 1 %}
+              <div class="units-left units-left-{{variant.option1}}">
+                <p>{{variant.inventory_quantity}} unit remaining</p>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+      </div>
+
+      <div class="grid size-selector-desktop" style="margin-top:30px; margin-bottom:30px;">
+        <div class="grid__item">
+          <button type="submit" name="add" id="AddToCart" class="btn btn-block btn-product product-headers">
+            <span id="AddToCartText">ADD TO BAG</span>
+          </button>
+        </div>
+        <div class="grid__item">
+          <button type="button" id="SoldOutButton" class="btn btn-inverted btn-block btn-product product-headers btn--disabled" style="display:none;">
+            SOLD OUT
+          </button>
+        </div>
+      </div>
+      </div>
+    {% comment %}
+ 	<div class="grid__item">
+      <p class="product-header-color" style="padding-bottom:25px;"><u>Expected Ship Date:</u> November 25th</p>
+    </div>
+    {% endcomment %}
+    <div class="grid__item">
+      <div class="reviews-rating-{{product.id}} reviews-rating" ></div>
+
+
+      <div id="reviews-container-link" style="display:none;">
+
+        <p><a href="#reviews-container">Read reviews for the <u>{{ newTitle.first }}</u></a></p>
+      </div>
+
+    </div>
+
+    <div class="grid__item">
+      <div class="product-description rte">
+        <p class="product-headers">DETAILS</p>
+        <div class="product-info-content">
+        {{ product.description }}
+
+        {% comment %}
+        <p>Free Domestic Shipping</p>
+        <a href="mailto:hello@tuckernyc.com?subject=Product Question:%20{{ product.title | url_param_escape }}%20{{ product.variants[0].option2 | url_param_escape }}"><i>Questions or comments?</i></a>
+		{% endcomment %}
+        </div>
+      </div>
+    </div>
+
+	<div class="grid__item" id="fb-shopping-details" style="padding-top:15px;">
+
+			<img src="{{ 'bag-icon-50x50-grey.png' | asset_url }}" class="image-left" alt="">
+            <p class="text-overflow"><span class="shopping-text">Free Shipping & Returns</span></p>
+			<br/>
+			<img src="{{ 'discount-tag-50x50-plain-grey.png' | asset_url }}" class="image-left" alt="">
+            <p class="text-overflow"><span class="shopping-text">Your 20% off Facebook discount will be auto-applied!</span></p>
+            <br/>
+			<img src="{{ 'paypal-black-logo-50x50-grey.png' | asset_url }}" class="image-left" alt="">
+            <p class="text-overflow"><span class="shopping-text">Just two taps to checkout</span></p>
+      		<br/><br/>
+	</div>
+
+
+    <div class="grid">
+      <div class="grid_item" style="display:inline-flex; width:auto">
+        <div id="share"></div>
+      </div>
+    </div>
+
+    <div class=" grid__item fixed-add-to-bag-mobile">
+      <div class="eight-tenths text-center" style="position:absolute;top:-5px;">
+        {% for variant in product.variants %}
+          {% if variant.inventory_quantity < 5 and variant.inventory_quantity > 0 %}
+            <div class="units-left units-left-{{variant.option1}}">
+              <p>{{variant.inventory_quantity}} units remaining</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="eight-tenths" style="padding-top: 22px; padding-left: 22px;">
+        <ul id="filter-by-size" name="selectSize" class="coll-filter product-size-values" style="font-size: 18px;">
+          {% for variant in product.variants %}
+            {% assign sizeOptions = variant.option1 | split: '-' %}
+            {% if variant.inventory_quantity > 0 or variant.inventory_policy != 'deny' %}
+              <li data-variantId="{{ variant.id }}" data-size="{{ variant.option1 }}" data-instock="true" class="size-options">
+                {{ sizeOptions.first | strip }} <p class="display-on-selection">{{ sizeOptions[1] | strip }}</p>
+              </li>
+            {% else %}
+              <li data-variantId="{{ variant.id }}" data-size="{{ variant.option1 }}" data-instock="false" class="size-options size-options-out-stock">
+                {{ sizeOptions.first | strip }} <p class="display-on-selection">{{ sizeOptions[1] | strip }}</p>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="two-tenths">
+        <button type="submit" name="add" id="AddToCartMobile" class="btn btn-product product-headers-mobile" style="width: 100%; height:80px;">
+          <span id="">ADD</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="grid__item large--six-tenths push--large--two-tenths" style="display:none;">
+      <span class="fb-variant-id" style="color:#FFFFFF;">{{ product.variants[0].id }}</span>
+      <span class="fb-category-id" style="color:#FFFFFF;">{{ product.type}}</span>
+    </div>
+  </div>
+
+  {% if collections.gwp.metafields.gift.variant_id %}
+
+  {% assign gwp_handle = collections.gwp.metafields.gift.handle %}
+  {% assign inventory_check = 0 %}
+  {% assign cart_check = 0 %}
+  {% assign gwp_min_spend = collections.gwp.metafields.gift.threshold | plus:0 %}
+  {% assign new_cart_value = cart.total_price | plus: product.price | divided_by: 100 %}
+
+  {% for variant in all_products[gwp_handle].variants %}
+
+  {% if variant.inventory_quantity > 0 or variant.inventory_policy != 'deny' %}
+
+  <input type="hidden" name="gwp-id" value="{{collections.gwp.metafields.gift.variant_id}}" />
+  <input type="hidden" name="gwp-min-spend" value="{{gwp_min_spend}}" />
+
+  <!-- GWP still has inventory -->
+  {% assign inventory_check = 1 %}
+
+  {% for item in cart.items %}
+
+  {% if item.id == variant.id %}
+
+  <!-- GWP is already in cart -->
+  {% assign cart_check = 1 %}
+
+  {% endif %}
+
+  {% endfor %}
+
+  {% endif %}
+
+  {% endfor %}
+
+
+  {% if inventory_check == 0 or cart_check == 1 or new_cart_value < gwp_min_spend %}
+
+  <input type="hidden" name="id" id="product-select" value="" />
+
+  {% else %}
+
+  <!-- This is the magic -->
+  <input type="hidden" name="id[]" id="product-select" value="" />
+  <input type="hidden" name="id[]" value="{{collections.gwp.metafields.gift.variant_id}}" />
+
+  {% endif %}
+
+  {% else %}
+
+  <input type="hidden" name="id" id="product-select" value="" />
+
+  {% endif %}
+
+
+   {% assign gift_box = shop.metafields['gift-box'] %}
+  <input name="gift_box" type="hidden" value='{{gift_box.variant-id}}'>
+  <input name="enable_gift_box" type="hidden" value='{{gift_box.enable}}'>
+
+
+  <!-- data for GTM -->
+  <span id="publish_date" style="color:white;">{{monthYear}}</span>
+  <span id="markdown" style="color:white;">{{markdown}}</span>
+
+</div>
+
+
+
+<script>
+
+	$(document).ready(function() {
+
+  		if (!Cookies.get('FB_PROMO')) {
+    		$('#fb-shopping-details').hide();
+    	}
+    })
+
+
+    $('.size-options').on('click', function() {
+      $('.size-options').each(function(idx, element){
+        var classes = $(element).attr("class").split(' ');
+        classes.map(function(element, idx){
+          if (element.includes("size-selected")) {
+            $('.size-options').removeClass(element);
+          }
+        });
+      });
+    var size = $(this).addClass('size-selected');
+  });
+
+  $('.size-options').on('click', function() {
+    if ($(this).attr("class").split(' ').indexOf("size-options-out-stock") != -1) {
+      $("#AddToCart, #AddToCartMobile").attr("disabled", true);
+      $("#AddToCart, #AddToCartMobile").addClass('btn-product-disable');
+    } else {
+      $("#AddToCart, #AddToCartMobile").removeAttr("disabled");
+      $("#AddToCart, #AddToCartMobile").removeClass('btn-product-disable');
+    }
+    var selector = ".units-left-"+ $(this).attr("data-size");
+    $(".units-left").hide();
+    $(selector).show();
+  });
+
+  $("#AddToCart, #AddToCartMobile").on('click', function(e) {
+    e.preventDefault();
+
+    var selectedSizeVariant = $('.size-options.size-selected').attr("data-variantId");
+
+    var sizeText = $('.size-options.size-selected').attr("data-size");
+
+    if (selectedSizeVariant == undefined) {
+      $("span.product-headers").addClass("shake");
+      $(".fixed-add-to-bag-mobile .eight-tenths").addClass("shake");
+      return;
+    }
+
+    // skip if user status already exists
+    if (Cookies.get('ADDED_TO_CART') || Cookies.get('INITIATED_CHECKOUT') || Cookies.get('FIRST_TRACKED_ORDER') || Cookies.get('HAS_ORDERED')) {
+
+        dataLayer.push({
+    		event: 'GTM-ADD-TO-CART',
+    		AddToCartSize: 1
+  		});
+
+	}
+    else {
+
+      	Cookies.set('ADDED_TO_CART', '1');
+
+        dataLayer.push({
+          event: 'GTM-ADD-TO-CART-FIRST',
+          AddToCartSize: 1,
+          'DL_ADDED_TO_CART': 1
+        });
+
+    }
+
+    var data = {
+      quantity: 1,
+      id: selectedSizeVariant,
+    };
+
+    $.ajax({
+      type: 'POST',
+      url: '/cart/add.js',
+      data: data,
+      contentType: 'application/x-www-form-urlencoded',
+      dataType: 'text',
+      success: function() {
+        ajaxCart.load();
+        //Refresh Ticket 11
+        {% increment cart.item_count %}
+      },
+      error: function() {
+      }
+    });
+  });
+
+  $("span.product-headers, .fixed-add-to-bag-mobile .eight-tenths").on("webkitAnimationEnd oanimationend msAnimationEnd animationend", function(){
+    $("span.product-headers").removeClass("shake");
+    $(".fixed-add-to-bag-mobile .eight-tenths").removeClass("shake");
+  });
+</script>

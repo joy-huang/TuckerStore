@@ -1,0 +1,204 @@
+{% if template contains 'search' %}
+	<meta name="robots" content="noindex">
+{% endif %}
+
+
+
+{% include 'nosto-element' with 'searchpage-nosto-1' %}
+<!-- /templates/search.liquid -->
+{% comment %}
+
+  To return only products or pages in results:
+    - http://docs.shopify.com/manual/configuration/store-customization/return-only-product-in-storefront-search-results
+    - Or manually add type=product or type=page to the search URL as a parameter
+
+{% endcomment %}
+
+{% comment %}
+  Set grid_results to true and set search results as a grid instead of a list.
+  This works well when your search is only for products.
+{% endcomment %}
+{% assign grid_results = false %}
+
+{% comment %}
+  Check to enforce respond.js
+{% endcomment %}
+{% assign respond_js_secret_key = shop.domain | md5 %}
+{% unless search.terms == respond_js_secret_key %}
+
+{% comment %}
+  Avoid accessing search.results before the opening paginate tag.
+  If you do, the pagination of results will be broken.
+{% endcomment %}
+{% paginate search.results by 12 %}
+
+  <div class="grid" style="margin-top:40px;">
+    <div class="grid__item large--two-thirds push--large--one-eighth">
+
+      <!-- Begin search header -->
+      <div class="search-header">
+        {% if search.performed and search.results_count > 0%}
+          <h2 class="headline5 text-center">
+            {{ search.results_count }} RESULTS FOR "{{ search.terms }}"
+          </h2>          
+        {% else %}
+        <div class="not-found">
+          <div class="form-container">
+            <h1 class="headline2">Oops!</h1>
+            <p class="headline4">
+              We can't seem to find the page you are looking for.
+            </p>
+
+            <form action="/search"
+                  method="get"
+                  class="search-bar"
+                  role="search">
+              <input type="hidden" name="type" value="product">
+
+              <input type="search"
+                     name="q"
+                     value="{{ search.terms | escape }}"
+                     class="search-input "
+                     placeholder="How can we help?"
+                     aria-label="{{ 'general.search.placeholder' | t }}"
+                     />
+
+              <button class="search-btn" type="submit">
+                <span class="icon icon-search icon-search-mobile icon-search-desktop" aria-hidden="true"></span>
+              </button>
+
+            </form>
+            
+            <a class="return-btn btn" href="/">BACK TO SHOP</a>
+          </div>
+        </div>
+
+        {% endif %}
+      </div>
+
+      <!-- Top pagination controls -->
+
+
+      {% if search.performed %}
+
+        <div class="grid-uniform collection-products-search">
+          {% for item in search.results %}
+          
+            {% assign not_special_order = true %}
+      {% assign productTitle = product.title | downcase %}
+      {% if productTitle contains "special" %}
+          {% assign not_special_order = false %}
+      {% endif %}
+          
+            {% if not_special_order %}
+             <div class="grid__item grid_collection_item large--one-third medium--one-half product-grid-item-container"
+                   id = {{ product.id }}
+                   data-xs={{ product.variants[0].inventory_quantity }}
+                   data-s={{ product.variants[1].inventory_quantity }}
+                   data-m={{ product.variants[2].inventory_quantity }}
+                   data-l={{ product.variants[3].inventory_quantity }}
+                   data-key="sameHeights" 
+              >
+              {% include 'product-grid-item', product: item %}
+          </div>
+            {% endif %}
+          
+          {% endfor %}
+          <div id="product-list-foot"></div>
+        </div>
+
+      {% endif %}
+      
+
+      {% if paginate.next %}
+        <div id="more"><p><a href="{{ paginate.next.url }}"></a></p></div>
+        <div id="loading-img" style="text-align:center;display:none;"><img src="{{ "loading.svg" | asset_url }}" style="width:90px;"/></div>
+      {% endif %}
+
+
+    </div>
+  </div>
+
+{% endpaginate %}
+
+{% else %}
+  {% include 'respond' %}
+  {% layout none %}
+{% endunless %}
+
+<script>
+  $(function() {
+    var q = window.getParameterByName('q');
+    if (q && typeof ga === 'function') ga('send', 'event', 'Engagement', 'Search');
+  })
+</script>
+
+  <script>       
+    function ScrollExecute() {
+      if($(document).height() - 800 < ($(document).scrollTop() + $(window).height())) {
+        scrollNode = $('#more').last();    
+        scrollURL = $('#more p a').last().attr("href");
+        if(scrollNode.length > 0 && scrollNode.html().length> 0) {
+          $.ajax({
+            type: 'GET',
+            url: scrollURL,
+            beforeSend: function() {
+              scrollNode.empty();
+              $('#loading-img').show();
+            },
+            success: function(data) {
+              var newLink = $(data).find("#more").html() || "";
+              $('#more').html( newLink );
+              var filteredData = $(data).find(".product-grid-item-container");
+              $(filteredData).find(".featured-image").each(function(idx,img){
+                $(img).attr("src",$(img).data('original'));
+              });                          
+
+              filteredData.insertBefore( $("#product-list-foot") ); 
+              $('#loading-img').hide();
+            },
+            complete: function() {
+              var container = $('#rw-modal-container');
+              var shop = container.data('shop');
+              var url = container.data('app');
+
+
+              if (!shop || !url) {
+                return;
+              };
+
+              var template = getTemplateById("#start-rating-template");
+
+              url += 'get-rating-reviews?shop=' + shop;
+              $.ajax({
+                url: url,
+                method: "GET",
+                success: function( data ) {
+                  data = JSON.parse(data);
+                  for (var i = data.length - 1; i >= 0; i--) {
+                    var d = data[i];
+                    d.rating = d.rating % parseInt(d.rating) > 0 ? (parseInt(d.rating) + " half") : d.rating;
+                    var targetQuery = ".reviews-rating-" + d.pid;
+                    $(targetQuery).each(function(index, target){
+                      if ($(target).html().length == 0){
+                        renderTemplateWithData(template, target, [d]);
+                      }
+                    });
+                  };
+                }
+              });
+            },
+            dataType: "html"
+          });
+        }
+      }
+    }
+
+    $(document).ready(function () {
+      $(window).scroll(function(){
+        $.doTimeout( 'scroll', 200, ScrollExecute);
+      });
+    });
+  </script>
+
+{% include 'nosto-element' with 'searchpage-nosto-2' %}

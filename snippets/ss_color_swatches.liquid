@@ -1,0 +1,180 @@
+{% comment %}
+  Set the extension of your color files below. Use 'png', 'jpeg', 'jpg' or 'gif'.
+{% endcomment %}
+{% assign file_extension = 'png' %}
+
+{% if ss_swatch == blank %}
+<div class="swatch error">
+  <p>You must include the snippet ss_swatch.liquid with the name of a product option.</p> 
+  <p>Use: <code>{% raw %}{% include 'ss_swatch' with 'name of your product option here' %}{% endraw %}</code></p>
+  <p>Example: <code>{% raw %}{% include 'ss_swatch' with 'Color' %}{% endraw %}</code></p>
+</div>
+{% else %}
+{% assign found_option = false %}
+{% assign is_color = false %}
+{% assign option_index = 0 %}
+
+{% for option in product.options %}
+  {% if option == ss_swatch %}
+    {% assign found_option = true %}
+    {% assign option_index = forloop.index0 %}
+    <style>
+      label[for="product-select-option-{{ option_index }}"] { display: none; }
+      #product-select-option-{{ option_index }} { display: none; }
+      #product-select-option-{{ option_index }} + .custom-style-select-box { display: none !important; }
+    </style>
+    <script>$(window).on('load',function() { $('.selector-wrapper:eq({{ option_index }})').hide(); });</script>
+    {% assign downcased_option = ss_swatch | downcase %}
+    {% if downcased_option contains 'color' or downcased_option contains 'colour' %}
+      {% assign is_color = true %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+{% unless found_option %}
+{% else %}
+<div class="swatch clearfix" data-option-index="{{ option_index }}">
+  <div class="header">{{ ss_swatch }}</div>
+  {% assign values = '' %}
+  {% for variant in product.variants %}
+    {% assign value = variant.options[option_index] %}
+    {% unless values contains value %}
+      {% assign values = values | join: ',' %}
+      {% assign values = values | append: ',' | append: value %} 
+      {% assign values = values | split: ',' %}
+      <div data-value="{{ value | escape }}" class="opt-{{ option_index }} swatch-element {% if is_color %}color {% endif %}{{ value | handle }} {% if variant.available %}available{% else %}soldout{% endif %}">
+        {% if is_color and swatch_layout != 'layout8'%}
+         <div class="tooltip">{{ value }}</div>
+        {% endif %}
+        <input class="swatch-{{ variant.id }}" id="swatch-{{ option_index }}-{{ value | handle }}" type="radio" name="option-{{ option_index }}" value="{{ value | escape }}"{% if forloop.first %} checked{% endif %} {% unless variant.available %}disabled{% endunless %} />
+        {% if is_color %}
+        
+         {% if swatch_layout == 'layout8' %}
+        <label for="swatch-{{ option_index }}-{{ value | handle }}" class="{{ swatch_layout }}" >
+          <div  class="color_box" id="color_swatch-{{option_index }}-{{ value | handle }}" ></div>
+          <span class="variant_name">{{ value }}</span>
+          <img class="crossed-out" src="{{ 'soldout.png' | asset_url }}" />
+        </label>
+         {% else %}
+          <label for="swatch-{{ option_index }}-{{ value | handle }}" class="{{ swatch_layout }}" id="color_swatch-{{option_index }}-{{ value | handle }}">
+          <img class="crossed-out" src="{{ 'soldout.png' | asset_url }}" />
+        </label>
+         {% endif %}
+         
+<!-- Get Swatches value from Switch to Swathes App here -->  
+{% assign metafield_val = shop.metafields.switch-to-swatches[value] %}
+<script type="text/javascript">
+//document.write(unescape("%3Cscript src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js' type='text/javascript'%3E%3C/script%3E"));
+</script>        
+<!--<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js' type='text/javascript'> </script>-->
+<script type="text/javascript">
+//var $ = $.noConflict(true);
+</script>        
+<script type="text/javascript">
+(function($){  
+  var colorjson = '{{ metafield_val }}';
+  var color_div_id = "#color_swatch-{{ option_index }}-{{ value | handle }}";
+  var input_id = "#swatch-{{option_index }}-{{ value | handle }}";
+  var color_code = "";
+  var color_obj = "";
+  var sett_obj = "";
+  var layout_val = '{{ swatch_layout }}';
+  var general_sett = '{{ gen_sett }}';
+  sett_obj = $.parseJSON(general_sett);
+  var curr_variantid = $("select[name='id'] option:selected").val();
+    
+  $(".swatch .opt-{{ option_index }} input").click(function() {
+   		var div_id = $(this).attr("id");
+   		if($('#'+div_id).is(':checked')) {
+     		$('.swatch .opt-{{ option_index }} input').next().css("border-color",sett_obj.swatch_border_color);
+       		$('#'+div_id).next().css("border-color",sett_obj.swatch_active_border_color);
+    	} 
+  });
+  
+       {% if swatch_layout == 'layout8' %}
+       		$(color_div_id+":not('.swatch-"+curr_variantid+"')").css("border",'1px solid');
+  		    $(color_div_id+":not('.swatch-"+curr_variantid+"')").css("border-color",sett_obj.swatch_border_color);
+           {% else %}
+         $(color_div_id+":not('.swatch-"+curr_variantid+"')").css("border-color",sett_obj.swatch_border_color);
+           {% endif %}
+  
+  $(".swatch input.swatch-"+curr_variantid).next().css("border-color",sett_obj.swatch_active_border_color);
+  
+  if(colorjson == "") {
+    
+   	 color_code = "{{ value | split: ' ' | last | handle }}";
+     $(color_div_id).css("background-color",color_code);
+    
+  } else {
+    
+  	 color_obj = $.parseJSON(colorjson);
+    
+    //for color img
+    if(color_obj.type == "color_image") {
+      imageUrl = color_obj.color_img;   
+      $(color_div_id).addClass(layout_val);
+      $(color_div_id).css('background-image', 'url(' + imageUrl + ')');
+    }
+    
+    //for one color
+    if(color_obj.type == "one_color") {
+       color_code = color_obj.color_code1;
+       $(color_div_id).addClass(layout_val);
+       $(color_div_id).css("background-color",color_code);
+    }
+    
+    //for two color
+    if(color_obj.type == "two_color") {
+      color_code1 = color_obj.color_code1;
+      color_code2 = color_obj.color_code2;
+     // $(color_div_id).addClass(layout_val+"-twocolor");
+      
+      if(layout_val == "layout4" || layout_val == "layout5") {
+           
+        if(layout_val == "layout4") {
+          var angle="45deg";
+        }
+        else if(layout_val == "layout5"){
+          var angle="56deg";
+        }
+        
+         /*** opera/IE/Safari Browser Fix ***/
+         $(color_div_id).css('background','linear-gradient(to bottom right, rgba(0,0,0,0) 50%, '+color_code2+' 50.25%),linear-gradient('+angle+', '+color_code1+','+color_code1+') '+color_code2+''); 
+         $(color_div_id).css('background','-webkit-linear-gradient('+angle+', '+color_code1+' 0%, '+color_code1+' 38%, '+color_code1+' 50%, '+color_code1+' 50%, '+color_code2+' 50%, '+color_code2+' 71%, '+color_code2+' 100%)');
+		 $(color_div_id).css('background','-o-linear-gradient('+angle+', '+color_code1+' 0%, '+color_code1+' 38%, '+color_code1+' 50%, '+color_code1+' 50%, '+color_code2+' 50%, '+color_code2+' 71%, '+color_code2+' 100%)');
+		 $(color_div_id).css('background','-ms-linear-gradient('+angle+', '+color_code1+' 0%, '+color_code1+' 38%, '+color_code1+' 50%, '+color_code1+' 50%, '+color_code2+' 50%, '+color_code2+' 71%, '+color_code2+' 100%)');
+            
+        
+      } else {  
+          
+        /*** opera/IE/Safari Browser Fix ***/
+  		$(color_div_id).css('background-image', "-webkit-linear-gradient(top, "+color_code1+" 50%,"+color_code2+" 50%)");
+  		$(color_div_id).css('background-image', "-o-linear-gradient(top, "+color_code1+" 50%,"+color_code2+" 50%)");
+  		$(color_div_id).css('background-image', "linear-gradient(top, "+color_code1+" 50%,"+color_code2+" 50%)");
+        $(color_div_id).css('background-image', "-ms-linear-gradient(top, "+color_code1+" 50%,"+color_code2+" 50%)");
+    	$(color_div_id).css('background-image', " -moz-linear-gradient(top, "+color_code1+" 50%,"+color_code2+" 50%)");
+       	$(color_div_id).css('filter','progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='+color_code1+', endColorstr='+color_code2+')');  
+       	$(color_div_id).css('background-image',"-webkit-gradient(linear, right top, right bottom, color-stop(50%,"+color_code1+"), color-stop(50%,"+color_code2+"))");
+     
+      }
+    }
+  }
+})($);   
+</script>
+<!-- ends here -->
+        {% else %}
+        <label for="swatch-{{ option_index }}-{{ value | handle }}">
+          {{ value }}
+          <img class="crossed-out" src="{{ 'soldout.png' | asset_url }}" />
+        </label>
+        {% endif %}
+      </div>
+    {% endunless %}
+    {% if variant.available %}
+    <script>
+      $('.swatch[data-option-index="{{ option_index }}"] .{{ value | handle }}').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
+    </script>
+    {% endif %}
+  {% endfor %}
+</div>
+{% endunless %}
+{% endif %}

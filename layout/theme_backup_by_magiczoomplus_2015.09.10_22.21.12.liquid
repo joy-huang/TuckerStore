@@ -1,0 +1,576 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="ie9 no-js"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+
+  <!-- Basic page needs ================================================== -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  {% if settings.favicon_enable %}
+  <link rel="shortcut icon" href="{{ 'favicon.png' | asset_url }}" type="image/png" />
+  {% endif %}
+
+  <!-- Title and description ================================================== -->
+  <title>
+  {{ page_title }}{% if current_tags %}{% assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+  </title>
+
+  {% if page_description %}
+  <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  <!-- Helpers ================================================== -->
+  {% include 'social-meta-tags' %}
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_primary }}">
+
+  <!-- CSS ================================================== -->
+  {{ 'timber.scss.css' | asset_url | stylesheet_tag }}
+  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.1.0/css/swiper.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+  <!-- Fonts ================================================= -->
+  <script src="//use.typekit.net/wpn7jsx.js"></script>
+  <script>try{Typekit.load({ async: true });}catch(e){}</script>
+
+  <!-- Header hook for plugins ================================================== -->
+  {{ content_for_header }}
+  {% include 'oldIE-js' %}
+
+  {{ '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js' | script_tag }}
+  {{ 'modernizr.min.js' | asset_url | script_tag }}
+  {{ 'swiper.min.js' | asset_url | script_tag }}
+
+  {% comment %}
+    If you store has customer accounts disabled, you can remove the following JS file
+  {% endcomment %}
+  {% if template contains 'customers' %}
+    {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+  {% endif %}
+
+  <script>
+    var LMRY = LMRY || {}, lumiary = '55e7918095370f902e000000';
+    (function(l){
+      setTimeout(function(){
+        var d = document, f = d.getElementsByTagName('script')[0], s = d.createElement('script');
+        s.type = 'text/javascript'; s.async = true; s.src = l;
+        f.parentNode.insertBefore(s, f);
+      },1);
+    })('//d3h25p0y7daqgh.cloudfront.net/lumiary.js');
+  </script>
+
+
+  {% include 'shogun-head' %}
+</head>
+
+{% comment %}
+  Add the page template as a class for easy page or template specific styling.
+{% endcomment %}
+<body id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}" >
+
+  <div id="NavDrawer" class="drawer drawer--left">
+    <div class="drawer__header">
+      <div class="drawer__title h3">{{ 'layout.drawers.browse' | t }}</div>
+      <div class="drawer__close js-drawer-close">
+        <button type="button" class="icon-fallback-text">
+          <span class="icon icon-x" aria-hidden="true"></span>
+          <span class="fallback-text">{{ 'layout.drawers.close_menu' | t }}</span>
+        </button>
+      </div>
+    </div>
+    <!-- begin mobile-nav -->
+    <ul class="mobile-nav">
+      <li class="mobile-nav__item mobile-nav__search">
+        {% include 'search-bar' %}
+      </li>
+      {% for link in linklists.main-menu.links %}
+        {% comment %}
+          Create a dropdown menu by naming a linklist the same as a link in the parent nav
+
+          More info on dropdowns:
+            - http://docs.shopify.com/manual/your-website/navigation/create-drop-down-menu
+        {% endcomment %}
+        {% assign child_list_handle = link.title | handleize %}
+        {% if linklists[child_list_handle].links != blank %}
+          <li class="mobile-nav__item{% if link.active %} mobile-nav__item--active{% endif %}" aria-haspopup="true">
+            <div class="mobile-nav__has-sublist">
+              <a href="{{ link.url }}" class="mobile-nav__link">{{ link.title }}</a>
+              <div class="mobile-nav__toggle">
+                <button type="button" class="icon-fallback-text mobile-nav__toggle-open">
+                  <span class="icon icon-plus" aria-hidden="true"></span>
+                  <span class="fallback-text">See More</span>
+                </button>
+                <button type="button" class="icon-fallback-text mobile-nav__toggle-close">
+                  <span class="icon icon-minus" aria-hidden="true"></span>
+                  <span class="fallback-text">{{ 'cart.general.close_cart' | t | json }}</span>
+                </button>
+              </div>
+            </div>
+            <ul class="mobile-nav__sublist">
+              {% for childlink in linklists[child_list_handle].links %}
+                <li class="mobile-nav__item {% if childlink.active %} mobile-nav__item--active{% endif %}">
+                  <a href="{{ childlink.url }}" class="mobile-nav__link">{{ childlink.title | escape }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% else %}
+          <li class="mobile-nav__item{% if link.active %} mobile-nav__item--active{% endif %}">
+            <a href="{{ link.url }}" class="mobile-nav__link">{{ link.title }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% comment %}
+        If customer accounts are enabled, provide login and create account links
+      {% endcomment %}
+      {% if shop.customer_accounts_enabled %}
+        {% if customer %}
+          <li class="mobile-nav__item">
+            {% if customer.first_name != blank %}
+              {% capture first_name %}<a href="/account">{{ customer.first_name }}</a>{% endcapture %}
+              {{ 'layout.customer.logged_in_as_html' | t: first_name: first_name }}
+            {% else %}
+              <a href="/account">{{ 'layout.customer.account' | t }}</a>
+            {% endif %}
+          </li>
+          <li class="mobile-nav__item">
+            {{ 'layout.customer.log_out' | t | customer_logout_link }}
+          </li>
+        {% else %}
+          <li class="mobile-nav__item">
+            {{ 'layout.customer.log_in' | t | customer_login_link }}
+          </li>
+          {% if shop.customer_accounts_optional %}
+          <li class="mobile-nav__item">
+            {{ 'layout.customer.create_account' | t | customer_register_link }}
+          </li>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+    </ul>
+    <!-- //mobile-nav -->
+  </div>
+  <div id="CartDrawer" class="drawer drawer--right">
+    <div class="drawer__header">
+      <div class="js-drawer-close continue-shopping">
+        <img src="{{ 'chevron-left.png' | asset_url }}" alt="Go back">
+        <div class="continue-shopping__text">CONTINUE SHOPPING</div>
+      </div>
+    </div>
+    <div id="CartContainer"></div>
+  </div>
+  <div id="PageContainer">
+    <header class="site-header" role="banner">
+      <div class="wrapper">
+
+        <div class="grid--full">
+          <div class="grid__item large--one-third push--large--one-third text-center">
+            <a href="/" itemprop="url" class="site-header__logo-link">
+              <img width="170px" src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" itemprop="logo">
+            </a>
+          </div>
+          <div class="grid__item large--one-third push--large--one-third large--text-right medium-down--hide">
+            {% comment %}
+              Show number of items in the cart and total cost in the /cart link
+
+              Ajax Cart Notes:
+                - #cartCount updates the total number of items in the cart
+                - #cartCost updates the total cost of the cart
+                - Documentation:  http://shopify.com/timber#ajax-cart
+            {% endcomment %}
+            <div>
+              <a href="/cart" class="site-header__cart-toggle js-drawer-open-right" aria-controls="CartDrawer" aria-expanded="false">
+                <div style="margin-top:-5px; display:inline-block; vertical-align:text-top;">
+                  <span id="CartCount">{{ cart.item_count }}</span>
+                  {{ 'layout.cart.items_count' | t: count: cart.item_count | capitalize }}
+                </div>
+                <img src="{{ 'bag-icon.png' | asset_url }}" alt="Shopping Cart">
+              </a>
+            </div>
+
+            {% comment %}
+              If customer accounts are enabled, provide login and create account links
+            {% endcomment %}
+            {% if shop.customer_accounts_enabled %}
+              <div>
+                {% if customer %}
+                  {% if customer.first_name != blank %}
+                    {% capture first_name %}<a href="/account">{{ customer.first_name }}</a>{% endcapture %}
+                    {{ 'layout.customer.logged_in_as_html' | t: first_name: first_name }}
+                  {% else %}
+                    <a href="/account">{{ 'layout.customer.account' | t }}</a>
+                  {% endif %}
+                  | {{ 'layout.customer.log_out' | t | customer_logout_link }}
+                {% else %}
+                  {{ 'layout.customer.log_in' | t | customer_login_link }}
+                  {% if shop.customer_accounts_optional %}
+                  | {{ 'layout.customer.create_account' | t | customer_register_link }}
+                  {% endif %}
+                {% endif %}
+              </div>
+            {% endif %}
+
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <nav class="nav-bar" role="navigation">
+
+      <!-- mobile nav -->
+      <div class="large--hide medium-down--show">
+        <div class="grid-full">
+          <div class="grid__item " style="width:28%;">
+            <div class="site-nav--mobile">
+              <a href="/collections/new">
+                SHOP
+              </a>
+            </div>
+          </div>
+          <div class="grid__item " style="width:28%;">
+            <div class="site-nav--mobile">
+              <a href="/pages/stories">
+                STORIES
+              </a>
+            </div>
+          </div>
+          <div class="grid__item " style="width:28%;">
+            <div class="site-nav--mobile">
+              <a href="/pages/about-us">
+                ABOUT
+              </a>
+            </div>
+          </div>
+          <div class="grid__item " style="width:16%;">
+            <a href="/cart" class="js-drawer-open-right" aria-controls="CartDrawer" aria-expanded="false">
+              <div class="site-nav--mobile">
+                <img src="{{ 'bag-icon.png' | asset_url }}" alt="Shopping Cart">
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- desktop nav -->
+      <div class="wrapper">
+        <div class="medium-down--hide">
+          {% comment %}
+            List out your main-menu linklist (default)
+
+            More info on linklists:
+              - http://docs.shopify.com/themes/liquid-variables/linklists
+          {% endcomment %}
+          <!-- begin site-nav -->
+          <ul class="site-nav text-center" id="AccessibleNav">
+            {% for link in linklists.main-menu.links %}
+              {% assign child_list_handle = link.title | handleize %}
+              {% if linklists[child_list_handle].links != blank %}
+                <li class="site-nav--has-dropdown {% if link.active %}site-nav--active{% endif %}">
+                  <a href="{{ link.url }}" class="site-nav__link">
+                    {{ link.title | upcase }}
+                  </a>
+                  <ul class="site-nav__dropdown">
+                    {% for childlink in linklists[child_list_handle].links %}
+                      <li {% if childlink.active %}class="site-nav--active"{% endif %}>
+                        <a href="{{ childlink.url }}" class="site-nav__link">{{ childlink.title | escape }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </li>
+              {% else %}
+                <li class="site-nav__list {% if link.active %}site-nav--active{% endif %}">
+                  {% capture title %}{{ link.title | upcase }}{% endcapture %}
+                  <a href="{{ link.url }}" class="site-nav__link" {% if title == 'FOLLOW US' %}id="FollowUsLink"{% endif %}>
+                    {{ title }}
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+            <div class="follow-form" id="FollowForm">
+              <div class="follow-form__caret"></div>
+              <div class="follow-form__content">
+                <div class="grid">
+                  <div class="grid__item large--one-quarter">
+                    <div class="text-right" style="margin-top:5px;margin-right:6px;">
+                      <div style="margin-right:20px;display:inline-block;">
+                        <a href="https://instagram.com/tucker_nyc" target="_blank">
+                          <img width="25px" src="{{ 'instagram-logo.png' | asset_url }}" alt="Instagram">
+                        </a>
+                      </div>
+                      <div style="margin-right:20px;display:inline-block;">
+                        <a href="https://www.facebook.com/tuckernyc" target="_blank">
+                          <img width="25px" src="{{ 'facebook-logo.png' | asset_url }}" alt="Facebook">
+                        </a>
+                      </div>
+                      <div style="margin-right:20px;display:inline-block;">
+                        <a href="https://twitter.com/tucker_nyc" target="_blank">
+                          <img width="25px" src="{{ 'twitter-logo.png' | asset_url }}" alt="Twitter">
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="grid__item large--one-quarter" style="border:solid #D9D7D7;border-width:0 0 0 2px;min-height:50px;position:relative;">
+                    <div class="follow-form__content__message">
+                      {{ 'general.newsletter_form.newsletter_enticement' | t }}
+                    </div>
+                  </div>
+                  <div class="follow-form__inputs">
+                    <div class="grid__item large--one-sixth">
+                      <input class="full-width follow-form__content__input follow-form__inputs__name" type="text" placeholder="Name">
+                    </div>
+                    <div class="grid__item large--one-sixth">
+                      <input class="full-width follow-form__content__input follow-form__inputs__email" type="email" placeholder="Your email">
+                    </div>
+                    <div class="grid__item large--one-sixth text-left">
+                      <button class="btn">SIGN UP</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-content" role="main">
+      <div class="wrapper">
+        {{ content_for_layout }}
+      </div>
+    </main>
+
+    <!-- begin site-footer -->
+
+    <footer class="site-footer small--text-center" role="contentinfo">
+      <div class="wrapper">
+        <hr />
+
+        <!-- TODO: reverse this so email signup shows up first on mobile -->
+        <div class="grid">
+          <div class="grid__item large--two-thirds medium--one-half">
+            <ul class="inline-list footer-nav">
+
+              <li class="footer-nav__social-icons">
+                <div style="margin-right:20px;display:inline-block;">
+                  <a href="https://instagram.com/tucker_nyc" target="_blank">
+                    <img width="25px" src="{{ 'instagram-logo.png' | asset_url }}" alt="Instagram">
+                  </a>
+                </div>
+                <div style="margin-right:20px;display:inline-block;">
+                  <a href="https://www.facebook.com/tuckernyc" target="_blank">
+                    <img width="25px" src="{{ 'facebook-logo.png' | asset_url }}" alt="Facebook">
+                  </a>
+                </div>
+                <div style="margin-right:20px;display:inline-block;">
+                  <a href="https://twitter.com/tucker_nyc" target="_blank">
+                    <img width="25px" src="{{ 'twitter-logo.png' | asset_url }}" alt="Twitter">
+                  </a>
+                </div>
+              </li>
+
+              <li class="footer-nav__item">
+                <a href="/pages/shipping-and-returns">
+                  SHIPPING & RETURNS
+                </a>
+              </li>
+              <li class="footer-nav__item">
+                <a href="/pages/privacy-policy">
+                  PRIVACY POLICY
+                </a>
+              </li>
+              <li class="footer-nav__item">
+                <a href="/pages/terms">
+                  TERMS
+                </a>
+              </li>
+              <li class="footer-nav__item">
+                <a href="/pages/contact-us">
+                  CONTACT US
+                </a>
+              </li>
+            </ul>
+          </div>
+          {% if settings.footer_newsletter_enable %}
+            <div class="grid__item large--one-third medium--one-half small--one-whole">
+              {% comment %}
+                MailChimp is the go-to newsletter service for Shopify.
+                Use the link below to find your MailChimp form action
+                and insert it in your site settings.
+
+                MailChimp newsletter integration and requirement:
+                 - http://docs.shopify.com/support/configuration/store-customization/where-do-i-get-my-mailchimp-form-action
+              {% endcomment %}
+              <div class="footer-newsletter__text">{{ 'general.newsletter_form.newsletter_enticement' | t }}</div>
+              {% if settings.newsletter_form_action != blank %}
+                {% assign form_action = settings.newsletter_form_action %}
+              {% else %}
+                {% assign form_action = '#' %}
+              {% endif %}
+              <form action="{{ form_action }}" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank">
+                <div class="grid">
+                  <div class="grid__item large--one-half medium--one-half small--one-whole">
+                    <input type="text" value="{% if customer %}{{ customer.name }}{% endif %}" placeholder="{{ 'general.newsletter_form.newsletter_name' | t }}" name="NAME" class="footer-newsletter__input">
+                  </div>
+                  <div class="grid__item large--one-half medium--one-half small--one-whole">
+                    <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.newsletter_email' | t }}" name="EMAIL" id="mail" class="footer-newsletter__input" aria-label="{{ 'general.newsletter_form.newsletter_email' | t }}" autocorrect="off" autocapitalize="off">
+                  </div>
+                  <div class="grid__item one-whole">
+                    <button type="button" class="btn footer-newsletter__btn" id="subscribe">
+                      {{ 'general.newsletter_form.submit' | t }}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </footer>
+    <!-- //site-footer -->
+
+    <div id="DarkOverlay" style="display:none;position:fixed;top:0;bottom:0;left:0;right:0;background-color:rgba(0,0,0,0.5);z-index:100;"></div>
+  </div>
+
+  {{ 'fastclick.min.js' | asset_url | script_tag }}
+  {{ 'timber.js' | asset_url | script_tag }}
+  {{ 'theme.js' | asset_url | script_tag }}
+
+  {% comment %}
+    Template-specific js
+  {% endcomment %}
+  <script>
+    {% if newHash %}
+      $(function() {
+        timber.updateHash('{{ newHash }}');
+      });
+    {% endif %}
+    {% if resetPassword %}
+      $(function() {
+        timber.resetPasswordSuccess();
+      });
+    {% endif %}
+  </script>
+
+  {% comment %}
+    Ajaxify your cart with this plugin.
+    Documentation:
+      - http://shopify.com/timber#ajax-cart
+  {% endcomment %}
+  {% if settings.ajax_cart_enable %}
+    {{ 'handlebars.min.js' | asset_url | script_tag }}
+    {% include 'ajax-cart-template' %}
+    {{ 'ajax-cart.js' | asset_url | script_tag }}
+    <script>
+      jQuery(function($) {
+        ajaxCart.init({
+          formSelector: '#AddToCartForm',
+          cartContainer: '#CartContainer',
+          addToCartSelector: '#AddToCart',
+          cartCountSelector: '#CartCount',
+          cartCostSelector: '#CartCost',
+          moneyFormat: {{ shop.money_format | json }}
+        });
+      });
+
+      $(function() {
+        var $followForm = $('#FollowForm');
+        $followForm.find('.btn').click(function() {
+          var name = $followForm.find('.follow-form__inputs__name').val();
+          var email = $followForm.find('.follow-form__inputs__email').val();
+          if (!name || !email) return;
+
+          sendEmailSignup(name, email);
+          ga('send', 'event', 'Engagement', 'Email Signup', 'Header Signup');
+
+          $followForm.find('.follow-form__inputs').hide();
+          var newText = 'THANK YOU! You\'ll hear from us soon.';
+          $followForm.find('.follow-form__content__message').text(newText);
+        });
+      });
+
+      $(function() {
+        var $footerFollowForm = $('.site-footer form');
+        $footerFollowForm.find('.btn').click(function() {
+          var name = $footerFollowForm.find('[name="NAME"]').val();
+          var email = $footerFollowForm.find('[name="EMAIL"]').val();
+          if (!name || !email) return;
+
+          sendEmailSignup(name, email);
+          ga('send', 'event', 'Engagement', 'Email Signup', 'Footer Signup');
+
+          var text = 'THANK YOU! You\'ll hear from us soon.';
+          $('.footer-newsletter__text').text(text);
+          $footerFollowForm.hide();
+        })
+      })
+
+      function sendEmailSignup(name, email) {
+        var mailChimpUrl = "//tuckerbygabybasora.us11.list-manage.com/subscribe/post-json?u=a1ed3f76424ee396c38bee485&id=422d79e763&c=?";
+        var data = 'FNAME=' + name + '&EMAIL=' + email;
+        $.ajax({
+          type: "GET",
+          url: mailChimpUrl,
+          data: data,
+          dataType: 'json',
+          contentType: 'application/json; charset=utf-8',
+          error: function(err) { console.log('newsletter signup error', err); },
+          success: function(d) { if (d.result == 'error') console.log(d.msg); },
+        });
+      }
+
+      $('#FollowUsLink').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation(); // Stop event from propagating all the way, because that closes follow us.
+        toggleFollowUs();
+      });
+
+      // Close follow form on body click.
+      $(document).click(function(e) {
+        $('#FollowForm').hide();
+      });
+      // Cart clicks don't bubble all way up, so watch for these too.
+      $('a.site-header__cart-toggle').click(function(e) {
+        $('#FollowForm').hide();
+      });
+
+      // Prevent clicks inside the follow form from propagating all the way up and closing the form.
+      $('.follow-form').click(function(e) {
+        e.stopPropagation();
+      });
+
+      function toggleFollowUs() {
+        $('#FollowForm').toggle();
+      }
+
+      jQuery('body').on('ajaxCart.afterCartLoad', function(evt, cart) {
+        // Bind to 'ajaxCart.afterCartLoad' to run any javascript after the cart has loaded in the DOM
+        timber.RightDrawer.open();
+      });
+
+      $(function() {
+        positionFollowCaret();
+      });
+
+      $(window).on('resize', positionFollowCaret);
+
+      function positionFollowCaret() {
+        var $followUs = $('#FollowUsLink');
+        var $caret = $('.follow-form__caret');
+        var followUsLeft = $followUs.offset().left;
+        var followUsWidth = $followUs.width();
+        var caretWidth = 30;
+        $caret.css('left', (followUsLeft + (followUsWidth / 2) - (caretWidth / 2)) + 'px');
+      }
+    </script>
+  {% endif %}
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+{% include 'the-creator-layout' %}
+
+{% schema %}
+  {
+    "blocks": [
+      {
+      "type": "content",
+      "name": "content",
+	  "limit": 1,
+      "settings": [
+		{
+          "type": "header",
+          "content": "Lead Content"
+        },
+        {
+          "id": "title",
+          "type": "text",
+          "label": "Heading",
+		  "default": "Meet Gaby Basora"
+        },
+        {
+          "id": "sub_title",
+          "type": "textarea",
+          "label": "Sub Heading",
+		  "default": "Born in Chicago and raised in Seattle, Gaby Studied abroad in Amsterdam before moving to New York. A graduate of Sarah Lawrence College (1955), She worked as a costumer designer and stylist for ten years before launching Tucker in 2006. It was a natural segue. Gaby had been designing things for herself and clients through-out the years"
+        },
+		{
+          "type": "image_picker",
+          "id": "lead_img",
+          "label": "Lead Image"
+        },
+		{
+          "type": "header",
+          "content": "Twin Image Row"
+        },
+		{
+          "type": "image_picker",
+          "id": "left_img",
+          "label": "Left Image"
+        },
+		{
+          "type": "image_picker",
+          "id": "right_img",
+          "label": "Right Image"
+        },
+		{
+          "id": "paragraph",
+          "type": "textarea",
+          "label": "Paragraph",
+		  "default": "Born in Chicago and raised in Seattle, Gaby Studied abroad in Amsterdam before moving to New York. A graduate of Sarah Lawrence College (1955), She worked as a costumer designer and stylist for ten years before launching Tucker in 2006. It was a natural segue. Gaby had been designing things for herself and clients through-out the years"
+        }
+      ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

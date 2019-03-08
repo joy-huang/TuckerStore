@@ -1,0 +1,30 @@
+{% if template contains 'collection' %}
+	{% assign advertizing = true %}
+{% else %}
+	{% assign advertizing = false %}
+{% endif %}
+<div class="{%if advertizing %} advertized {% endif%}carousel-container container">
+  {% for item in section.blocks %}
+  <div id="slide-{{ forloop.index }}" class="item-container">
+    <a href="{{ item.settings.shop_col }}">
+      <div class="carousel-img-container {% if forloop.index == 1 and advertizing == false %} lazyload {% endif %}"
+           {% if advertizing %}
+            style="background-size: cover;"
+           {% else %}
+            style="min-height:80vh;background-size: cover;"
+           {% endif %}
+           data-bgset="{{ item.settings.item_img_mobile | img_url: "480x"}} [(max-width: 480px)] | {{ item.settings.item_img_mobile | img_url: "700x"}} [(max-width: 700px)] | {{ item.settings.item_img | img_url: "master"}}">
+
+        <div class="slide-text-container">
+          <div class="carousel-homepage-headline3" style="color:{{item.settings.headline_color}};">{{ item.settings.title }}</div>
+          {% if item.settings.shop_col %}
+          <div class="carousel-link">
+            <button class="homepage-link carousel-homepage-paragraph3" href="{{ item.settings.shop_col }}">{{item.settings.text_link}}</button>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </a>
+  </div>
+  {% endfor %}
+</div>

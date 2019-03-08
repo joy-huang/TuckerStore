@@ -1,0 +1,454 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+
+    <title>{{ page_title }}</title>
+
+    {{ content_for_header }}
+
+    {{ checkout_stylesheets }}
+    {{ checkout_scripts }}
+    {{ '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js' | script_tag }}
+
+    <!-- Fonts ================================================= -->
+    <script src="//use.typekit.net/wpn7jsx.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
+
+
+    <style>
+
+      @media only screen and (max-width: 767px) {
+        .terms {
+          font-size: 12px;
+          text-align:center;
+          width:100%;
+          margin-top:10px;
+          margin-bottom:10px;
+          padding:5px;
+          line-height:175%;
+          font-family: "fontin_sans_rgregular","Georgia",serif;
+        }
+        .order-summary--is-collapsed,
+        .js .order-summary--is-collapsed {
+          display: block;
+          height: 100%;
+          visibility: visible;
+        }
+
+        .order-summary__section--product-list {
+          display: none;
+        }
+        #terms-desktop {
+          display: none;
+        }
+        #terms-mobile {
+          display: block;
+        }
+
+        .alt-payment-list-container {
+          display: none;
+        }
+
+        .wrap .alt-payment-list-container {
+          display: block;
+        }
+        .order-summary__section--discount {
+          border-top: 0px;
+        }
+        .total-line__name {
+          font-size: 13px;
+        }
+        .order-summary-toggle {
+          display: none;
+        }
+        .alternative-payment-separator {
+          display: none;
+        }
+        .step .step__sections .section.section--reductions.hidden-on-desktop {
+          display: none;
+        }
+
+        .custom-wrap .sidebar {
+          order: 1;
+        }
+
+        .custom-wrap #terms-mobile {
+          order: 2;
+        }
+
+        .custom-wrap .main {
+          order: 3;
+        }
+
+        .anyflexbox .content .wrap.custom-wrap {
+          flex-direction: column;
+        }
+
+      }
+      @media only screen and (min-width: 768px) {
+        .terms {
+          font-size: 14px;
+          text-align:center;
+          width:100%;
+          margin-top:10px;
+          margin-bottom:10px;
+          background-color:#f2f2f2;
+          outline-style:solid;
+          outline-color:#381d21;
+          outline-width:1px;
+          padding:5px;
+          line-height:175%;
+        }
+        #terms-desktop {
+          display: block;
+        }
+        #terms-mobile {
+          display: none;
+        }
+        .wrap .alt-payment-list-container {
+          display: block;
+        }
+
+        .anyflexbox .content .wrap.custom-wrap {
+          flex-direction: row;
+        }
+      }
+      
+      @media only screen and (min-width: 768px) and (max-width: 999px){ 
+        .anyflexbox .content .wrap.custom-wrap {
+          flex-direction: column-reverse;
+        }
+        .main__header {
+          display: none;
+        }
+
+        .order-summary--is-collapsed {
+          height: 0;
+          visibility: hidden;
+          transition: all .3s;
+        }
+      }
+
+
+    </style>
+
+
+
+
+  
+  {% include 'shogun-head' %}
+</head>
+  <body>
+
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TGT3QZ"
+                      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                                                          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                                })(window,document,'script','dataLayer','GTM-TGT3QZ');</script>
+    <!-- End Google Tag Manager -->
+
+    {{ skip_to_content_link }}
+
+    <div class="banner" data-header>
+      <div class="wrap">
+        {{ content_for_logo }}
+      </div>
+    </div>
+
+
+    <div class="content" data-content>
+      <div class="main__header" style="text-align:center;">
+        {{ content_for_logo }}
+      </div>
+
+      <div id="terms-desktop" class="">
+        <div class="terms" class="">
+          <div style="display:inline;" class="">
+            FREE SHIPPING & FREE RETURNS FOR USA ORDERS<br/>
+            USA RETURNS UP TO 14 DAYS AFTER DELIVERY<br/>
+            WE CURRENTLY DO NOT ACCEPT INTERNATIONAL RETURNS
+            <br/>IF YOUR SIZE IS NOT CURRENTLY IN STOCK, IT MAY TAKE UP TO 10-14 DAYS TO SPECIFICALLY MAKE THIS FOR YOU
+          </div>
+        </div>
+      </div>
+
+      {{ breadcrumb }}
+      
+      {{ order_summary_toggle }}
+
+      <div class="wrap custom-wrap">
+
+        <div class="main" role="main">
+          <div class="main__content">
+
+            <p>{{ alternative_payment_methods }}</p>
+
+            <br/><br/>
+
+            {{ content_for_layout }}
+
+          </div>
+        </div>
+
+        <div class="sidebar" role="complementary">
+          <div class="sidebar__header">
+            {{ content_for_logo }}
+          </div>
+          <div class="sidebar__content">
+            {{ content_for_order_summary }}
+          </div>
+        </div>
+
+        <div id="terms-mobile" class="">
+          <div class="terms" class="">
+            <div style="display:inline;" class="">
+              FREE SHIPPING & FREE RETURNS FOR USA ORDERS<br/>
+              USA RETURNS UP TO 14 DAYS AFTER DELIVERY<br/>
+              WE CURRENTLY DO NOT ACCEPT INTERNATIONAL RETURNS
+            <br/>IF YOUR SIZE IS NOT CURRENTLY IN STOCK, IT MAY TAKE UP TO 10-14 DAYS TO SPECIFICALLY MAKE THIS FOR YOU
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    {{ tracking_code }}
+
+
+    <!-- Earpiece App =========================================== -->
+    <div id="resonance" style="display: none;">{{checkout.email}}</div>
+    <script src="//how-heard.herokuapp.com/initialize.js?{{"now" | date: "%Y-%m-%d-%H-%M-%s" }}"></script>
+    <!-- End Earpiece App ======================================== -->
+
+
+    <script>
+      $(function() {
+        allPages();
+        onlyCustomerInformationPage();
+        onlyShippingMethodPage();
+        onlyPaymentMethodPage();
+        onlyInventoryIssuesPage();
+        onlyThankYouPage();
+      });
+
+
+      function allPages() {
+        useNormalProductImages();
+        addOrderSummaryHeader();
+        addLabelBeforeSize();
+        addContinueShopping();
+      }
+
+      function onlyCustomerInformationPage() {
+        var noPOBoxHTML = '<p class="shipping_info__text">We do not ship to PO boxes.</p>';
+        $('.section--shipping-address .section__header .section__title').append(noPOBoxHTML);
+        if (!isCustomerInformationPage()) return;
+        changeBackToCartLink();
+
+        removeOptionalForPhoneNumber();
+        //          ga('send', 'event', 'Transactional', 'Custom Information Page Visit');
+      }
+
+      function onlyShippingMethodPage() {
+        if (!isShippingMethodPage()) return;
+
+        function itr() {
+          var $step = $('.main__content > .step');
+          // check for marker
+          // if it is there, we've already made our edits, so return.
+          if ($step.hasClass('__marker')) return;
+
+          // if it's not there, our changes aren't in the dom so make them.
+
+          makeEditLinkButton();
+          if ('{{ checkout.shipping_address.country_code }}' !== 'US') {
+              var taxHTML = '<p class="shipping_info__text" style="font-size:16px;padding-bottom:15px;">Taxes & duties of approximately 25%-30% of your order value will be due upon receipt and collected directly.</p>';
+              $('.section--shipping-method .section__header .section__title').append(taxHTML);
+        }
+
+        // make our mark to show we've made our changes
+        $step.addClass('__marker');
+      }
+
+      itr();
+      setInterval(itr, 100);
+      ga('send', 'event', 'Transactional', 'Shipping Method Page Visit');
+      }
+
+      function onlyPaymentMethodPage() {
+        if (!isPaymentMethodPage()) return;
+        checkEmailSignupButton();
+
+        function checkAndInsertEarpiece() {
+          if (!$("#howhearddropdown").length || $("#howhearddropdown").height() == 0) {
+            // GetMainBody is prodived by the earpiece initialize js
+            // hack to make sure the iframe will be inserted on the checkout page
+            $("#howhearddropdown").remove();
+            GetMainBody();
+          } else {
+            stopEarpieceInterval();
+          }
+        }
+
+        var earpieceIntervalId = setInterval(checkAndInsertEarpiece, 2500);
+
+        function stopEarpieceInterval(){
+          clearInterval(earpieceIntervalId);
+        }
+
+        ga('send', 'event', 'Transactional', 'Payment Method Page Visit');
+      }
+
+      function onlyInventoryIssuesPage() {
+        if (!isInventoryIssuesPage()) return;
+        changeBackToCartLink();
+        changeTitleMain("SORRY, WE'VE RUN OUT");
+        changeTitleSub("The out of stock item(s) have been removed from your cart. Please revist the product page to add yourself to our waitlist.");
+      }
+
+      function onlyThankYouPage() {
+        if (!isThankYouPage()) return;
+        transformThankYouMessage();
+        ga('send', 'event', 'Transactional', 'Thank You Page Visit');
+      }
+
+      function isCustomerInformationPage() {
+        return currentItem() === 'customer information';
+      }
+
+      function isShippingMethodPage() {
+        return currentItem() === 'shipping method';
+      }
+
+      function isPaymentMethodPage() {
+        return currentItem() === 'payment method';
+      }
+
+      function currentItem() {
+        return $('.breadcrumb__item--current').text().trim().toLowerCase();
+      }
+
+      function isInventoryIssuesPage() {
+        return location.pathname.split('/').slice(-1).pop() === 'stock_problems';
+      }
+
+      function isThankYouPage() {
+        return location.pathname.split('/').slice(-1).pop() === 'thank_you';
+      }
+
+      function useNormalProductImages() {
+        var imgs = $('.product__image img').toArray();
+        imgs.forEach(function(img) {
+          var $img = $(img);
+          var src = $img.prop('src');
+          $img.prop('src', src.replace('150x150_cropped', 'compact'));
+        });
+      }
+
+      function addOrderSummaryHeader() {
+        var html = '<div class="section__header"><h2 class="section__title">Order Summary</h2></div>';
+        $('.sidebar').prepend(html);
+      }
+
+      function addContinueShopping() {
+        var html = '' +
+            '<div class="wrap">' +
+            '<div style="text-align:left;width:100%;margin-top:20px;" class="continue-shopping">' +
+            '<a href="http://{{ shop.domain }}/collections/shop-all">' +
+            '<img style="display:inline;" src="' + '{{ "chevron-left.png" | asset_url }}' + '" alt="Go back">' +
+            '<div style="display:inline;" class="continue-shopping__text"> CONTINUE SHOPPING</div>' +
+              '</a>' +
+              '</div>' +
+              '</div>';
+        $('.main__header').append(html);
+      }
+
+      function addLabelBeforeSize() {
+        var variants = $('.product__description__variant').toArray();
+        variants.forEach(function(variant) {
+          var $variant = $(variant);
+          var size = $variant.text();
+          var lowerCaseSize = size.toLowerCase();
+          if (lowerCaseSize !== "x" && lowerCaseSize !== "m" && lowerCaseSize !== "l" && lowerCaseSize !== "xs") return;
+          $variant.text('Size ' + size);
+        });
+      }
+
+      function changeButtonText(text) {
+        $('.btn').text(text);
+      }
+
+      function makeEditLinkButton() {
+        $editLink = $('.edit-link');
+        $editLink.text('');
+        var html = '<div class="btn btn-gray btn-small">Edit</div>'
+        $editLink.append(html);
+        $editLink.css('opacity', 1);
+      }
+
+      function addShippingMessage() {
+        var message = 'Due to the slight delay in delivery during our relaunch, shipping is on us.';
+        var html = '<p style="margin-bottom:14px;font-size:16px;">' + message + '</p>';
+        $('[data-shipping-methods]').parent('.section__content').prepend(html);
+      }
+
+      function strikeThroughShippingCost() {
+        var $price = $('span.radio__accessory');
+        $price.css('text-decoration', 'line-through');
+        $price.css('color', '#737373');
+        $price.before('<span class="free-notice">Free</span>');
+      }
+
+      function checkEmailSignupButton() {
+        $('#checkout_buyer_accepts_marketing').prop('checked', true);
+      }
+
+      function changeBackToCartLink() {
+        var $a = $('a.step__footer__previous-link');
+        var href = $a.prop('href');
+        if (!href) return;
+        if (href.match("\/cart$")) {
+          $a.prop('href', href.replace(/cart$/, 'collections/shop-all'));
+          $a.contents().last().replaceWith(' Keep shopping');
+        }
+      }
+
+      function changeTitleMain(text) {
+        $('.section--page-title > .section__title').text(text);
+      }
+
+      function changeTitleSub(text) {
+        $('.section--page-title > .section__text').text(text);
+      }
+
+      function removeOptionalForPhoneNumber() {
+        var text = 'Phone number';
+        $('#checkout_shipping_address_phone').prop('placeholder', text);
+        $('label[for="checkout_shipping_address_phone"]').text(text);
+      }
+
+      function transformThankYouMessage() {
+        $('.thank-you__info h2').text('').append('Thank you for your purchase.<br /><span style="text-transform:none;line-height:2;">Wear with pleasure and great fun.</span>');
+      }
+
+    </script>
+
+    <!-- Dynamic Remarketing -->
+    {% include 'adwords-remarketing' %}
+
+
+    <!-- Res.pixel  -->
+    <img src='https://api.resmagic.io/respixel/commerce?brand_code=TK&pixel_id=1001' WIDTH="1" HEIGHT="1">
+
+    {% include 'nosto-script' with 'shopify-9150248' %}
+    {% include 'nosto-tagging' %}
+  </body>
+</html>

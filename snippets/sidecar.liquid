@@ -1,0 +1,8 @@
+<!-- Sidecar tracking -->
+<script src="https://d3v27wwd40f0xu.cloudfront.net/js/tracking/sidecar_tucker.js" type="text/javascript" async></script>
+{%if template contains 'product' %}
+<script type="text/javascript">
+var sidecar = sidecar || {};
+sidecar.product_info = {
+/* if your feed uses handle instead, change the following product.id to product.handle */ group_id: '{{product.id}}'
+}; </script> {%endif%}

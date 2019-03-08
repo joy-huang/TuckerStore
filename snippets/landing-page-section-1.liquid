@@ -1,0 +1,110 @@
+<style>
+
+  .section-1-img-left,
+  .section-1-img-right,
+  .section-1-pg-right,
+  .section-1-pg-left {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+
+  .section-1-pg-right .pg-container,
+  .section-1-pg-left .pg-container {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    padding: 23px;
+    margin: auto;
+  }
+
+  .section-1-pg-right p,
+  .section-1-pg-left p {
+    width: 100%;
+  }
+
+  div.row,
+  div.reviews {
+    text-align: center;
+  }
+
+  #facebook .paragraph1 {
+    color: #333;
+    font-size: 18px;
+    line-height: 30px;
+  }
+  
+  .features-first-row {
+  	margin-bottom: 30px;
+  }
+
+  @media (max-width: 767px) {
+
+    div.features-first-row {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+    .section-1-img-left,
+    .section-1-img-right,
+    .section-1-pg-right,
+    .section-1-pg-left {
+      max-width: 100%;
+      margin: 0;
+      margin-bottom: 25px;
+    }
+
+    .section-1-pg-right .pg-container,
+    .section-1-pg-left .pg-container {
+      width: 75vw;
+      height: 75vw;
+      vertical-align: middle;
+    }
+
+    .section-1-img-left .img-container,
+    .section-1-img-right .img-container {
+      width: 100%;
+      margin: 0px;
+    }
+  }
+  
+</style>
+
+<div class="grid landing-page-section section-1">
+  <div class="grid__item one-whole">
+    <h2 class="headline2b">{{section.settings.section_1_title}}</h2>
+  </div>
+  <div class="grid__item one-whole features-first-row text-center">
+    <div class="section-1-img-left large--forty-nine-point-five-tenths small--one-whole">
+      <div class="img-container">
+        <img
+             src="{{section.settings.section_1_img_1 | img_url: 'master'}}"
+             alt=''
+             class="">
+      </div>
+    </div>
+    <div class="section-1-pg-right large--forty-nine-point-five-tenths small--one-whole">
+      <div class="pg-container">
+        <p class="paragraph1 text-center small--font-size">
+          {{section.settings.section_1_pg_1}}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="grid__item one-whole text-center">
+    <div class="section-1-pg-left large--forty-nine-point-five-tenths small--one-whole">
+      <div class="pg-container">
+        <p class="paragraph1 text-center small--font-size">
+          {{section.settings.section_1_pg_2}}
+        </p>
+      </div>
+    </div>
+    <div class="section-1-img-right large--forty-nine-point-five-tenths small--one-whole">
+      <div class="img-container">
+        <img
+             src="{{section.settings.section_1_img_2 | img_url: 'master'}}"
+             alt=''
+             class="">
+      </div>
+    </div>
+  </div>
+</div>

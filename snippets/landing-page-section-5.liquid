@@ -1,0 +1,62 @@
+<style>
+
+  .fabrics {
+    margin-top: 40px;
+  }
+
+  @media (max-width: 767px) {
+    .section-5-pg {
+      display: block;
+      vertical-align: middle;
+    }
+
+    .section-5-pg.title {
+      padding-left: 0px;
+      font-weight: bold;
+      vertical-align: top;
+    }
+
+    .section-5-pg.description {
+      padding-bottom: 30px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .section-5-pg {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .section-5-pg.title {
+      padding-left: 20px;
+      font-weight: bold;
+      vertical-align: top;
+    }
+  }
+
+</style>
+
+<div class="grid landing-page-section">
+  <div class="grid__item">
+    <h2 class="headline2b">{{section.settings.section_5_title}}</h2>
+    <p class="paragraph1 small--font-size">{{section.settings.section_5_paragraph}}</p>
+  </div>
+  <div class="grid__item fabrics">
+    {% for item in section.blocks %}
+    <div class="section-5-pg title large--four-tenths small--one-whole">
+      <div>
+      <p class="text-left paragraph1 small--font-size">
+        {{item.settings.section_5_title}}
+      </p>
+      </div>
+    </div>
+     <div class="section-5-pg description large--seven-twelfths small--one-whole">
+      <div>
+      <p class="text-left paragraph1 small--font-size">
+        {{item.settings.section_5_paragraph}}
+      </p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>

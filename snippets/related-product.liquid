@@ -1,0 +1,37 @@
+{% assign related_count = 0 %}
+{% for related_product in collections["shop-all"].products %}
+{% if related_product.type == product.type %}
+{% unless related_product.id == product.id %}
+{% assign related_count = related_count | plus: 1 %}
+{% endunless %}
+{% endif %}
+{% endfor %}
+
+{% if related_count > 0 %}
+
+<div class="grid grid--table related-products">
+  <div class="related-container">
+    <div class="grid__item">
+      <div class="also-like headline2">
+        We thought of you...
+      </div>
+    </div>
+
+    {% assign related_shown = 0 %}
+    {% for related_product in collections["shop-all"].products %}
+    {% if related_shown == 4 %}
+    {% break %}
+    {% endif %}
+
+    {% if related_product.type == product.type %}
+    {% unless related_product.id == product.id %}
+    <div class="grid__item large--one-quarter medium--one-half small--one-half related-product-grid product__you-might-also-like">
+      {% include 'product-grid-item', product:related_product, image_size:'master' %}
+    </div>
+    {% assign related_shown = related_shown | plus: 1 %}
+    {% endunless %}
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

@@ -1,0 +1,200 @@
+
+<!-- /snippets/product-grid-item.liquid -->
+{% comment %}
+
+  This snippet is used to showcase each product during the loop,
+  'for product in collection.products' in collection.liquid.
+
+  A liquid variable (grid_item_width) is set just before the this
+  snippet is included to change the size of the container.
+  Once the variable is set on a page, all future instances of this
+  snippet will use that width. Overwrite the variable to adjust this.
+
+  Example
+    - assign grid_item_width = 'large--one-quarter medium--one-half'
+
+{% endcomment %}
+
+{% comment %}
+  Set the default image size if no variable is set
+{% endcomment %}
+{% unless image_size %}
+  {% assign image_size = 'grande' %}
+{% endunless %}
+
+{% comment %}
+  Set the default grid_item_width if no variable is set
+{% endcomment %}
+{% unless grid_item_width %}
+  {% assign grid_item_width = 'large--one-third medium--one-half' %}
+{% endunless %}
+
+{% comment %}
+  Check if the product is on sale and set a variable to be used below.
+{% endcomment %}
+{% assign on_sale = false %}
+{% if product.compare_at_price > product.price %}
+  {% assign on_sale = true %}
+{% endif %}
+
+{% comment %}
+  Check if the product is sold out and set a variable to be used below.
+{% endcomment %}
+{% assign sold_out = true %}
+{% if product.available %}
+  {% assign sold_out = false %}
+{% endif %}
+
+{% comment %}
+  Link to your product with the 'within: collection' filter for the link to be aware of the collection.
+  This allows you to create collection-based navigation on the product page.
+
+  Results of using 'within: collection':
+  - Instead of a URL with /products/product-handle
+    you would get /collections/collection-handle/products/product-handle
+
+  For more info on navigation within a collection
+    - http://docs.shopify.com/support/your-store/collections/how-to-navigate-within-a-collection
+
+{% endcomment %}
+
+{% assign productTags = product.tags | downcase %}
+{% assign newBadge = 0 %}
+
+
+
+
+{% if productTags contains 'new' %}
+
+  {% assign nowYearMonth = "now" | date: "%y%m" | plus:0 %}
+  {% assign pubYearMonth = product.created_at | date: "%y%m"  | plus:0 %}
+  {% assign yearMonthDiff = nowYearMonth | minus: pubYearMonth %}
+
+  {% assign nowDay = "now" | date: "%d" %}
+  {% assign pubDay = product.created_at | date: "%d" %}
+  {% assign dayCompare = nowDay | minus: pubDay %}
+
+
+  {% if yearMonthDiff == 0 %}
+
+    {% if dayCompare < 15 %}
+      {% assign newBadge = 1 %}
+    {% endif%}
+
+  {% elsif yearMonthDiff == 1 %}
+
+    {% if dayCompare < -15 %}
+      {% assign newBadge = 1 %}
+    {% endif%}
+
+  {% endif %}
+
+
+{% endif %}
+
+<a href="{{ product.url | within: collection }}" class="grid__image link-product-merchandise" style="position:relative;px">
+  <div class="rotate-image-on-hover image-merchandise">
+  <!--   Img max-height: to make sure the hover image swap keep the same size, due to both being of differents natural sizes   -->
+    <!--   Resonance Merchandise App -->
+    <img onError="this.src='{{product.featured_image.src | img_url: image_size}}'" class="featured-image grid__image--full-width lazyload" data-src="{{ feature_image }}" alt="{{ product.featured_image.alt | escape }}" style="max-height: 480px;">
+    <!--   Resonance Merchandise App -->
+    <div class="placeholder" ></div>
+    {% if product.images.size > 1 %}
+
+      {% assign count_shots = 0 %}
+
+      {% for image in product.images %}
+        {% if image.id != product.featured_image.id and count_shots < 1 %}
+          <!--   Resonance Merchandise App -->
+          {% if layout.imgUrl == "" or layout.imgUrl == nil %}
+            <img src="{{ image.src | img_url: image_size }}" alt="{{ image.alt | escape }}" class="grid__image--full-width secundary-img lazyload" style="display:none; max-height: 480px;">
+          {% else %}
+            <img onerror="this.src='{{ image.src | img_url: image_size }}'" src="{{ layout.imgUrl}}" alt="{{ image.alt | escape }}" class="grid__image--full-width secundary-img" style="display:none; max-height: 480px;">
+          {% endif %}
+          <!--   Resonance Merchandise App -->
+          {% assign count_shots = count_shots | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  {% unless product.available || product.metafields.info.waitlist == "yes" %}
+    <div class="sold-out-tag">
+      Sold Out
+    </div>
+  {% endunless %}
+</a>
+
+<div style="height:115px;">
+  <div class="text-center product__header">
+    <a href="{{ product.url | within: collection }}"></a>
+    {% assign newTitle = product.title | split:'|' %}
+
+    {% assign count = 0 %}
+    {% for part in newTitle %}
+    {% assign count = count | plus: 1 %}
+    {% if count == 2 %}
+    <p class="product-header-color">{{part}}</p>
+    {% endif %}
+    {% endfor %}
+
+    {% assign count = 0 %}
+    {% for part in newTitle %}
+    {% assign count = count | plus: 1 %}
+    {% if count == 1 %}
+    {% assign bodyname = part | strip %}
+    <p class="product-font">{{part}}</p>
+    {% endif %}
+    {% endfor %}
+
+    {% if collection.handle != 'markdowns' %}
+    {% if newBadge == 1 %}
+      <p><span class="new-badge">New Arrival</span></p>
+    {% elsif productTags contains 'bestseller' %}
+      <p><span class="bestseller-badge">Best Seller</span></p>
+    {% endif %}
+    {% endif %}
+
+
+  </div>
+
+  <div class="text-center product__price--small price" style="margin-top:16px;">
+    {% if product.price < product.compare_at_price %}
+      <span class="product__sale-price">
+        <del>{{ product.compare_at_price | money | remove: '.00' }}</del>
+      </span>
+    {% endif %}
+    {{ product.price | money | remove: '.00' }}
+  </div>
+
+{% if collection.handle == 'markdowns' %}
+   <div class="text-center product-font">
+          <ul id="filter-by-size" name="selectSize" class="coll-filter product-size-values">
+        <li class="size-options-label">
+                  SIZE:
+                </li>
+            {% for variant in product.variants %}
+              {% assign sizeOptions = variant.option1 | split: '-' %}
+
+              {% if variant.inventory_quantity > 0 or variant.inventory_policy != 'deny' %}
+                <li data-variantId="{{ variant.id }}" data-size="{{ variant.option1 }}" data-instock="true" class="size-options">
+                  {{ sizeOptions.first | strip }} <p class="display-on-selection">{{ sizeOptions[1] | strip }}</p>
+                </li>
+              {% endif %}
+
+            {% endfor %}
+          </ul>
+   </div>
+{% endif %}
+
+
+    <div class="rating-content reviews-rating reviews-rating-{{product.id}}" data-bodyname="{{bodyname}}" style="padding-top:15px;">
+      <div class="star-rating star-0">
+        <span class="halfStyle">★</span>
+        <span class="halfStyle">★</span>
+        <span class="halfStyle">★</span>
+        <span class="halfStyle">★</span>
+        <span class="halfStyle">★</span>
+      </div>
+   </div>
+</div>

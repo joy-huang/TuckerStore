@@ -1,0 +1,209 @@
+<style>
+
+  @media screen and (min-width: 768px) {
+    .homepage-review-container {
+      max-width: 78%;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .homepage-review-container .large--review-container {
+      max-width: 85%;
+    }
+    .homepage-review-container .large--hp-review-img {
+      width:250px;
+      float:right;
+    }
+  }
+
+  @media only screen and (max-width: 767px) {
+    .homepage-review-container .small--header-container {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+
+    .homepage-review-container .small--review-container {
+      max-width: 90%;
+      margin: 0 auto;
+    }
+    .homepage-review-container .small--hp-review-img {
+      width:200px;
+      margin:auto;
+    }
+  }
+
+  .homepage-review-container .stars {
+    font-size: 25px;
+    text-align: left;
+    color: #b57f30;
+  }
+
+  .homepage-review-container .review-title {
+    color: #969595;
+    font-family: "fontin_sans_rgregular", serif;
+    letter-spacing: 0.8px;
+    font-size: 28px;
+    margin-top: 10px;
+  }
+
+  .homepage-review-container .review-content {
+    margin-top: 35px;
+    color: #969595;
+    font-size: 14px;
+    letter-spacing: 0.8px;
+    font-family: "fontin_sans_rgregular", serif;
+  }
+
+  .homepage-review-container .review-customer-name {
+    color: #969595;
+    font-size: 18px;
+    letter-spacing: 0.8px;
+    font-family: "fontin_sans_rgregular", serif;
+    text-transform: capitalize;
+  }
+
+  .homepage-review-container .slick-prev {
+    z-index: 1000;
+    left: 0px;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+  }
+
+  .homepage-review-container .slick-next {
+    right: 0px;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+  }
+
+  .homepage-review-container .slick-prev:before,
+  .homepage-review-container .slick-next:before {
+    color: #969595;
+  }
+
+</style>
+
+<div class="featured-section media-connect">
+  <div class="grid--full">
+    <div class="grid__item large--one-whole">
+      <div class = "insta-wrapper">	      
+		<p class="homepage-inst-headline2 homepage-inst-headline3">Customer Raves</p>	
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% assign review-server = "https://resonance-pr.herokuapp.com/" %}
+
+<div class="grid">
+  <div class="grid__item one-whole">
+    <div class="homepage-review-container" data-app="{{review-server}}" data-shop="{{shop.name}}"></div>
+  </div>
+</div>
+
+<script>
+
+  $(function () {
+    var shop = $('.homepage-review-container').data('shop');
+    var url = $('.homepage-review-container').data('app');
+
+    $.ajax({
+      url: url + "get-reviews?shop=tuckernyc&limit=5&rwsortby=highest-rated",
+      method: "GET",
+      success: function (data) {
+        data = JSON.parse(data);
+        console.log(data.length);
+        data.map(function (review) {
+          review.published = review.published ? "" : "disabled-link";
+          if (review && !review.rwImgUrl) {
+            review.noReviewImage = "no-review-img";
+          }
+          return review;
+        });
+        formatDisplay(data);
+        $(".homepage-review-container").html('');
+        data.map(function(d, index){
+          var slideId = 'slide-' + index;
+          $(".homepage-review-container").append('<div id='+ slideId +' class="item-container"><div>');
+          var slideSelector = '.homepage-review-container #' + slideId;
+
+          renderTemplateWithData("#rw-homepage-template", slideSelector, [d]);
+        });
+        $(".homepage-review-container").slick({
+          arrows: true,
+          nextArrow: '<button class="slick-next slick-arrow fa fa-chevron-right" aria-label="Next" type="button" style="display: block;" aria-disabled="false"></button>',
+          prevArrow: '<button class="slick-prev slick-arrow fa fa-chevron-left" aria-label="Previous" type="button" style="display: block;" aria-disabled="false"></button>',
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          autoplay: true,
+          autoplaySpeed: 5000,});
+      }
+    });
+
+  });
+
+  function formatDisplay(data) {
+    for (var i = data.length - 1; i >= 0; i--) {
+      var d = data[i];
+      d.lastname = d.lastname || '';
+      d.name = d.firstname + " " + d.lastname.charAt(0);
+      if (d.height) {
+        d.height = d.height.replace(".", "'").replace(' ', "'");
+      }
+    };
+  }
+
+
+  function renderTemplateWithData(templateSelector, target, data) {
+    var template = getTemplateById(templateSelector);
+
+    $(target).append(data.map(function (props, indexReviews) {
+      return template.map(function (tok, i) {
+        return (i % 2) ? props[tok] : tok;
+      }).join('');
+    }));
+  }
+
+  function getTemplateById(tid) {
+    return $(tid).text().split(/\$\{(.+?)\}/g);
+  }
+</script>
+
+
+<script type="text/template" id="rw-homepage-template">
+
+
+
+
+
+
+<div class="small--review-container large--review-container">
+  <div class="small--header-container large--hide">
+    <h3 class="headline3">${title}</p>
+    <p class="stars star-${starRating} small--text-center medium--text-center">
+      <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+    </p>
+  </div>
+
+  <div class= "large--one-half medium--one-whole small--one-whole grid__item">
+    <img class="lazyload large--hp-review-img small--hp-review-img" data-src="${imgUrl}" alt="Review">
+  </div>
+  <div class= "large--one-half medium--one-whole small--one-whole grid__item">
+    <div class="large--show small--hide medium--hide">
+      <p class="headline3">${title}</p>
+      <p class="stars star-${starRating}">
+        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      </p>
+    </div>
+    <p class="homepage-paragraph3" style="line-height: 200%;">${fit}. ${design}</p>
+    <p class="homepage-paragraph3">- ${name}</p>
+  </div>
+
+
+</div>
+
+</script>

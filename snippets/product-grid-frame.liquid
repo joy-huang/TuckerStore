@@ -1,0 +1,44 @@
+{% comment %} This is the logic for desktop {% endcomment %}
+
+  {% if counter == 7 or counter == 11 or counter == 19 or counter == 23 
+     or counter == 31 or counter == 35 or counter == 43 %}
+
+    {% assign count_image = count_image | plus: 1 %}
+    {% if linklists[menu]links[count_image]url %}
+      <div class="grid__item one-half large--two-quarters medium--one-quarter product-grid-item-container medium-down--hide" style="width:49%;" data-key="sameHeights" >
+        <img title="{{count_image}}" src="{{linklists[menu]links[count_image]url}}">
+      </div>
+    {% endif %}
+  {% endif %}
+
+{% comment %} End of logic for desktop {% endcomment %}
+
+
+
+{% comment %} This is the logic for mobile {% endcomment %}
+
+   {% if forloop.index == 7 or forloop.index == 13 or forloop.index == 19 or forloop.index == 25 or forloop.index == 31 
+      or forloop.index == 37 or forloop.index == 43 or forloop.index == 49 or forloop.index == 55 or forloop.index == 61 %}
+   
+     {% assign count_image_mobile = count_image_mobile | plus: 1 %}
+
+     {% if linklists[menu]links[count_image_mobile]url %}
+       <div class="grid__item one-whole large--two-quarters medium--one-quarter product-grid-item-container medium-down--show large--hide" style="margin:10px 0; width:99%;">
+         <img title="{{count_image_mobile}} - {{modulo}}" src="{{linklists[menu]links[count_image_mobile]url}}">
+       </div>
+     {% endif %}
+   {% endif %}
+
+{% comment %} End of logic for mobile {% endcomment %}
+
+
+
+<div class="grid__item one-half large--one-quarter medium--one-quarter product-grid-item-container"
+   
+   data-xs={{ product.variants[0].inventory_quantity }}
+   data-s={{ product.variants[1].inventory_quantity }}
+   data-m={{ product.variants[2].inventory_quantity }}
+   data-l={{ product.variants[3].inventory_quantity }}
+   data-key="sameHeights" >
+{% include 'product-grid-item' %}
+</div>

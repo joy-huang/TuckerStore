@@ -1,0 +1,376 @@
+
+{% for block in section.blocks %}
+{% if forloop.index == 2 %}
+{% comment %}
+{% include 'nosto-element' with 'frontpage-nosto-1' %}
+{% include 'nosto-element' with 'frontpage-nosto-2' %}
+{% endcomment %}
+{% endif %}
+  {% assign compact_class = ""  %}
+  {% if block.settings.content_compact == true %}
+  	{% assign compact_class = "compact"  %}
+  {% endif %}
+
+  {% assign decoration_paragraph = ""  %}
+  {% if block.settings.decoration_paragraph == true %}
+  	{% assign decoration_paragraph = "homepage-paragraph"  %}
+  {% endif %}
+
+  {% assign font_style = ""  %}
+  {% if block.settings.headline_font_style == true %}
+  	{% assign font_style = "italy"  %}
+  {% endif %}
+
+  {% assign font_style_paragraph = ""  %}
+  {% if block.settings.font_style_paragraph == true %}
+  	{% assign font_style_paragraph = "italy"  %}
+  {% endif %}
+
+  {% assign margin_ = ""  %}
+  {% if block.settings.content_separation == true %}
+	{% assign margin_ = "padding-top:40px;"  %}
+  {% endif %}
+
+  {% assign margin_top = ""  %}
+  {% if block.settings.content_type == 'img-text' or  block.settings.content_type == 'text-img' %}
+	{% assign margin_top = "homepage-text-img"  %}
+  {% endif %}
+
+{% if block.settings.content_type == "paragraph" %}
+	<div class="homepage-row {{block.settings.content_type}} {{block.settings.background_color}}" style="{{margin_}} position:relative;">
+{% else %}
+    <div class="homepage-row {{block.settings.content_type}} {{block.settings.background_color}} {{block.settings.snippets}} {{margin_top}}" style="{{margin_}}  position:relative;">
+{% endif %}
+
+
+{% if block.settings.heading_location == "top" %}
+  <div class="text-left headline-padding {{block.settings.snippets}}">
+  {% if block.settings.title != "" %}
+  <p class="{{block.settings.heading_style}} {{font_style}} heading"> {{ block.settings.title }} </p>
+  {% endif %}
+
+  {% if block.settings.sub_title != "" %}
+  <p class="paragraph1 subheading"> {{ block.settings.sub_title }} </p>
+  {% endif %}
+</div>
+{% endif %}
+
+<!-- Snippet -->
+{% if block.settings.content_type == "snippet" %}
+  {% include {{block.settings.snippets}} %}
+{% endif %}
+
+<!-- Video -->
+{% if block.settings.content_type == "video" %}
+  <div class="large--eleven-twelfths medium--eleven-twelfths small--one-whole text-center" style="margin:auto;">
+    <div class="video-container mobile-margin">
+      <video class="component-size">
+        <source src="{{ block.settings.video_url }}" type="video/mp4">
+      </video>
+      <div class="control {{block.settings.video_control_position}}"></div>
+      <div class="large--eight-twelfths medium--one-whole small--one-whole text-left component-description">
+        {% if block.settings.video_title != "" %}
+        <h2 class="headline3" style="margin-top: 15px;"> {{ block.settings.video_title }} </h2>
+        {% endif %}
+
+        {% if block.settings.video_description != "" %}
+        <p class="paragraph2"> {{ block.settings.video_description }} </p>
+        {% endif %}
+
+        {% if block.settings.link_into_video_description %}
+        <a class="homepage-paragraph3 homepage-link" href="{{ block.settings.link_into_video_description }}">{{ block.settings.text_link_into_video_description }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+  <!-- Image -->
+  {% if block.settings.content_type == "image" %}
+  {% if block.settings.img_1 %}
+  <div class="large--eleven-twelfths medium--eleven-twelfths small--one-whole text-center" style="margin:auto;">
+    <a href="{{ block.settings.link_into_image1_description }}"><img src="{{ block.settings.img_1 | img_url: "master"  }}" class="component-size"></a>
+    <div class="large--eight-twelfths medium--one-whole small--one-whole text-left component-description">
+      {% if block.settings.image1_title != "" %}
+      <h2 class="headline3" style="margin-top: 15px;"> {{ block.settings.image1_title }} </h2>
+      {% endif %}
+
+      {% if block.settings.image1_description != "" %}
+      <p class="paragraph2"> {{ block.settings.image1_description }} </p>
+      {% endif %}
+      {% if block.settings.link_into_image1_description %}
+      <a class="homepage-paragraph3 homepage-link" href="{{ block.settings.link_into_image1_description }}">{{ block.settings.text_link_into_image1_description }}</a>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+  {% endif %}
+
+<!-- Paragraph -->
+  {% if block.settings.content_type == "paragraph" %}
+  <div class="small--one-whole text-center">
+    <div class="flex-container" style="padding-top: {{block.settings.paragraph_vertical_align}}vh">
+      <div class="page-paragraph border {{decoration_paragraph}} {{compact_class}} {{block.settings.paragraph_alignment}} component-description">
+        <p class="{{block.settings.paragraph_style}} {{font_style_paragraph}}">{{block.settings.paragraph}}</p>
+        <p class="desc-paragraph paragraph3">{{block.settings.paragraph_desc}}</p>
+      </div>
+      {% if block.settings.link_into_paragraph %}
+      <a class="homepage-paragraph3 homepage-link" href="{{ block.settings.link_into_paragraph }}">{{ block.settings.text_link_into_paragraph }}</a>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+<!-- Video-Image -->
+{% if block.settings.content_type == "video-image" %}
+
+  <div class="small--one-whole text-center">
+    <div class="video-container svi-left-fourty-five-tenths svi-left-image-margin mobile-margin">
+      <video class="component-size">
+        <source src="{{ block.settings.video_url }}" type="video/mp4">
+      </video>
+      <div class="control {{block.settings.video_control_position}}"></div>
+      <div class="text-left component-description">
+        {% if block.settings.video_title != "" %}
+        <h2 class="headline3" style="margin-top: 15px;"> {{ block.settings.video_title }} </h2>
+        {% endif %}
+
+        {% if block.settings.video_description != "" %}
+        <p class="paragraph2"> {{ block.settings.video_description }} </p>
+        {% endif %}
+
+        {% if block.settings.link_into_video_description %}
+        <a class="homepage-paragraph3 homepage-link" href="{{ block.settings.link_into_video_description }}">{{ block.settings.text_link_into_video_description }}</a>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if block.settings.img_1 %}
+    <div class="svi-right-fourty-five-tenths">
+      <a href="{{ block.settings.link_into_image1_description }}"><img src="{{ block.settings.img_1 | img_url: "master"  }}" class="component-size"></a>
+      <div class="text-left component-description">
+        {% if block.settings.image1_title != "" %}
+        <h2 class="headline3" style="margin-top: 15px;"> {{ block.settings.image1_title }} </h2>
+        {% endif %}
+
+        {% if block.settings.image1_description != "" %}
+        <p class="paragraph2"> {{ block.settings.image1_description }} </p>
+        {% endif %}
+        {% if block.settings.link_into_image1_description %}
+        <a class="homepage-paragraph3 homepage-link" href="{{ block.settings.link_into_image1_description }}">{{ block.settings.text_link_into_image1_description }}</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+<!-- Image-Video -->
+{% if block.settings.content_type == "image-video" %}
+
+  <div class="small--one-whole text-center">
+    {% if block.settings.img_1 %}
+    <div class="svi-right-fourty-five-tenths svi-left-image-margin mobile-margin">
+      <a href="{{ block.settings.link_into_image1_description }}"><img src="{{ block.settings.img_1 | img_url: "master"  }}" class="component-size"></a>
+      <div class="text-left component-description">
+        {% if block.settings.image1_title != "" %}
+        <h2 class="headline3" style="margin-top: 15px;"> {{ block.settings.image1_title }} </h2>
+        {% endif %}
+
+        {% if block.settings.image1_description != "" %}
+        <p class="paragraph2"> {{ block.settings.image1_description }} </p>
+        {% endif %}
+        {% if block.settings.link_into_image1_description %}
+        <a class="homepage-paragraph3 homepage-link" href="{{ block.settings.link_into_image1_description }}">{{ block.settings.text_link_into_image1_description }}</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+    <div class="video-container svi-left-fourty-five-tenths">
+      <video class="component-size">
+        <source src="{{ block.settings.video_url }}" type="video/mp4">
+      </video>
+      <div class="control {{block.settings.video_control_position}}"></div>
+      <div class="text-left component-description">
+        {% if block.settings.video_title != "" %}
+        <h2 class="headline3" style="margin-top: 15px;"> {{ block.settings.video_title }} </h2>
+        {% endif %}
+
+        {% if block.settings.video_description != "" %}
+        <p class="paragraph2"> {{ block.settings.video_description }} </p>
+        {% endif %}
+
+        {% if block.settings.link_into_video_description %}
+        <a class="homepage-paragraph3 homepage-link" href="{{ block.settings.link_into_video_description }}">{{ block.settings.text_link_into_video_description }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<!-- Image-Image -->
+{% if block.settings.content_type == "image-image" %}
+
+{% assign image1_size = "sii-large-fourty-four-tenths"  %}
+{% if block.settings.image1_small == true %}
+	{% assign image1_size = "sii-small-thirty-four-tenths"  %}
+{% endif %}
+
+{% assign image2_size = "sii-large-fourty-four-tenths"  %}
+{% if block.settings.image2_small == true %}
+	{% assign image2_size = "sii-small-thirty-four-tenths"  %}
+{% endif %}
+
+  <div class="small--one-whole text-center" style="margin-bottom:{{ block.settings.image_horizontal_padding }}%">
+    {% if block.settings.img_1 %}
+     <div class="{{ image1_size }} mobile-margin" style="margin-right:{{ block.settings.image_vertical_padding }}%">
+      <a href="{{ block.settings.link_into_image1_description }}{% if block.settings.adv_prod_1_img_1 != '' %}?handle={{block.settings.adv_prod_1_img_1}}{% if block.settings.adv_prod_2_img_1 != '' %}|{{block.settings.adv_prod_2_img_1}}{% endif %}{% endif %}">
+        <img class="component-size lazyload blur-up"
+        src="{{ block.settings.img_1 | img_url}}"
+        data-srcset="
+                     {{ block.settings.img_1_mobile | img_url: "320x"}} 320w,
+                     {{ block.settings.img_1_mobile | img_url: "480x"}} 480w,
+                     {{ block.settings.img_1_mobile | img_url: "540x"}} 540w,
+                     {{ block.settings.img_1_mobile | img_url: "640x"}} 640w,
+                     {{ block.settings.img_1 | img_url: "750x"}} 750w,
+                     {{ block.settings.img_1 | img_url: "960x"}} 960w,
+                     {{ block.settings.img_1 | img_url: "1200x"}} 1200w
+                    "
+        alt="{{ block.settings.img_1.alt | escape }}">
+      </a>
+      <div class="text-left component-description">
+        {% if block.settings.image1_title != "" %}
+        <h2 class="headline3" style="margin-top: 15px;"> {{ block.settings.image1_title }} </h2>
+        {% endif %}
+
+        {% if block.settings.image1_description != "" %}
+        <p class="paragraph2"> {{ block.settings.image1_description }} </p>
+        {% endif %}
+        {% if block.settings.link_into_image1_description %}
+        <a class="homepage-paragraph3 homepage-link" href="{{ block.settings.link_into_image1_description }}">{{ block.settings.text_link_into_image1_description }}</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+    {% if block.settings.img_2 %}
+    <div class="{{ image2_size }}">
+      <a href="{{ block.settings.link_into_image2_description }}{% if block.settings.adv_prod_1_img_2 != '' %}?handle={{block.settings.adv_prod_1_img_2}}{% if block.settings.adv_prod_2_img_2 != '' %}|{{block.settings.adv_prod_2_img_2}}{% endif %}{% endif %}">
+        <img class="component-size lazyload blur-up"
+        src="{{ block.settings.img_2 | img_url}}"
+        data-srcset="
+                     {{ block.settings.img_2_mobile | img_url: "320x"}} 320w,
+                     {{ block.settings.img_2_mobile | img_url: "480x"}} 480w,
+                     {{ block.settings.img_2_mobile | img_url: "540x"}} 540w,
+                     {{ block.settings.img_2_mobile | img_url: "640x"}} 640w,
+                     {{ block.settings.img_2 | img_url: "750x"}} 750w,
+                     {{ block.settings.img_2 | img_url: "960x"}} 960w,
+                     {{ block.settings.img_2 | img_url: "1200x"}} 1200w"
+        alt="{{ block.settings.img_1.alt | escape }}">
+      </a>
+      <div class="text-left component-description">
+        {% if block.settings.image2_title != "" %}
+        <h2 class="headline3" style="margin-top: 15px;"> {{ block.settings.image2_title }} </h2>
+        {% endif %}
+
+        {% if block.settings.image2_description != "" %}
+        <p class="paragraph2"> {{ block.settings.image2_description }} </p>
+        {% endif %}
+        {% if block.settings.link_into_image2_description %}
+        <a class="homepage-paragraph3 homepage-link" href="{{ block.settings.link_into_image2_description }}">{{ block.settings.text_link_into_image2_description }}</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+<!-- Text-Image -->
+{% if block.settings.content_type == "text-img" %}
+
+  <div class="sti-container small--one-whole text-center flex-content">
+    <div class="sti-left-thirty-five">
+      <div class="sti-paragraph-container component-description">
+        <p class="paragraph2 {{block.settings.paragraph_alignment}} sti-paragraph" style="padding-left: {{block.settings.paragraph_horizontal_padding}}px; padding-right: {{block.settings.paragraph_horizontal_padding}}px; padding-top: {{block.settings.paragraph_vertical_padding}}px; padding-bottom: {{block.settings.paragraph_vertical_padding}}px;">{{block.settings.paragraph}}
+          <br>
+          <br/>
+          {% if block.settings.link_into_paragraph %}
+          <a class="homepage-paragraph3 homepage-link" href="{{ block.settings.link_into_paragraph }}">{{ block.settings.text_link_into_paragraph }}</a>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    {% if block.settings.img_1 %}
+
+    <div class="sti-right-sixty">
+      <a href="{{ block.settings.link_into_paragraph }}"><img src="{{ block.settings.img_1 | img_url: "master"  }}" class="component-size"></a>
+      <div class="headline-right-image">
+        {% if block.settings.image1_title != "" %}
+        <p class="headline"> {{ block.settings.image1_title }} </p>
+        {% endif %}
+        {% if block.settings.image1_description != "" %}
+        <p class="paragraph2"> {{ block.settings.image1_description }} </p>
+        {% endif %}
+        {% if block.settings.link_into_image1_description %}
+        <a class="homepage-paragraph3 homepage-link" href="{{ block.settings.link_into_image1_description }}">{{ block.settings.text_link_into_image1_description }}</a>
+        {% endif %}
+      </div>
+
+    </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+<!-- Image-Text -->
+{% if block.settings.content_type == "img-text" %}
+  <div class="sit-container small--one-whole text-center">
+
+
+    {% if block.settings.img_1 %}
+
+    <div class="sit-left-sixty">
+      <a href="{{ block.settings.link_into_paragraph }}"><img src="{{ block.settings.img_1 | img_url: "master"  }}" class="component-size"></a>
+      <div class="headline-left-image">
+        {% if block.settings.image1_title != "" %}
+        <p class="headline"> {{ block.settings.image1_title }} </p>
+        {% endif %}
+        {% if block.settings.image1_description != "" %}
+        <p class="paragraph2"> {{ block.settings.image1_description }} </p>
+        {% endif %}
+        {% if block.settings.link_into_image1_description %}
+        <a class="homepage-paragraph3 homepage-link" href="{{ block.settings.link_into_image1_description }}">{{ block.settings.text_link_into_image1_description }}</a>
+        {% endif %}
+      </div>
+
+    </div>
+    {% endif %}
+
+    <div class="sit-right-thirty-five">
+      <div class="sti-paragraph-container component-description">
+        <p class="paragraph2 {{block.settings.paragraph_alignment}} sti-paragraph" style="padding-left: {{block.settings.paragraph_horizontal_padding}}px; padding-right: {{block.settings.paragraph_horizontal_padding}}px; padding-top: {{block.settings.paragraph_vertical_padding}}px; padding-bottom: {{block.settings.paragraph_vertical_padding}}px;">{{block.settings.paragraph}}
+          <br>
+          <br/>
+          {% if block.settings.link_into_paragraph %}
+          <a class="homepage-paragraph3 homepage-link" href="{{ block.settings.link_into_paragraph }}">{{ block.settings.text_link_into_paragraph }}</a>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+
+{% if block.settings.heading_location == "bottom" %}
+<div class="text-left headline-padding">
+  {% if block.settings.title != "" %}
+  <p class="{{block.settings.heading_style}} {{font_style}}"> {{ block.settings.title }} </p>
+  {% endif %}
+
+  {% if block.settings.sub_title != "" %}
+  <p class="paragraph1"> {{ block.settings.sub_title }} </p>
+  {% endif %}
+</div>
+{% endif %}
+</div>
+
+{% endfor %}

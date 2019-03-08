@@ -1,0 +1,32 @@
+
+<style media="screen">
+  .email-btn {
+    margin-top: 35px;
+    background-color:#381D21;
+    color:#fff;
+    padding:10px 60px;
+    font-size:18px;
+    display:inline-block;
+  }
+  .email-btn:hover {
+    background-color: #160c0d;
+    cursor: pointer;
+  }
+</style>
+
+<div class="grid" style="margin-top:35px;margin-bottom:35px;">
+  <div class="grid__item large--one-half">
+    <img src="{{ 'kids.png' | asset_url }}" />
+  </div>
+  <div class="grid__item large--one-half" style="text-align:center;margin-top:20px;">
+    <h1>Kids!</h1>
+    <p style="font-size:24px;">
+      {{ page.content }}
+    </p>
+    <a href="mailto:hello@tuckernyc.com">
+      <div class="email-btn">
+        EMAIL US
+      </div>
+    </a>
+  </div>
+</div>

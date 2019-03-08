@@ -1,0 +1,46 @@
+{% for block in section.blocks %}
+
+  <div class="grid__item">
+    <div class="column-content">
+      {% if block.settings.lead_img %}
+        <div class="image-holder">
+          <img src="{{ block.settings.lead_img | img_url: "original"  }}">
+        </div>
+      {% endif %}
+
+      {% if block.settings.title != "" or block.settings.sub_title != "" %}
+        <div class="page-title bottom {{block.settings.title_alignment}}">
+          {% if block.settings.title != "" %}
+            <div class="headline3"> {{ block.settings.title }} </div>
+          {% endif %}
+
+          {% if block.settings.sub_title != "" %}
+              <p class="paragraph2"> {{ block.settings.sub_title }} </p>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="column-content-90 text-center">
+      {% if block.settings.left_img %}
+        <div class="left-image-holder">
+          <img src="{{ block.settings.left_img | img_url: "original"  }}">
+        </div>
+      {% endif %}
+
+      {% if block.settings.right_img %}
+        <div class="right-image-holder">
+          <img src="{{ block.settings.right_img | img_url: "original"  }}">
+        </div>
+      {% endif %}
+
+    </div>
+
+    <div class="column-content">
+      <div class="page-paragraph {{paragraph_separator}}">
+        <p class="paragraph2">{{block.settings.paragraph}}</p>
+      </div>
+    </div>
+  </div>
+
+{% endfor %}

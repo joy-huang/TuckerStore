@@ -1,0 +1,166 @@
+<!-- close wrapper for full width -->
+</div>
+<style media="screen">
+  .outer {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0; /* remove extra line of whitespace */
+  }
+  .item {
+    flex-basis: 100%;
+  }
+
+  /*two column*/
+  @media all and (min-width: 971px) {
+    .item {
+      flex-basis: 50%;
+    }
+    .text-item {
+      max-width: 500px;
+      float:left;
+    }
+  }
+
+  /*one column*/
+  @media all and (max-width: 970px) {
+    .small-hide {
+      display: none;
+    }
+    .text-item {
+      margin: 0 auto;
+      max-width: 500px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-bottom: 50px;
+    }
+  }
+
+  .clickable:hover {
+    cursor: pointer;
+  }
+
+  .background-image {
+    background-image: url("{{ 'advocacy-background-slice.jpg' | asset_url }}");
+    background-repeat: repeat-x;
+  }
+  .white {
+    color: white;
+  }
+  .big {
+    font-size: 60px;
+    line-height: 1;
+    font-family: "AvantGardeGothicITCDemiBold";
+  }
+  .text-center {
+    text-align: center;
+  }
+  .social-circle {
+    display: inline-block;
+    background: white;
+    width: 50px;
+    height: 50px;
+    position: relative;
+    border-radius: 25px;
+  }
+  .social-img {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+</style>
+<div class="outer background-image">
+  <div class="item small-hide" style="text-align:right;">
+    <img src="{{ 'advocacy-model.jpg' | asset_url }}" alt="" />
+  </div>
+  <div class="item text-center text-item" style="padding-top:90px;padding-right:20px;">
+    <!-- <div class="" style="display:inline-block;width:500px;"> -->
+    <!-- <div class="" style="display:inline-block;"> -->
+      <div class="big white" style="margin-bottom:12px;">
+        GIVE $25
+      </div>
+      <div class="big white" style="margin-bottom:27px;">
+        GET $25
+      </div>
+      <div class="" style="font-size:18px;">
+        We know that #ladieslovetucker. Give your friends $25 off their first
+        order, and get $25 when their order ships.
+      </div>
+      <div class="" style="font-style:italic;margin-top:50px;margin-bottom:10px;font-size:16px;">
+        Share the Tucker love:
+      </div>
+      <div class="" style="margin-top:20px;">
+        <a id="facebook-link">
+          <div class="clickable social-circle" style="margin-right:10px;">
+            <img class="social-img" src="{{ 'facebook-logo.png' | asset_url }}" alt="" style="transform: translate(-51%, -50%);"/>
+          </div>
+        </a>
+        <a id="twitter-link">
+          <div class="clickable social-circle" style="display:inline-block;background:white;">
+            <img class="social-img" src="{{ 'twitter-logo.png' | asset_url }}" alt="" />
+          </div>
+        </a>
+        <a id="mail-link">
+          <div class="clickable social-circle" style="display:inline-block;background:white;margin-left:10px;">
+            <img class="social-img" src="{{ 'twitter-logo.png' | asset_url }}" alt="" />
+          </div>
+        </a>
+      <!-- </div> -->
+    </div>
+  </div>
+</div>
+
+<!-- re-open wrapper -->
+<div class="wrapper">
+
+<script>
+  $(function() {
+    becomeAdvocate();
+
+    var $facebook = $('#facebook-link');
+    var $twitter = $('#twitter-link');
+    var $personalizedLink = $('#personalized-link');
+    var $mailLink = $('#mail-link');
+
+    var code = codeFromUrl()
+    setFacebookLink($facebook, code);
+    setTwitterLink($twitter, code);
+    setMailLink($mailLink, code);
+    // setPersonalizedLink($personalizedLink, code);
+  })
+
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  function codeFromUrl() {
+    return getParameterByName("rc");
+  }
+
+  function becomeAdvocate() {
+    localStorage.setItem('advocate', '1');
+  }
+
+  function setFacebookLink($element, code) {
+    $element.attr('href', 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.tuckernyc.com%3Futm_source%3Drefer%3Frc%3D'+code);
+  }
+
+  function setTwitterLink($element, code) {
+    var href = 'https://twitter.com/intent/tweet?url=http%3A%2F%2Fwww.tuckernyc.com%2F%3Futm_source%3Drefer%26rc%3D'+code+'&text=%23ladieslovetucker%20Explore%20the%20world%20of%20prints'
+    $element.attr('href', href)
+  }
+
+  function setMailLink($element, code) {
+    $element.attr('href', 'mailto:?Subject=Hello')
+  }
+  function setPersonalizedLink($element, code) {
+    $element.attr('href', '/?utm_source=refer&rc='+code)
+  }
+</script>

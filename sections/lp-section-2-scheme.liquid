@@ -1,0 +1,38 @@
+{% include 'landing-page-section-2' %}
+{% schema %}
+  {
+	"name": "Section 2: How to wear it",
+  	"settings": [
+    {
+    "type": "text",
+    "id": "section_2_title",
+    "label": "Section title"
+    }
+	],
+    "blocks":[
+		{
+			"type": "images",
+			"name": "Images",
+			"limit": 4,
+			"settings": [
+				{
+				  "type": "image_picker",
+				  "id": "section_2_img_1",
+ 				  "label": "Image 1"
+				},
+				{
+				  "type": "image_picker",
+				  "id": "section_2_img_2",
+ 				  "label": "Image 2"
+				}
+			]
+		}
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

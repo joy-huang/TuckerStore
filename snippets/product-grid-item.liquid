@@ -1,0 +1,149 @@
+<style>
+ {% capture content %}
+  @media screen and (max-width: 580px) {
+    .product__header {
+      font-size: 15px;
+    }
+  }
+
+.grid-uniform.collection-products .grid_collection_item,
+.grid-uniform.collection-products-search .grid_collection_item {
+  margin-bottom: 45px;
+}
+
+  {% endcapture %}
+{% assign content =  content | strip_newlines | split: " " | join: " " | split: "*/" %}
+{% assign new_content = "" %}
+{% for word in content %}
+  {% assign new_word = word | split: "/*" | first | strip %}
+    {% assign new_content = new_content | append: new_word %}
+{% endfor %}
+
+{{ new_content }}
+</style>
+
+<!-- /snippets/product-grid-item.liquid -->
+{% comment %}
+
+  This snippet is used to showcase each product during the loop,
+  'for product in collection.products' in collection.liquid.
+
+  A liquid variable (grid_item_width) is set just before the this
+  snippet is included to change the size of the container.
+  Once the variable is set on a page, all future instances of this
+  snippet will use that width. Overwrite the variable to adjust this.
+
+  Example
+    - assign grid_item_width = 'large--one-quarter medium--one-half'
+
+{% endcomment %}
+
+{% comment %}
+  Set the default image size if no variable is set
+{% endcomment %}
+{%unless image_size%}
+  {% assign image_size = '540x480' %}
+{%endunless%}
+
+{% comment %}
+  Set the default grid_item_width if no variable is set
+{% endcomment %}
+{% unless grid_item_width %}
+  {% assign grid_item_width = 'large--one-third medium--one-half' %}
+{% endunless %}
+
+{% comment %}
+  Check if the product is on sale and set a variable to be used below.
+{% endcomment %}
+{% assign on_sale = false %}
+{% if product.compare_at_price > product.price %}
+  {% assign on_sale = true %}
+{% endif %}
+
+{% comment %}
+  Check if the product is sold out and set a variable to be used below.
+{% endcomment %}
+
+{% assign sold_out = true %}
+{% if product.available %}
+  {% assign sold_out = false %}
+{% endif %}
+
+
+{% comment %}
+  Link to your product with the 'within: collection' filter for the link to be aware of the collection.
+  This allows you to create collection-based navigation on the product page.
+
+  Results of using 'within: collection':
+  - Instead of a URL with /products/product-handle
+    you would get /collections/collection-handle/products/product-handle
+
+  For more info on navigation within a collection
+    - http://docs.shopify.com/support/your-store/collections/how-to-navigate-within-a-collection
+
+{% endcomment %}
+<a href="{{ product.url | within: collection }}" class="grid__image" style="position:relative;">
+  <div class="rotate-image-on-hover">
+    <img src="{{{{ product.featured_image.src }}" class="featured-image grid__image--full-width lazyload blur-up" data-src="{{ product.featured_image.src | img_url: image_size }}" alt="{{ product.featured_image.alt | escape }}">
+    {% if product.images.size > 1 %}
+
+      {% assign count_shots = 0 %}
+
+      {% for image in product.images %}
+        {% if image.id != product.featured_image.id and count_shots < 1 %}
+          <img src="{{ image.src  | img_url: '100x' }}" data-src="{{ image.src | img_url: image_size }}" alt="{{ image.alt | escape }}" class="grid__image--full-width secundary-img lazyload blur-up" style="display:none;">
+
+          {% assign count_shots = count_shots | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  {% unless product.available || product.metafields.info.waitlist == "yes" %}
+    <div class="sold-out-tag">
+      Sold Out
+    </div>
+  {% endunless %}
+</a>
+
+<div style="height:90px;">
+  <div class="text-center product__header related-product-info" style="">
+    <a href="{{ product.url | within: collection }}"></a>
+    {% assign newTitle = product.title | split:'|' %}
+
+    {% assign count = 0 %}
+    {% for part in newTitle %}
+    {% assign count = count | plus: 1 %}
+    {% if count == 2 %}
+    <p class="product-header-color">{{part}}</p>
+    {% endif %}
+    {% endfor %}
+
+    {% assign count = 0 %}
+    {% for part in newTitle %}
+    {% assign count = count | plus: 1 %}
+    {% if count == 1 %}
+    {% assign bodyname = part | strip %}
+    <p class="product-font">{{part}}</p>
+    {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="text-center product__price--small price related-product-info price-font" style="margin-top:16px;">
+    {% if product.price < product.compare_at_price %}
+    <span class="product__sale-price">
+      <del>{{ product.compare_at_price | money | remove: '.00' }}</del>
+    </span>
+    {% endif %}
+    {{ product.price | money | remove: '.00' }}
+  </div>
+  <div class="rating-content reviews-rating reviews-rating-{{product.id}}" data-bodyname="{{bodyname}}" style="padding-top:15px;">
+    <div class="star-rating star-0">
+      <span class="halfStyle">★</span>
+      <span class="halfStyle">★</span>
+      <span class="halfStyle">★</span>
+      <span class="halfStyle">★</span>
+      <span class="halfStyle">★</span>
+    </div>
+  </div>
+</div>

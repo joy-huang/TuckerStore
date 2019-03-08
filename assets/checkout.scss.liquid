@@ -1,0 +1,610 @@
+
+$colorPrimary: {{ settings.color_primary }};
+$fontStack: 'garamond-premier-pro', 'Georgia', serif;
+
+/*============================================================================
+  #Breakpoint and Grid Variables
+==============================================================================*/
+$viewportIncrement: 1px;
+
+// NOTE: these are different than the breakpoints timber uses but is consistent
+// with how shopify's mobile checkout works.
+$small: 480px;
+$medium: 999px;
+$large: 1000px;
+
+/*============================================================================
+  Dependency-free breakpoint mixin
+    - Based on http://blog.grayghostvisuals.com/sass/sass-media-query-mixin/
+    - Usage docs: http://shopify.github.io/Timber/#sass-mixins
+==============================================================================*/
+
+$min: min-width;
+$max: max-width;
+@mixin at-query ($constraint_, $viewport1_, $viewport2_:null) {
+ $constraint: $constraint_; $viewport1: $viewport1_; $viewport2: $viewport2_;
+  @if type-of($constraint_) == number {
+    $viewport1 : $constraint_; $viewport2 : $viewport1_; $constraint : null;
+  }
+  @if $constraint == $min {
+    @media screen and ($min: $viewport1) {
+      @content;
+    }
+  } @else if $constraint == $max {
+    @media screen and ($max: $viewport1) {
+      @content;
+    }
+  } @else {
+    @media screen and ($min: $viewport1) and ($max: $viewport2) {
+      @content;
+    }
+  }
+}
+
+/*============================================================================
+  Redesign Site Palette Coplors:
+==============================================================================*/
+
+$colorBlack: #4a4a4a;
+$colorGray: #817f7f;
+$colorDarkGray: #969595;
+$colorLightGray: #d8d8d8;
+$colorRed: #d12631;
+$colorGold: #b57f30;
+$colorDarkBlue: #364076;
+$colorAqua: #ebf2f0;
+$colorLightPink: #f6e7dc;
+$colorGrayBackground: #f8f8f7;
+
+/*============================================================================
+  Redesign Site Font Types:
+==============================================================================*/
+
+@font-face {
+    font-family: 'fontin_sans_rgregular';
+    src: url('fontin_sans_r_45b-webfont.woff2') format('woff2'),
+         url('fontin_sans_r_45b-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+$headlineFontStack: "adobe-caslon-pro", serif;
+$paragraphFontStack: "fontin_sans_rgregular", 'Georgia', serif;
+
+.headline {
+  color: $colorGold;
+  font-size: 100px;
+  line-height: 1;
+  letter-spacing: -1px;
+  font-style: italic;
+  font-family: $headlineFontStack;
+}
+
+.headline2 {
+  color: $colorGold;
+  font-size: 63px;
+  letter-spacing: 0px;
+  font-style: italic;
+  line-height: 71px;
+  font-family: $headlineFontStack;
+}
+
+.headline3 {
+  color: $colorBlack;
+  font-size: 40px;
+  letter-spacing: 0.6px;
+  font-style: normal;
+  font-family: $headlineFontStack;
+  line-height: 48px;
+}
+
+.headline4 {
+  color: $colorDarkGray;
+  font-size: 34px;
+  letter-spacing: 1px;
+  font-style: normal;
+  font-family: $headlineFontStack;
+  line-height: 47px;
+}
+
+.headline5 {
+  color: $colorGray;
+  font-size: 22px;
+  letter-spacing: 0px;
+  font-style: italic;
+  font-family: $headlineFontStack;
+}
+
+.paragraph1 {
+  color: $colorDarkGray;
+  font-size: 23px;
+  letter-spacing: 0px;
+  font-family: $paragraphFontStack;
+  line-height: 30px;
+}
+
+.paragraph2 {
+  color: $colorDarkGray;
+  font-size: 18px;
+  letter-spacing: 0.8px;
+  font-family: $paragraphFontStack;
+  line-height: 25px;
+}
+
+.paragraph3 {
+  color: $colorDarkGray;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  font-family: $paragraphFontStack;
+  line-height: 17px;
+}
+
+.product-font {
+  color: $colorBlack;
+  font-size: 20px;
+  letter-spacing: 0.6px;
+}
+
+.price-font {
+  color: $colorDarkGray;
+  font-size: 16px;
+  letter-spacing: 1px;
+  font-family: $paragraphFontStack;
+}
+
+.bodyname-font {
+  color: $colorDarkGray;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+
+// Mobile only stylings.
+@include at-query($max, $medium) {
+
+  .sidebar .section__header {
+    display: none;
+  }
+  .content .sidebar__content {
+    // display: none;
+    // border: none;
+    // padding: 0;
+  }
+  .main__header {
+    display: none;
+  }
+
+  .order-summary-toggle__icon-wrapper {
+    display: none !important;
+  }
+
+  .banner .logo {
+    text-align: center !important;
+  }
+  // Mobile drop down label font.
+  .order-summary-toggle__text.order-summary-toggle__text--show {
+    font-family: $fontStack;
+  }
+}
+
+// Desktop only stylings.
+@include at-query($min, $large) {
+  .sidebar__content {
+    border: 1px solid #D9D9D9;
+    padding: 15px;
+  }
+  .step__footer__previous-link {
+    display: none;
+  }
+
+  // This centers the continue button on desktop, but fucks
+  // things up on mobile.
+  .step__footer {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo {
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+}
+
+.step__footer__previous-link {
+  font-family: $fontStack;
+}
+
+.continue-shopping {
+  font-family: $fontStack;
+  width: 100%;
+  text-align: left;
+  color: $colorPrimary;
+}
+
+.continue-shopping__text {
+  vertical-align: top;
+  margin-top: -1px;
+  margin-left: 10px;
+/*   font-size: 14px; */
+
+  @extend .paragraph3;
+}
+
+.sidebar__content {
+  margin-bottom: 20px; // Otherwise, a tall sidebar sits on the ground.
+}
+
+// Field inputs
+
+.field__input {
+  border: 1px solid #D9D9D9;
+  border-radius: 0;
+  box-shadow: none !important;
+}
+
+.field--error .field__input {
+  border-color: #FFC5C7;
+  background-color: #FFEFEF;
+}
+
+.field__input-wrapper,
+.field__input-wrapper label {
+  font-family: 'Helvetica', sans-serif;
+}
+
+// Section titles.
+h2.section__title {
+  text-transform: uppercase;
+/*   font-size: 16px;
+  color: $colorPrimary;
+  font-family: $fontStack;
+  font-weight: normal; */
+  @extend .paragraph3;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+// Breadcrumbs
+
+.breadcrumb {
+  text-transform: uppercase;
+/*   font-family: $fontStack;
+  font-size: 17px; */
+  outline-style:solid;
+  outline-color:#381d21;
+  outline-width:1px;
+  padding:5px;
+
+  @extend .paragraph3;
+
+}
+
+.breadcrumb__item a,
+.breadcrumb__item .breadcrumb__text {
+  font-size: 12px;
+}
+
+.breadcrumb__item {
+  display:inline;
+}
+.breadcrumb__item a {
+  color: #962133;
+}
+
+.breadcrumb__item--current a {
+  color: #000000;
+}
+
+// Hide the link back to cart since we don't have that page.
+.breadcrumb__item:first-child {
+  display:none;
+}
+
+
+
+
+// Hide the dividing line.
+.sidebar:after {
+  display: none;
+}
+
+// Styling for the top left text. Only style the paragraph, because the
+// credit card stuff lives in .section__content too.
+.section__content p {
+  font-family: $fontStack;
+  color: lighten($colorPrimary, 5%);
+}
+
+// Product image.
+
+// Increase the product image width.
+.product__image {
+  width: 80px;
+}
+
+.product__image img {
+  border-radius: 0;
+}
+
+// Now that we are using the taller image, make text aligned with the top
+// of that image.
+tr.product td {
+  vertical-align: top;
+}
+
+.product__description {
+  font-family: $fontStack;
+}
+
+.product__description__name {
+  font-size: 16px;
+}
+
+// Styling the name (left part) of the lines. Leave the value (right part)
+// as other font because our fontStack numbers (aka prices) don't look nice.
+.total-line__name {
+  font-family: $fontStack;
+}
+
+.total-line {
+  font-size: 13px;
+  color: $colorPrimary;
+}
+
+// Increase the main payment size.
+.payment-due-label {
+  font-size: 13px;
+}
+
+// Buttons
+
+.btn {
+  background-color: $colorPrimary;
+  color: white;
+  border-radius: 0;
+  font-family: $fontStack;
+  padding-left: 70px;
+  padding-right: 70px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn:hover,
+.btn:focus {
+  background-color: darken($colorPrimary, 10%);
+}
+
+.btn-gray {
+  background-color: #D9D7D7;
+  color: $colorPrimary;
+}
+
+.btn-gray:focus,
+.btn-gray:hover {
+  background-color: darken(#D9D7D7, 10%);
+  color: $colorPrimary;
+}
+
+.btn-small {
+  padding: 4px 27px;
+  font-size: 11px;
+  max-width: 50%;
+  letter-spacing: normal;
+}
+
+// We are hiding the edit link and replacing it with a button.
+.edit-link {
+  opacity: 0;
+}
+
+// Content boxes are where options like shipping option and
+// use same billing address as shipping address live. Currently we are
+// doctoring them by changing the styling, and on the shipping page, we are
+// hiding the free shipping option and disabling the standard shipping option.
+
+// Styling.
+.content-box,
+.content-box__row {
+  box-shadow: none !important;
+}
+
+// Styling.
+.content-box {
+  border: 1px solid #d9d9d9;
+  border-radius: 0 !important;
+  font-family: $fontStack;
+}
+
+// Styling.
+.content-box__row:first-child,
+.content-box__row:last-child {
+  border-radius: 0;
+}
+
+// Checkboxes and radio buttons.
+
+.input-checkbox {
+  border-radius: 0;
+}
+
+.input-radio,
+.input-checkbox {
+  box-shadow: 0 0 0 0 $colorPrimary inset;
+}
+
+.input-radio:checked,
+.input-checkbox:checked {
+  box-shadow: 0 0 0 10px $colorPrimary inset;
+}
+
+// Remove the "and more..." text next to the card icons.
+.payment-icon-list__more {
+  display: none;
+}
+
+// This is for the text underneath the Payment heading where we
+// say we don't store cards.
+p.section__text {
+  font-size: 13px;
+  margin-top: 15px;
+}
+
+p {
+  font-family: $fontStack;
+  color: $colorPrimary;
+}
+
+label {
+  font-family: $fontStack;
+}
+
+.free-notice {
+  color: $colorPrimary;
+  padding-right: 8px;
+}
+
+.shipping_info__text {
+  text-transform:none;
+  margin-top:11px;
+  margin-bottom:-20px;
+  font-size:11px;
+}
+
+@include at-query($max, $medium) {
+  .shipping_info__text {
+    margin-bottom:-10px;
+  }
+}
+
+.checkbox-wrapper {
+
+}
+
+.step__sections .field__input-wrapper input,
+.step__sections .field__input-wrapper label,
+.step__sections .field__input-wrapper select {
+  @extend .paragraph3;
+  font-size: 13px;
+}
+
+.step__sections .field__input-wrapper.field__input-wrapper--select label {
+  font-size: 8px;
+}
+
+.step__footer .btn.step__footer__continue-btn {
+  background-color: white;
+  color: $colorDarkBlue;
+  border: 1px solid;
+  font-family: $paragraphFontStack;
+
+  &:focus {
+    box-shadow: none;
+  }
+
+  &:hover {
+    color: white;
+    background-color: $colorDarkBlue;
+  }
+}
+
+.content .sidebar {
+  background-color: $colorGrayBackground;
+  margin-top: 2px;
+  padding-left: 24px;
+  padding-right: 24px;
+
+  .sidebar__content {
+    border: none;
+    padding: 0;
+  }
+
+  .product__description {
+    @extend .paragraph3;
+  }
+
+  .product__description__variant {
+    font-size: 12px;
+  }
+
+  .product__price {
+     @extend .price-font;
+  }
+
+  .field__input-wrapper label,
+  .field__input-wrapper input {
+    @extend .paragraph3;
+    font-size: 13px;
+  }
+
+  .field__input-btn.btn {
+    background-color: $colorDarkBlue;
+    color: white;
+    border: 1px solid;
+    font-family: $paragraphFontStack;
+
+    &:focus {
+      box-shadow: none;
+    }
+
+    &:hover {
+      color: $colorDarkBlue;
+      background-color: $colorGrayBackground;
+    }
+  }
+
+  .field__input-btn.btn.btn--disabled {
+    background-color: $colorGray;
+    color: $colorLightGray;
+  }
+
+  .payment-due-label__total,
+  .total-line__name {
+    @extend .paragraph3;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .payment-due__price,
+  .total-line__price {
+    @extend .price-font;
+  }
+}
+
+.section {
+
+  .shipping_info__text {
+    @extend .paragraph3;
+    font-weight: normal;
+  }
+
+  .section__content label  {
+    @extend .paragraph3;
+    font-size: 13px;
+  }
+
+  .section__content label .content-box__emphasis {
+    @extend .price-font;
+  }
+
+  .review-block {
+    @extend .paragraph3;
+    font-size: 13px;
+  }
+
+  .review-block .review-block__label {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+}
+
+.step__footer .step__footer__previous-link-content {
+  @extend .paragraph3;
+  font-size: 13px;
+}

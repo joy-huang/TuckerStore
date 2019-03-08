@@ -1,0 +1,152 @@
+
+<div class="grid">
+
+  <div class="row">
+    <div class="grid__item one-whole">
+      <div class="movie movie-poster story-item">
+        <video preload="none">
+          <source src="https://s3-us-west-2.amazonaws.com/tuckernyc/Vogue18-Video.mp4" type="video/mp4">
+        </video>
+        <div class="movie__controls">
+          <div style="background-image: url({{ 'Vogue18-Video-Still.jpg' | asset_url }});" class="movie__control movie__control__poster-img"></div>
+          <div class="movie__control movie__control__poster-story-subhead movie__control__poster--big">A No Good Day In Tuckertown</div>
+          <div class="movie__control movie__control__btn movie__control__play-btn"><i class="fa fa-play"></i></div>
+          <div class="movie__control movie__control__btn movie__control__pause-btn"><i class="fa fa-pause"></i></div>
+        </div>
+      </div>
+      <div class="music-series-text">
+        Vogue Magazine 2018 Spring Preview
+      </div>
+    </div>
+  </div>  
+  
+  <div class="row">
+    <div class="grid__item one-whole">
+      <div class="movie movie-poster story-item">
+        <video preload="none">
+          <source src="https://tuckernyc.s3.amazonaws.com/lets-bowl.mp4" type="video/mp4">
+        </video>
+        <div class="movie__controls">
+          <div style="background-image: url({{ 'lets-bowl.jpg' | asset_url }});" class="movie__control movie__control__poster-img"></div>
+          <div class="movie__control movie__control__poster-story-subhead movie__control__poster--big">Let's Bowl</div>
+          <div class="movie__control movie__control__btn movie__control__play-btn"><i class="fa fa-play"></i></div>
+          <div class="movie__control movie__control__btn movie__control__pause-btn"><i class="fa fa-pause"></i></div>
+        </div>
+      </div>
+      <div class="music-series-text">
+        Another wonderful <i>I AM pictures</i> production shot at The Gutter in Williamsburg, Brooklyn.
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="grid__item one-whole">
+      <div class="movie movie-poster story-item">
+        <video preload="none">
+          <source src="https://tuckernyc.s3.amazonaws.com/brooklyn-dance-party.mp4" type="video/mp4">
+        </video>
+        <div class="movie__controls">
+          <div style="background-image: url({{ 'brooklyn-dance-party-poster.jpg' | asset_url }});" class="movie__control movie__control__poster-img"></div>
+          <div class="movie__control movie__control__poster-story-subhead movie__control__poster--big">Brooklyn Dance Off</div>
+          <div class="movie__control movie__control__btn movie__control__play-btn"><i class="fa fa-play"></i></div>
+          <div class="movie__control movie__control__btn movie__control__pause-btn"><i class="fa fa-pause"></i></div>
+        </div>
+      </div>
+      <div class="music-series-text">
+        Shot on the corner of North 3rd and Kent in Williamsburg, Brooklyn and directed by Gaby's sister Zoe Potkin with Chloe Dumont.
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="grid__item one-whole">
+      <div class="movie movie-poster story-item">
+		<video preload="none">
+          <source src="https://tuckernyc.s3.amazonaws.com/heather-boo-and-emma-rose.mp4" type="video/mp4">
+        </video>
+        <div class="movie__controls">
+          <div style="background-image: url({{ 'heather-boo-and-emma-rose-poster.jpg' | asset_url }});" class="movie__control movie__control__poster-img"></div>
+          <div class="movie__control movie__control__poster-story-subhead movie__control__poster--big">Heather Boo and Emma Rose</div>
+          <div class="movie__control movie__control__btn movie__control__play-btn"><i class="fa fa-play"></i></div>
+          <div class="movie__control movie__control__btn movie__control__pause-btn"><i class="fa fa-pause"></i></div>
+        </div>
+      </div>
+      <div class="music-series-text">
+        Gaby first heard Heather and Emma perform this song at a poetry reading in the East Village. Next thing you knew, Heather was in Gaby's living room with her guitar.
+        <br />
+        Gaby's youngest son still knows the song by heart.
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-bottom:40px;">
+    <div class="grid__item one-whole">
+      <div class="movie movie-poster story-item">
+        <video preload="none" class="">
+          <source src="https://tuckernyc.s3.amazonaws.com/bmx.mp4" type="video/mp4">
+        </video>
+        <div class="movie__controls">
+          <div style="background-image: url({{ 'bmx-poster.jpg' | asset_url }});" class="movie__control movie__control__poster-img"></div>
+          <div class="movie__control movie__control__poster-story-subhead movie__control__poster--big">Rising BMX Stars Jade and Hazel</div>
+          <div class="movie__control movie__control__btn movie__control__play-btn"><i class="fa fa-play"></i></div>
+          <div class="movie__control movie__control__btn movie__control__pause-btn"><i class="fa fa-pause"></i></div>
+        </div>
+      </div>
+      <div class="music-series-text">
+        This epic film, directed by the formidable Aaron Rose and shot in New Mexico, has a story behind it as impressive as the film itself. Gaby met Jade and Hazel's uncle on West Broadway NYC when he drove by in his metallic green 60's station wagon. She told him that her secret dream was to be a BMX rider, and the rest is cinematic history.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  $(function() {
+    setupAllMovieControls();
+  });
+
+  function setupAllMovieControls() {
+    var movies = $('.movie').toArray();
+    movies.forEach(function(movie) {
+      setupMovieControls(movie);
+    });
+  }
+
+  function setupMovieControls(movie) {
+    var $movie = $(movie);
+    var $video = $movie.find('video');
+    var videoElement = $video.get(0);
+    var videoFile = $video.find('source').prop('src').split('/').slice(-1).pop();
+    $movie.click(function(e) {
+      var $this = $(this);
+      if ($this.hasClass('movie-paused') || $this.hasClass('movie-poster')) {
+        pauseAllVideos();
+        videoElement.play();
+        return;
+      }
+
+      if ($this.hasClass('movie-playing')) {
+        videoElement.pause();
+      }
+    });
+
+    $video.on('play', function() {
+      $movie.removeClass('movie-paused')
+            .removeClass('movie-poster')
+            .addClass('movie-playing');
+      ga('send', 'event', 'Engagement', 'Video Play', videoFile);
+    }).on('pause', function() {
+      $movie.removeClass('movie-playing').addClass('movie-paused');
+    }).on('ended', function() {
+      videoElement.load();
+      $movie.removeClass('movie-playing').addClass('movie-poster');
+    });
+  }
+
+  function pauseAllVideos() {
+    var videoElements = $('video').toArray();
+    videoElements.forEach(function(videoElement) {
+      videoElement.pause();
+    });
+  }
+</script>

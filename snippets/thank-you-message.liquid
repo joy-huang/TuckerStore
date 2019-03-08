@@ -1,0 +1,120 @@
+<style>
+  
+{% capture content %}
+.tw-modal {
+    background: white;
+    margin-top: 80px;
+    width: 300px;
+}
+.tw-modal-foot,
+.tw-modal-body,
+.tw-modal-head {
+    margin: auto;
+    padding: 10px 0px;
+    width: 90%;
+}
+ #tw-modal-outer {
+    background-color: rgba(0, 0, 0, 0.498039);
+    bottom: 0px;
+    display: none;
+    left: 0px;
+    position: fixed;
+    right: 0px;
+    top: 0px !important;
+    z-index: 999;
+}
+ #tw-modal-container {
+    display: none;
+    left: 50%;
+    margin-left: -150px;
+    position: absolute;
+    top: 0px !important;
+    z-index: 1000;
+}
+
+ #tw-flash {
+    background-color: black;
+    color: white;
+    display: none;
+    font-size: 20px;
+    padding: 10px;
+    position: fixed;
+    text-align: center;
+    top: 40px;
+    width: 100%;
+}
+ #tw-flash p {
+    margin: 0px;
+}
+
+ .form-header-left, .form-header-right {
+    padding: 0px;
+}
+ #tw-modal-container {
+    color: #79cee4;
+    font-family: Helvetica, sans-serif;
+    font-size:14px;
+    text-align: center;
+}
+ #tw-modal-container .thanks-message {
+    font-size: 16px;
+    font-weight: bold;
+    margin: initial;
+}
+ #tw-modal-container .heart-icon {
+    font-size: 30px;
+    margin: initial;
+}
+ #tw-modal-container .value-message {
+    color: #969595;
+}
+ #tw-modal-container #share .jssocials-share-link {
+    border: 2px solid #79cee4;
+    color: #79cee4;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px 20px;
+}
+ #tw-modal-container .facebook-share-button i {
+    margin-right: 5px;
+}
+@media only screen and (min-width: 768px) {
+    .tw-modal {
+        width: 600px;
+    }
+    #tw-modal-container {
+        margin-left: -300px;
+    }
+    .form-header-wrapper {
+        display: box;
+        display: flex;
+    }
+}
+  {% endcapture %}
+{% assign content =  content | strip_newlines | split: " " | join: " " | split: "*/" %}
+{% assign new_content = "" %}
+{% for word in content %}
+	{% assign new_word = word | split: "/*" | first | strip %}
+  	{% assign new_content = new_content | append: new_word %}
+{% endfor %}
+{{ new_content }}
+  
+</style>
+
+{% assign review-server = "https://resonance-pr.herokuapp.com/" %}
+
+<div id="tw-modal-outer"></div>
+<div id="tw-modal-container" data-app="{{review-server}}" data-shop="tuckernyc-dev" style="display:none;">
+  <div class="tw-modal">
+    <div class="tw-modal-head">
+    </div>
+    <div class="tw-modal-body">
+      <p class="heart-icon">♥</p>
+      <p class="thanks-message">THANK YOU FOR POSTING A REVIEW!</p>
+      <p class="value-message">We value your input. Share your review so everyone else can enjoy it too.</p>
+      <div id="share" class="sharing-modal">
+      <a href="#" class="jssocials-share-link"><i class="fa fa-facebook jssocials-share-logo"></i><span class="jssocials-share-label">SHARE</span></a></div>
+    </div>
+    <div class="tw-modal-foot"></div>
+  </div>
+</div>

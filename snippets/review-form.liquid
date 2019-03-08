@@ -1,0 +1,314 @@
+<style>
+{% capture content %}
+#rw-modal-container .rw-fit .slider-tick-label-container {
+  display: flex;
+  justify-content: space-between;
+}
+@media only screen and (min-width: 768px) {
+    .form-header-wrapper {
+        display: box;
+        display: flex;
+    }
+}
+
+.form-header-left,
+.form-header-right {
+    padding: 0px;
+}
+  
+#full input {
+  width: 100%;
+    display: inline-block;
+}
+
+#full textarea {
+  width: 100%;
+    display: inline-block;
+}
+
+#full label {
+    width: 100%;
+    text-align: left;
+    display: float;
+}  
+  
+  
+#rw-modal-container {
+  font-size:18px; 
+}
+  
+textarea, input {
+  font-size:18px;
+}
+  
+.form-gr.rw-fit{
+	margin-bottom: 25px;
+}
+  
+@media only screen and (min-width: 768px) {
+  .form-header-left,
+  .form-header-right  {
+        padding: 0px
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .form-header-left {
+      width: 200px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .form-header-right {
+        border-top: none;
+        font-size: 18px;
+        text-align: left;
+    }
+      #rw-modal-container {
+      font-size:13px; 
+    }
+    .rw-modal-body .form-gr.rw-fit{
+      font-size:10px; 
+      margin-bottom: 50px;
+  }
+  .rw-modal-body .form-gr.rw-rate{
+      margin-bottom: 50px;
+  }
+  .rw-modal-body .form-gr.rw-fit .overallFit-label{
+      font-size:13px; 
+  }
+  
+  .rw-modal-body .form-gr.rw-fit .slider{
+	margin-left: -22px;  
+  }
+
+}
+
+@media only screen and (min-width: 768px) {
+    .form-header-right {
+        -webkit-box-flex: 1;
+        -moz-box-flex: 1;
+        box-flex: 1;
+        -webkit-flex: 1;
+        -moz-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        border-left: none;
+        text-align: left;
+        font-size: 18px;
+    }
+}
+
+{% endcapture %}
+{% assign content =  content | strip_newlines | split: " " | join: " " | split: "*/" %}
+{% assign new_content = "" %}
+{% for word in content %}
+	{% assign new_word = word | split: "/*" | first | strip %}
+  	{% assign new_content = new_content | append: new_word %}
+{% endfor %}
+{{ new_content }}
+</style>
+
+
+
+{% assign review-server = "https://resonance-pr.herokuapp.com/" %}
+
+<div id="rw-modal-outer"></div>
+<div id="rw-modal-container" data-app="{{review-server}}" data-shop="tuckernyc" style="display:none;">
+  <div class="rw-modal">
+    {% assign rw_variant = product.selected_or_first_available_variant %}
+    {% assign rw_featured_img = rw_variant.featured_image | default: product.featured_image %}
+    <div class="rw-modal-head">
+      <h3>You are reviewing:</h3>
+      <div class="form-header-wrapper">
+        <div class="form-header-left">
+        <img src="{{ rw_featured_img | img_url: 'compact' }}" alt="{{ rw_featured_img.alt | escape }}">
+        </div>
+        <div class="form-header-right">
+          {% assign newTitle = product.title | split:'|' %}
+          {% assign count = 0 %}
+          {% for part in newTitle %}
+          {% assign count = count | plus: 1 %}
+          {% if count == 2 %}
+          {{part}}
+          <br>
+          {% endif %}
+          {% endfor %}
+          {% assign count = 0 %}
+          {% for part in newTitle %}
+          {% assign count = count | plus: 1 %}
+          {% if count == 1 %}
+          <i class="">{{part}}</i>
+          {% endif %}
+          {% endfor %}
+      </div>
+      </div>
+    </div>
+    <div class="rw-modal-body">
+      <form class="rw-form">
+          <div class="form-gr-hidden">
+            <input type="hidden" name="shop" value="tuckernyc">
+            <input type="hidden" name="shopURL" value="{{ shop.url }}">
+            <input type="hidden" name="pid" value="{{product.id}}">
+            <input type="hidden" name="bodyName" value="{{product.title}}">
+            <input type="hidden" name="colorVariant" value="{{rw_variant.option2}}">
+            <input type="hidden" name="imgUrl" value="{{ rw_featured_img | img_url: 'master' }}">
+            <input type="hidden" name="height"value="">
+            <input type="hidden" name="published"value="{{product.available}}">
+          </div>
+
+          <div class="form-gr rw-rate">
+            <label for="starRating">Star Rating</label>
+            <fieldset class="rating" style="font-size:12px;padding-top:8px;">
+              <input type="radio" id="star5" name="starRating" value="5" /><label for="star5">5 stars</label>
+              <input type="radio" id="star4" name="starRating" value="4" /><label for="star4">4 stars</label>
+              <input type="radio" id="star3" name="starRating" value="3" /><label for="star3">3 stars</label>
+              <input type="radio" id="star2" name="starRating" value="2" /><label for="star2">2 stars</label>
+              <input type="radio" id="star1" name="starRating" value="1" required/><label for="star1">1 star</label>
+            </fieldset>
+
+          </div>
+
+          <div class="form-gr rw-fit">
+            <label for="overallFit" class="overallFit-label">Overall Fit</label>
+            <input
+              type="text"
+              name="overallFit"
+              class="rw-slider"
+              data-provide="slider"
+              data-slider-ticks="[1, 2, 3, 4, 5]"
+              data-slider-ticks-labels='["Runs Small", "", "", "", "Runs Large"]'
+              data-slider-min="1"
+              data-slider-max="5"
+              data-slider-step="1"
+              data-slider-value="3"
+              data-slider-selection="none"
+        data-slider-handle="square"
+              data-slider-tooltip="hide"
+            >
+
+          </div>
+
+
+          <div class="form-gr" style="margin-bottom:25px;">
+            <br/>
+            <label for="sizeOrdered">Size Ordered</label>
+            <select name="sizeOrdered">
+                <option value="XXS">XXS</option>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+            </select>
+          </div>
+
+          <div class="form-gr" id="full" style="margin-bottom:35px;">
+            <label for="title">Review Headline</label>
+            <input type="text" name="title" required data-validation="length" data-validation-length="max60" placeholder="Ex. A classic piece that will never go out of style">
+          </div>
+
+          <div class="form-gr" id="full" style="margin-bottom:35px;">
+            <label for="fit">Let us know your thoughts:</label>
+            <textarea type="text" name="fit" required data-validation="length" data-validation-length="max255" placeholder="What are your thoughts on the colors, the print and the fabrics used?"></textarea>
+          </div>
+
+          <div class="form-gr custumer-email" id="full" style="margin-bottom:35px;">
+            <label for="email">Your Email Address</label>
+            <input type="text" name="email" data-validation="email" value="{{customer.email}}" required>
+          </div>
+
+          <div class="form-gr" style="margin-bottom:35px;">
+            <label for="firstname">First Name</label>
+            <input type="text" name="firstname" value="{{customer.first_name}}" required>
+          </div>
+
+          <div class="form-gr" style="margin-bottom:35px;">
+            <label for="lastname">Last Name Initial</label>
+            <input type="text" name="lastname" value="{{customer.last_name}}" maxlength="1" style="text-transform:uppercase;">
+          </div>
+
+          <div class="form-gr height" style="margin-bottom:35px;">
+            <label for="height">Your Height</label>
+            <select id="rw-ft" name="feet" class="rw-fill-height">
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+            <label for="height">Ft.</label>
+            <select id="rw-in" name="inch" class="rw-fill-height">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+            </select>
+            <label for="inches">In.</label>
+          </div>
+
+          <div class="form-gr" style="margin-bottom:35px;">
+            <label for="city">City</label>
+            <input type="text" name="city" value="{{customer.default_address}}" required>
+          </div>
+
+          <div class="form-gr" style="margin-bottom:35px;">
+            <label for="state">State / Region</label>
+            <input type="text" name="state" value="{{customer.default_address}}">
+          </div>
+
+          <div id="review-click" class="form-submit">
+              <button type="submit" id="review-button" class="btn full-width">CONTINUE</button>
+          </div>
+        </form>
+    </div>
+    <div class="rw-modal-foot"></div>
+  </div>
+</div>
+
+<script type="text/template" id="start-rating-template">
+    <div class="star-rating star-${rating}">
+      <span class="halfStyle">★</span>
+      <span class="halfStyle">★</span>
+      <span class="halfStyle">★</span>
+      <span class="halfStyle">★</span>
+      <span class="halfStyle">★</span>
+          <span class="halfStyle rating-color" style="color:#333;">(${count})</span>
+    </div>
+</script>
+
+<script type="text/javascript">
+  $(".reviews-rating-{{product.id}}").click(function (){
+  	 $("html, body").animate({ scrollTop: $("#reviews-container").offset().top-85}, "slow");
+  });
+</script>
+
+<script type="text/template" id="average-fit-template">
+  <span style="width: 100px;display: inline-block;">Overall Fit:</span>
+    <input
+     type="text"
+         name="overallFit"
+         data-provide="slider"
+         data-slider-ticks="[1, 2, 3, 4, 5]"
+         data-slider-ticks-labels='["Runs Small", "", "", "", "Runs Large"]'
+         data-slider-min="1"
+         data-slider-max="5"
+         data-slider-step="1"
+         data-slider-value="3"
+         data-slider-selection="none"
+         data-slider-handle="square"
+         data-slider-tooltip="hide">
+</script>
+
+<script>
+  // review form fit
+  $('.rw-slider').slider({});
+  $('.rw-modal-body .rw-form .slider.slider-horizontal .slider-tick-label-container .slider-tick-label').css("width","52.5px");
+  $('.rw-modal-body .rw-form .slider.slider-horizontal .slider-tick-label-container .slider-tick-label-container').css("margin-left", "-26.25px");
+</script>
